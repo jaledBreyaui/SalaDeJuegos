@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { GithubApi } from '../../services/github-api';
 import { GithubUser } from '../../interfaces/github-user';
+import { Spinner } from '../spinner/spinner';
 
 @Component({
   selector: 'app-about',
-  imports: [],
+  imports: [Spinner],
   templateUrl: './about.html',
   styleUrl: './about.css',
 })

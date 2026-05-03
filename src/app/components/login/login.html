@@ -1,1 +1,31 @@
-<p>login works!</p>
+<div class="mx-auto w-ful  px-4 py-6 sm:px-6 md:max-w-xl lg:max-w-l xl:max-w-l">
+    <section class="w-full rounded-lg bg-zinc-900 p-5 shadow-md">
+        <h2 class="mb-10 font-semibold text-white text-2xl">Inicia Sesion</h2>
+        <form class="flex w-full flex-col justify-between">
+            <div class="flex flex-col gap-5">
+                <p-inputgroup class="flex w-full">
+                    <p-inputgroup-addon class="flex w-12 shrink-0 items-center justify-center text-slate-300">
+                        <i class="pi pi-user text-sm text-slate-300"></i>
+                    </p-inputgroup-addon>
+                    <input class="w-full min-w-0" pInputText name="usuario" [(ngModel)]="usuario" placeholder="Usuario"
+                        autocomplete="username" />
+                </p-inputgroup>
+
+                <p-inputgroup class="flex w-full">
+                    <p-inputgroup-addon class="flex w-12 shrink-0 items-center justify-center text-slate-300">
+                        <i class="pi pi-lock text-sm text-slate-300"></i>
+                    </p-inputgroup-addon>
+                    <input class="w-full min-w-0" pInputText name="password" type="password" [(ngModel)]="password"
+                        placeholder="Contraseña" autocomplete="current-password" />
+                </p-inputgroup>
+                <a routerLink="/register"
+                    class="-mt-3 ml-1 text-sm text-gray-400 underline underline-offset-4 transition-colors hover:text-gray-300">
+                    No estoy registrado
+                </a>
+            </div>
+            <div class="card flex mt-10 justify-center">
+                <p-button label="Ingresar" />
+            </div>
+        </form>
+    </section>
+</div>

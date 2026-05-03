@@ -1,12 +1,18 @@
-<p>about works!</p>
-@if(usuario) {
-<p>{{ usuario.name }}</p>
-<section>
-    <img [src]="usuario.avatar_url" alt="Avatar">
-    <h2>{{ usuario.name }}</h2>
-    <p>{{ usuario.bio }}</p>
-    <a [href]="usuario.html_url" target="_blank">GitHub</a>
+<section
+    class="gap-16 flex justify-center items-center py-8 px-4 mx-auto max-w-7xl lg:grid lg:grid-cols-2 lg:py-16 lg:px-6">
+    @if(usuario) {
+    <div class="font-light text-gray-500 sm:text-lg dark:text-gray-400">
+        <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"> Me llamo {{ usuario.name
+            }}</h2>
+        <p class="mb-4">{{ usuario.bio }}</p>
+        <a class="underline" [href]="usuario.html_url" target="_blank">Visitá mi GitHub</a>
+    </div>
+    <div class="flex justify-center">
+        <img class="w-80 rounded-lg" [src]="usuario.avatar_url" alt="Avatar">
+    </div>
+    } @else {
+    <div class="w-full lg:col-span-2">
+        <app-spinner></app-spinner>
+    </div>
+    }
 </section>
-} @else {
-<p>Cargando...</p>
-}
