@@ -1,21 +1,20 @@
 <div class="mx-auto w-full px-4 py-6 sm:px-6 md:max-w-2xl lg:max-w-3xl xl:max-w-4xl">
     <section class="w-full rounded-lg bg-zinc-900 p-5 shadow-md">
         <h2 class="mb-10 font-semibold text-white text-2xl">Crea Tu Cuenta</h2>
-        <form class="flex w-full flex-col justify-between">
+        <form [formGroup]="formularioRegistro" class="flex w-full flex-col justify-between">
             <div class="flex flex-col gap-5">
                 <p-inputgroup class="flex w-full">
                     <p-inputgroup-addon class="flex w-12 shrink-0 items-center justify-center text-slate-300">
                         <i class="pi pi-user text-sm text-slate-300"></i>
                     </p-inputgroup-addon>
-                    <input class="w-full min-w-0" pInputText name="usuario" [(ngModel)]="usuario" placeholder="Usuario"
+                    <input class="w-full min-w-0" pInputText name="usuario" formControlName="usuario" placeholder="Usuario"
                         autocomplete="username" />
                 </p-inputgroup>
-
                 <p-inputgroup class="flex w-full">
                     <p-inputgroup-addon class="flex w-12 shrink-0 items-center justify-center text-slate-300">
                         <i class="pi pi-lock text-sm text-slate-300"></i>
                     </p-inputgroup-addon>
-                    <input class="w-full min-w-0" pInputText name="password" type="password" [(ngModel)]="password"
+                    <input class="w-full min-w-0" pInputText name="password" type="password" formControlName="password"
                         placeholder="Contraseña" autocomplete="current-password" />
                 </p-inputgroup>
                 <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -23,7 +22,7 @@
                         <p-inputgroup-addon class="flex w-12 shrink-0 items-center justify-center text-slate-300">
                             <i class="pi pi-id-card text-sm text-slate-300"></i>
                         </p-inputgroup-addon>
-                        <input class="w-full min-w-0" pInputText name="nombre" [(ngModel)]="nombre" placeholder="Nombre"
+                        <input class="w-full min-w-0" pInputText name="nombre" formControlName="nombre" placeholder="Nombre"
                             autocomplete="given-name" />
                     </p-inputgroup>
 
@@ -31,7 +30,7 @@
                         <p-inputgroup-addon class="flex w-12 shrink-0 items-center justify-center text-slate-300">
                             <i class="pi pi-id-card text-sm text-slate-300"></i>
                         </p-inputgroup-addon>
-                        <input class="w-full min-w-0" pInputText name="apellido" [(ngModel)]="apellido"
+                        <input class="w-full min-w-0" pInputText name="apellido" formControlName="apellido"
                             placeholder="Apellido" autocomplete="family-name" />
                     </p-inputgroup>
                 </div>
@@ -42,7 +41,7 @@
                         <p-inputgroup-addon class="flex w-12 shrink-0 items-center justify-center text-slate-300">
                             <i class="pi pi-calendar text-sm text-slate-300"></i>
                         </p-inputgroup-addon>
-                        <input class="w-full min-w-0" pInputText name="edad" type="number" [(ngModel)]="edad"
+                        <input class="w-full min-w-0" pInputText name="edad" type="number" formControlName="edad"
                             placeholder="Edad" autocomplete="off" />
                     </p-inputgroup>
 
@@ -50,7 +49,7 @@
                         <p-inputgroup-addon class="flex w-12 shrink-0 items-center justify-center text-slate-300">
                             <i class="pi pi-envelope text-sm text-slate-300"></i>
                         </p-inputgroup-addon>
-                        <input class="w-full min-w-0" pInputText name="correo" type="email" [(ngModel)]="correo"
+                        <input class="w-full min-w-0" pInputText name="correo" type="email" formControlName="correo"
                             placeholder="Correo" autocomplete="email" />
                     </p-inputgroup>
                 </div>
@@ -61,7 +60,7 @@
                 </a>
             </div>
             <div class="card flex mt-10 justify-center">
-                <p-button label="Crear Cuenta " />
+                <p-button label="Crear Cuenta "(onClick)="loguearCampos()"/>
             </div>
         </form>
     </section>

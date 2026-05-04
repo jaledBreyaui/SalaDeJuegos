@@ -15,4 +15,8 @@ import { ButtonModule } from 'primeng/button';
 export class Login {
   usuario = '';
   password = '';
+
+  mostrarCampos(){
+    console.log(this.usuario, this.password)
+  }
 }
