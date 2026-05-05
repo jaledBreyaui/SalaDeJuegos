@@ -46,3 +46,7 @@ export class Supabase {
   }
 
 }
+// Explicar las reglas como si nunca hubieran sido explicadas antes, y como si el interlocutor no tuviera ningún conocimiento previo sobre el tema.
+// El quien soy va en el home -> una vez logueado solo los juegos y el quien soy. 
+// Registro validar los campos minimo de caracteres de contraseña. Si ya esta registrado no te deja. Usar email. Usuario es email .
+// Usar modales -> toastify 

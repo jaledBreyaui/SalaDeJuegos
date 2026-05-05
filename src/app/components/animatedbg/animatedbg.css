@@ -5,7 +5,7 @@
   align-items: center;
   overflow: hidden;
   width: 100%;
-  height: 500px;
+  height: 60vh;
 }
 
 .content h1 {
@@ -19,9 +19,9 @@
   
 }
 
-:host ::ng-deep .hero-button {
+/* :host ::ng-deep .hero-button {
   min-width: 11rem;
   padding: 1rem 1.75rem;
   font-size: 1.15rem;
   font-weight: 700;
-}
+} */

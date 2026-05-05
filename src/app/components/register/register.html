@@ -1,14 +1,14 @@
-<div class="mx-auto w-full px-4 py-6 sm:px-6 md:max-w-2xl lg:max-w-3xl xl:max-w-4xl">
-    <section class="w-full rounded-lg bg-zinc-900 p-5 shadow-md">
-        <h2 class="mb-10 font-semibold text-white text-2xl">Crea Tu Cuenta</h2>
-        <form [formGroup]="formularioRegistro" class="flex w-full flex-col justify-between">
-            <div class="flex flex-col gap-5">
+<div class="mx-auto w-full min-h-[90vh] px-4 py-6 sm:px-6 md:max-w-2xl lg:max-w-3xl xl:max-w-4xl">
+    <h2 class="mb-10 font-semibold text-white text-center text-2xl">Crea Tu Cuenta</h2>
+    <section class="flex w-full min-h-135 flex-col rounded-lg bg-zinc-900 p-5 shadow-md sm:p-7">
+        <form [formGroup]="formularioRegistro" class="flex w-full flex-1 flex-col px-5 justify-evenly">
+            <div class="flex flex-col justify-around flex-1">
                 <p-inputgroup class="flex w-full">
                     <p-inputgroup-addon class="flex w-12 shrink-0 items-center justify-center text-slate-300">
                         <i class="pi pi-user text-sm text-slate-300"></i>
                     </p-inputgroup-addon>
-                    <input class="w-full min-w-0" pInputText name="usuario" formControlName="usuario" placeholder="Usuario"
-                        autocomplete="username" />
+                    <input class="w-full min-w-0" pInputText name="usuario" formControlName="usuario"
+                        placeholder="Usuario" autocomplete="username" />
                 </p-inputgroup>
                 <p-inputgroup class="flex w-full">
                     <p-inputgroup-addon class="flex w-12 shrink-0 items-center justify-center text-slate-300">
@@ -22,8 +22,8 @@
                         <p-inputgroup-addon class="flex w-12 shrink-0 items-center justify-center text-slate-300">
                             <i class="pi pi-id-card text-sm text-slate-300"></i>
                         </p-inputgroup-addon>
-                        <input class="w-full min-w-0" pInputText name="nombre" formControlName="nombre" placeholder="Nombre"
-                            autocomplete="given-name" />
+                        <input class="w-full min-w-0" pInputText name="nombre" formControlName="nombre"
+                            placeholder="Nombre" autocomplete="given-name" />
                     </p-inputgroup>
 
                     <p-inputgroup class="flex w-full min-w-0">
@@ -60,7 +60,7 @@
                 </a>
             </div>
             <div class="card flex mt-10 justify-center">
-                <p-button label="Crear Cuenta "(onClick)="loguearCampos()"/>
+                <p-button label="Crear Cuenta" (onClick)="loguearCampos()" />
             </div>
         </form>
     </section>

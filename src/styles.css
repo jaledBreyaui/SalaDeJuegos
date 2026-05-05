@@ -2,3 +2,10 @@
 
 @import 'tailwindcss';
 @import 'primeicons/primeicons.css';
+
+html, body{
+    min-height:100%;
+}
+body>app-root{
+    min-height:100%;
+}
