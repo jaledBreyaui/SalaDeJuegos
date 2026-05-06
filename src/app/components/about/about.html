@@ -1,30 +1,31 @@
 <section
-  class="gap-16 h-[40vh] flex justify-center items-center py-8 px-4 mx-auto max-w-7xl lg:grid lg:grid-cols-2 lg:py-16 lg:px-6">
-  @if (usuario) {
-  <div class="font-light text-gray-500 sm:text-lg dark:text-gray-400">
-    <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
-      Me llamo {{ usuario.name }}
-    </h2>
-    <p class="mb-4">{{ usuario.bio }}</p>
-    <p class="mb-4">
-      El juego propio que elegí es el Wordle. Tenés 6 intentos para Advinir una palabra de 5
-      letras. El color de cada letra te acerca dependiendo del color <br />
-      Si es <span class="text-green-600 font-bold">VERDE</span> la letra es correcta y esta en el
-      lugar correcto.
-      <br />
-      Si es <span class="text-yellow-300 font-bold">AMARILLA</span> la letra es correcta pero esta
-      en el lugar incorrecto <br />
-      Por último si se pinta de <span class="text-gray-700 font-bold">GRIS</span> la letra no está
-      presente en la palabra.
-    </p>
-    <a class="underline" [href]="usuario.html_url" target="_blank">Visitá mi GitHub</a>
-  </div>
-  <div class="flex justify-center">
-    <img class="w-80 rounded-lg" [src]="usuario.avatar_url" alt="Avatar" />
-  </div>
+  class="gap-16 h-[40vh] flex justify-center items-center py-8 px-4 mx-auto max-w-7xl lg:grid lg:grid-cols-2 lg:py-16 lg:px-6"
+>
+  @if (usuario(); as usuario) {
+    <div class="font-light text-gray-500 sm:text-lg dark:text-gray-400">
+      <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
+        Me llamo {{ usuario.name }}
+      </h2>
+      <p class="mb-4">{{ usuario.bio }}</p>
+      <p class="mb-4">
+        El juego propio que elegí es el Wordle. Tenés 6 intentos para Advinir una palabra de 5
+        letras. El color de cada letra te acerca dependiendo del color <br />
+        Si es <span class="text-green-600 font-bold">VERDE</span> la letra es correcta y esta en el
+        lugar correcto.
+        <br />
+        Si es <span class="text-yellow-300 font-bold">AMARILLA</span> la letra es correcta pero esta
+        en el lugar incorrecto <br />
+        Por último si se pinta de <span class="text-gray-700 font-bold">GRIS</span> la letra no está
+        presente en la palabra.
+      </p>
+      <a class="underline" [href]="usuario.html_url" target="_blank">Visitá mi GitHub</a>
+    </div>
+    <div class="flex justify-center">
+      <img class="w-80 rounded-lg" [src]="usuario.avatar_url" alt="Avatar" />
+    </div>
   } @else {
-  <div class="w-full lg:col-span-2">
-    <app-spinner></app-spinner>
-  </div>
+    <div class="w-full lg:col-span-2">
+      <app-spinner></app-spinner>
+    </div>
   }
 </section>

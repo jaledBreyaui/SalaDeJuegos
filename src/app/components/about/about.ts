@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { GithubApi } from '../../services/github-api';
+import { Component, signal } from '@angular/core';
+import { GithubApi } from '../../services/github/github-api';
 import { GithubUser } from '../../interfaces/github-user';
 import { Spinner } from '../spinner/spinner';
 
@@ -10,12 +10,12 @@ import { Spinner } from '../spinner/spinner';
   styleUrl: './about.css',
 })
 export class About {
-  usuario: GithubUser | null = null;
+  usuario = signal<GithubUser | null>(null);
+
   constructor(private githubApi: GithubApi) { }
   ngOnInit() {
     this.githubApi.getUserInfo('jaledBreyaui').subscribe((data: GithubUser) => {
-      console.log(data.name);
-      this.usuario = data;
+      this.usuario.set(data);
     });
   }
 }

@@ -1,21 +1,27 @@
-import { ValidatorFn, ValidationErrors, AbstractControl } from "@angular/forms";
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 export function confirmarClaveValidator(): ValidatorFn {
-    return (formGroup: AbstractControl): ValidationErrors | null => {
-        
-    const claveControl = formGroup.get('clave');
-    const repiteClaveControl = formGroup.get('repiteClave');
-    const respuestaError = { noCoincide: 'La clave no coincide' };
+  return (formGroup: AbstractControl): ValidationErrors | null => {
+    const claveControl = formGroup.get('password');
+    const repiteClaveControl = formGroup.get('repitePassword');
 
-    if (claveControl?.value !== repiteClaveControl?.value) {
-        formGroup.get('repiteClave')?.setErrors(respuestaError);
-        // Si los campos de contraseña no coinciden, devolvemos un error de validación
-        return respuestaError;
+    if (!claveControl || !repiteClaveControl) {
+      return null;
+    }
 
-    } else {
-        formGroup.get('repiteClave')?.setErrors(null);
-        // Si los campos de contraseña coinciden, la validación es correcta
-        return null;
-    } 
-    };
+    if (claveControl.value !== repiteClaveControl.value) {
+      repiteClaveControl.setErrors({
+        ...(repiteClaveControl.errors ?? {}),
+        noCoincide: 'La clave no coincide',
+      });
+      return { noCoincide: true };
+    }
+
+    if (repiteClaveControl.hasError('noCoincide')) {
+      const { noCoincide, ...otrosErrores } = repiteClaveControl.errors ?? {};
+      repiteClaveControl.setErrors(Object.keys(otrosErrores).length ? otrosErrores : null);
+    }
+
+    return null;
+  };
 }
