@@ -3,6 +3,7 @@ import { NgxRetroGridComponent } from '@omnedia/ngx-retro-grid';
 import { ButtonModule } from 'primeng/button';
 import { Login } from '../login/login';
 import { RouterLink } from "@angular/router";
+import { Supabase } from '../../services/supabase/supabase';
 
 @Component({
   selector: 'app-animatedbg',
@@ -11,4 +12,7 @@ import { RouterLink } from "@angular/router";
   styleUrl: './animatedbg.css',
   standalone: true
 })
-export class Animatedbg {}
+export class Animatedbg {
+  constructor(public sb: Supabase) { }
+
+}

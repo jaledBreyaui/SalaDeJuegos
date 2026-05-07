@@ -1,15 +1,11 @@
 <om-retro-grid [gridColor]="'#fff'" [fadeColor]="'rgb(15, 15, 15)'">
   <div class="content">
-    <h1 class="sm:sfont-l">Sala de Juegos</h1>
+    <h1 class="sm:sfont-l text-center">Sala de Juegos</h1>
+    @if(!sb.usuarioLogueado()){
     <div class="flex gap-10">
       <app-login></app-login>
-      <p-button
-        label="Registrarse"
-        size="large"
-        routerLink="/register"
-        icon="pi pi-user-plus"
-        class=""
-      ></p-button>
+      <p-button label="Registrarse" size="large" routerLink="/register" icon="pi pi-user-plus" class=""></p-button>
     </div>
+    }
   </div>
 </om-retro-grid>

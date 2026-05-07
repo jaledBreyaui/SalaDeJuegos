@@ -12,7 +12,7 @@ import { Toast } from '../toast/toast';
 
 @Component({
   selector: 'app-register',
-  imports: [ ReactiveFormsModule,
+  imports: [ReactiveFormsModule,
     RouterLink,
     InputGroupModule,
     InputGroupAddonModule,
@@ -22,56 +22,56 @@ import { Toast } from '../toast/toast';
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
-export class Register implements OnInit{
+export class Register implements OnInit {
   @ViewChild(Toast) toast!: Toast;
 
   formularioRegistro!: FormGroup;
 
-  constructor(private fb: FormBuilder, private sb: Supabase, private router: Router){
+  constructor(private fb: FormBuilder, private sb: Supabase, private router: Router) {
   }
 
 
   ngOnInit(): void {
     this.formularioRegistro = this.fb.group(
       {
-      correo: ["", [Validators.required, Validators.email]],
-      nombre: ["", [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],
-      apellido: ["", [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],
-      edad: ["", [Validators.required, Validators.min(18), Validators.max(99)]],
-      password: ["", [Validators.required, Validators.minLength(4)]],
-      repitePassword: ["", Validators.required]
+        correo: ["", [Validators.required, Validators.email]],
+        nombre: ["", [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],
+        apellido: ["", [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],
+        edad: ["", [Validators.required, Validators.min(18), Validators.max(99)]],
+        password: ["", [Validators.required, Validators.minLength(4)]],
+        repitePassword: ["", Validators.required]
 
-    }, { validators: confirmarClaveValidator() });
+      }, { validators: confirmarClaveValidator() });
   }
 
 
 
   async registrarUsuario() {
-    if(!this.validarFormulario()){
+    if (!this.validarFormulario()) {
       return
     }
     const { correo, password, nombre, apellido, edad } = this.formularioRegistro.getRawValue();
-    const {data, error} = await this.sb.registrar(correo, password)
-    if(error){
-      console.error('Error: ', error.message);
-    }else{
-      console.log('User registrado:', data.user);
+    const { data, error } = await this.sb.registrar(correo, password)
+    if (error) {
+      this.toast.mostrar('Error al registrar', error.message, 'error');
+    } else {
       const datosGuardados = await this.sb.guardarDatosUsuario(correo, nombre, Number(edad), apellido);
-
       if (datosGuardados) {
-        this.toast.mostrar();
+        this.toast.mostrar('Registro exitoso', 'Ya estás registrado', 'success');
         setTimeout(() => {
           this.router.navigate(['/home']);
         }, 1500);
+      } else {
+        this.toast.mostrar('Error al guardar datos', 'No se pudieron guardar los datos del usuario', 'error');
       }
     }
   }
 
-  validarFormulario():boolean{
-    let isValid=true
+  validarFormulario(): boolean {
+    let isValid = true
     if (this.formularioRegistro.invalid) {
       this.formularioRegistro.markAllAsTouched();
-      isValid= false;
+      isValid = false;
     }
     return isValid
   }

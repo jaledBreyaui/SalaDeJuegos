@@ -15,11 +15,15 @@ export class Toast {
 
   private messageService = inject(MessageService);
 
-  mostrar(): void {
+  mostrar(
+    titulo = this.titulo,
+    mensaje = this.mensaje,
+    severity: 'success' | 'info' | 'warn' | 'error' = this.severity
+  ): void {
     this.messageService.add({
-      severity: this.severity,
-      summary: this.titulo,
-      detail: this.mensaje,
+      severity,
+      summary: titulo,
+      detail: mensaje,
     });
   }
 }
