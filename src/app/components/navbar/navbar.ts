@@ -1,42 +1,46 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, computed } from '@angular/core';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
 import { Supabase } from '../../services/supabase/supabase';
+
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
-  template: `
-        <div class="card">
-            <p-menubar [model]="items" />
-        </div>
-    `,
   standalone: true,
   imports: [MenubarModule]
 })
+export class Navbar {
+  items = computed<MenuItem[]>(() => {
+    const estaLogueado = this.sb.usuarioLogueado();
 
-export class Navbar implements OnInit {
-  items: MenuItem[] | undefined;
-  constructor(public sb: Supabase) { }
-  ngOnInit() {
-    this.items = [
+    return [
       {
         label: 'Home',
         icon: 'pi pi-home',
         routerLink: '/home'
       },
       {
-        label: 'Registrarse',
-        icon: 'pi pi-user-plus',
-        routerLink: '/register'
+        label: 'Quien Soy',
+        icon: 'pi pi-user',
+        routerLink: '/about'
       },
-      {
-        label: 'Cerrar Sesión',
-        icon: 'pi pi-sign-out',
-        command: () => {
-          this.sb.clienteSupabase.auth.signOut();
-        }
-      }
+      estaLogueado
+        ? {
+            label: 'Cerrar Sesion',
+            icon: 'pi pi-sign-out',
+            command: async () => {
+              await this.sb.cerrarSesion();
+            }
+          }
+        : {
+            label: 'Registrarse',
+            icon: 'pi pi-user-plus',
+            routerLink: '/register'
+          }
     ];
-  }
+
+  });
+
+  constructor(public sb: Supabase) {}
 }

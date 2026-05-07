@@ -1,0 +1,19 @@
+<button
+  type="button"
+  class="game-cube-link"
+  [class.locked]="!sb.usuarioLogueado()"
+  [attr.aria-disabled]="!sb.usuarioLogueado()"
+  aria-label="Acceder al juego"
+  (click)="acceder()"
+>
+  <div class="game-cube">
+    <span class="cube-face cube-front">
+      <img [src]="imagen" alt="" />
+    </span>
+    <span class="cube-face cube-back"></span>
+    <span class="cube-face cube-right"></span>
+    <span class="cube-face cube-left"></span>
+    <span class="cube-face cube-top"></span>
+    <span class="cube-face cube-bottom"></span>
+  </div>
+</button>

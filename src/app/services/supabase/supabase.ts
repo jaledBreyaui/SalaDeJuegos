@@ -28,23 +28,28 @@ export class Supabase {
     });
   }
 
-  iniciarSesion(correo: string, clave: string) {
-    return this.clienteSupabase.auth.signInWithPassword({
+  async iniciarSesion(correo: string, clave: string) {
+    const respuesta = await this.clienteSupabase.auth.signInWithPassword({
       email: correo,
       password: clave,
     });
+
+    this.usuarioLogueado.set(!!respuesta.data.session);
+    return respuesta;
   }
 
-  verificarAutenticacion() {
-    return this.clienteSupabase.auth.getUser();
-  }
+  // yaEstaLogueado() {
+    // return this.clienteSupabase.auth.getSession();
+  // }
 
-  yaEstaLogueado() {
-    return this.clienteSupabase.auth.getSession();
-  }
+  async cerrarSesion() {
+    const respuesta = await this.clienteSupabase.auth.signOut();
 
-  cerrarSesion() {
-    return this.clienteSupabase.auth.signOut();
+    if (!respuesta.error) {
+      this.usuarioLogueado.set(false);
+    }
+
+    return respuesta;
   }
 
 

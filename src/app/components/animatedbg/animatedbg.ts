@@ -4,10 +4,12 @@ import { ButtonModule } from 'primeng/button';
 import { Login } from '../login/login';
 import { RouterLink } from "@angular/router";
 import { Supabase } from '../../services/supabase/supabase';
+import { AccesoJuego } from '../acceso-juego/acceso-juego';
+import { Toast } from '../toast/toast';
 
 @Component({
   selector: 'app-animatedbg',
-  imports: [NgxRetroGridComponent, ButtonModule, Login, RouterLink],
+  imports: [NgxRetroGridComponent, ButtonModule, Login, RouterLink, AccesoJuego, Toast],
   templateUrl: './animatedbg.html',
   styleUrl: './animatedbg.css',
   standalone: true

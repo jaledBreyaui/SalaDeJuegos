@@ -57,9 +57,6 @@ export class Login implements OnInit {
 
   }
 
-  estaLogueado() {
-    return this.sb.yaEstaLogueado();
-  }
 
   aplicarLoginRapido(loginRapido: boolean): void {
     if (loginRapido) {
