@@ -1,4 +1,5 @@
 import { Component, computed } from '@angular/core';
+import { Router } from '@angular/router';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
 import { Supabase } from '../../services/supabase/supabase';
@@ -31,6 +32,9 @@ export class Navbar {
             icon: 'pi pi-sign-out',
             command: async () => {
               await this.sb.cerrarSesion();
+              if (this.router.url.startsWith('/juegos')) {
+                await this.router.navigate(['/home']);
+              }
             }
           }
         : {
@@ -42,5 +46,5 @@ export class Navbar {
 
   });
 
-  constructor(public sb: Supabase) {}
+  constructor(public sb: Supabase, private router: Router) {}
 }

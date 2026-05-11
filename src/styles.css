@@ -3,9 +3,26 @@
 @import 'tailwindcss';
 @import 'primeicons/primeicons.css';
 
-html, body{
-    min-height:100%;
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+    margin: 0;
 }
-body>app-root{
-    min-height:100%;
+
+body>app-root {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
 }
+
+/*
+Color Fondo
+rgba(16, 16, 16)
+
+Color turquesa Aurora 
+rgba(98, 201, 174)
+
+Color titulo
+rgba(51, 72, 64)
+*/

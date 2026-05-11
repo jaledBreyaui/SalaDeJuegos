@@ -1,14 +1,16 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 import { ReactiveFormsModule } from '@angular/forms';
 import { confirmarClaveValidator } from '../../validators/clave.validator';
 import { Supabase } from '../../services/supabase/supabase';
-import { Toast } from '../toast/toast';
+
 
 @Component({
   selector: 'app-register',
@@ -18,17 +20,21 @@ import { Toast } from '../toast/toast';
     InputGroupAddonModule,
     InputTextModule,
     ButtonModule,
-    Toast],
+    ToastModule
+  ],
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
 export class Register implements OnInit {
-  @ViewChild(Toast) toast!: Toast;
 
   formularioRegistro!: FormGroup;
 
-  constructor(private fb: FormBuilder, private sb: Supabase, private router: Router) {
-  }
+  constructor(
+    private fb: FormBuilder,
+    private sb: Supabase,
+    private router: Router,
+    private messageService: MessageService
+  ) { }
 
 
   ngOnInit(): void {
@@ -48,31 +54,43 @@ export class Register implements OnInit {
 
   async registrarUsuario() {
     if (!this.validarFormulario()) {
-      return
+      return;
     }
     const { correo, password, nombre, apellido, edad } = this.formularioRegistro.getRawValue();
-    const { data, error } = await this.sb.registrar(correo, password)
+    const { error } = await this.sb.registrar(correo, password);
     if (error) {
-      this.toast.mostrar('Error al registrar', error.message, 'error');
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error al registrar',
+        detail: error.message,
+      });
     } else {
       const datosGuardados = await this.sb.guardarDatosUsuario(correo, nombre, Number(edad), apellido);
       if (datosGuardados) {
-        this.toast.mostrar('Registro exitoso', 'Ya estás registrado', 'success');
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Registro exitoso',
+          detail: 'Ya estas registrado',
+        });
         setTimeout(() => {
           this.router.navigate(['/home']);
         }, 1500);
       } else {
-        this.toast.mostrar('Error al guardar datos', 'No se pudieron guardar los datos del usuario', 'error');
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error al guardar datos',
+          detail: 'No se pudieron guardar los datos del usuario',
+        });
       }
     }
   }
 
   validarFormulario(): boolean {
-    let isValid = true
+    let isValid = true;
     if (this.formularioRegistro.invalid) {
       this.formularioRegistro.markAllAsTouched();
       isValid = false;
     }
-    return isValid
+    return isValid;
   }
 }

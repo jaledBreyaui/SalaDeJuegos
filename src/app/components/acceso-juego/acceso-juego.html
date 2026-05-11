@@ -1,11 +1,4 @@
-<button
-  type="button"
-  class="game-cube-link"
-  [class.locked]="!sb.usuarioLogueado()"
-  [attr.aria-disabled]="!sb.usuarioLogueado()"
-  aria-label="Acceder al juego"
-  (click)="acceder()"
->
+<button type="button" class="game-cube-link" aria-label="Acceder al juego" (click)="acceder()">
   <div class="game-cube">
     <span class="cube-face cube-front">
       <img [src]="imagen" alt="" />

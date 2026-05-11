@@ -7,17 +7,21 @@ import { environment } from '../../../environments/environment.development';
 })
 export class Supabase {
   usuarioLogueado = signal(false);
+  nombreUsuario = signal('');
 
   clienteSupabase: SupabaseClient;
 
   constructor() {
     this.clienteSupabase = createClient(environment.SUPABASE_URL, environment.SUPABASE_KEY);
+
     this.clienteSupabase.auth.getSession().then(({ data }) => {
       this.usuarioLogueado.set(!!data.session);
+      this.cargarNombreUsuario(data.session?.user.email ?? null);
     });
 
     this.clienteSupabase.auth.onAuthStateChange((_event, session) => {
       this.usuarioLogueado.set(!!session);
+      this.cargarNombreUsuario(session?.user.email ?? null);
     });
   }
 
@@ -33,22 +37,17 @@ export class Supabase {
       email: correo,
       password: clave,
     });
-
     this.usuarioLogueado.set(!!respuesta.data.session);
     return respuesta;
   }
 
-  // yaEstaLogueado() {
-    // return this.clienteSupabase.auth.getSession();
-  // }
 
   async cerrarSesion() {
     const respuesta = await this.clienteSupabase.auth.signOut();
-
     if (!respuesta.error) {
       this.usuarioLogueado.set(false);
+      this.nombreUsuario.set('');
     }
-
     return respuesta;
   }
 
@@ -57,17 +56,31 @@ export class Supabase {
     const { error } = await this.clienteSupabase.from('usuarios_registrados').insert([
       { email: email, nombre: nombre, edad: edad, apellido: apellido }
     ]);
-
     if (error) {
       console.error('Error: ', error.message);
       return false;
     }
-
     return true;
   }
-
   obtenerDatosUsuario() {
     return this.clienteSupabase.from('usuariosTabla').select('*');
+  }
+
+  private async cargarNombreUsuario(email: string | null) {
+    if (!email) {
+      this.nombreUsuario.set('');
+      return;
+    }
+    this.nombreUsuario.set(email);
+    const { data, error } = await this.clienteSupabase
+      .from('usuarios_registrados')
+      .select('nombre')
+      .eq('email', email)
+      .maybeSingle();
+    if (error) {
+      console.error('Error al cargar usuario: ', error.message);
+    }
+    this.nombreUsuario.set(data?.nombre ?? email);
   }
 
 }

@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './guards/auth-guard';
+
 export const routes: Routes = [
     {
         path: '',
@@ -16,6 +18,11 @@ export const routes: Routes = [
     {
         path: 'about',
         loadComponent: () => import("./components/about/about").then(m => m.About),
-    }
+    },
+    {
+        path: 'juegos/ahorcado',
+        canActivate: [authGuard],
+        loadComponent: () => import("./components/ahorcado/ahorcado").then(m => m.Ahorcado),
+    },
 
 ];

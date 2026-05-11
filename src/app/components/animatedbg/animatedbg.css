@@ -1,11 +1,12 @@
 .content {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
+  display: grid;
+  grid-template-rows: 8rem 1fr 5rem;
+  justify-items: center;
   align-items: center;
-  overflow: hidden;
+  overflow: visible;
   width: 100%;
-  height: 90vh;
+  height: 94vh;
+  padding: 2rem 1rem;
 }
 
 .content h1 {
@@ -15,9 +16,34 @@
   -webkit-background-clip: text;
   background-clip: text;
   /* background-image: linear-gradient(to bottom, #ffd319, #ff2975, #8c1eff); */
-  background-image: linear-gradient(to bottom, rgb(96, 231, 188), rgba(255, 255, 255, 0.181));
-  
+  /* background-image: linear-gradient(to bottom, rgb(96, 231, 188), rgba(255, 255, 255, 0.181)); */
+  background-image: linear-gradient(to bottom, rgba(98, 201, 174), rgba(98, 201, 174, 0.2));
+
 }
+
+.games-grid {
+  align-self: center;
+}
+
+.auth-slot {
+  min-height: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.content h2 {
+  font-size: 3rem;
+  font-weight: bold;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  /* background-image: linear-gradient(to bottom, #ffd319, #ff2975, #8c1eff); */
+  background-image: linear-gradient(to bottom, rgba(98, 201, 174), rgba(98, 201, 174, 0.2));
+
+}
+
+
 
 /* :host ::ng-deep .hero-button {
   min-width: 11rem;
