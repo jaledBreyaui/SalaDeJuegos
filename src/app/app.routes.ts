@@ -23,6 +23,10 @@ export const routes: Routes = [
         path: 'juegos/ahorcado',
         canActivate: [authGuard],
         loadComponent: () => import("./components/ahorcado/ahorcado").then(m => m.Ahorcado),
-    },
+    }, {
+        path: 'chat',
+        loadComponent: () => import("./components/chat/chat").then(m => m.Chat),
+
+    }
 
 ];

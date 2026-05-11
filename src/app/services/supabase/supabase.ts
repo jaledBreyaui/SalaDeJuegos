@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient, RealtimeChannel, User } from '@supabase/supabase-js';
 import { environment } from '../../../environments/environment.development';
 
 @Injectable({
@@ -9,6 +9,7 @@ export class Supabase {
   usuarioLogueado = signal(false);
   nombreUsuario = signal('');
 
+  dataUsuario: User | undefined
   clienteSupabase: SupabaseClient;
 
   constructor() {
@@ -17,12 +18,14 @@ export class Supabase {
     this.clienteSupabase.auth.getSession().then(({ data }) => {
       this.usuarioLogueado.set(!!data.session);
       this.cargarNombreUsuario(data.session?.user.email ?? null);
+      this.dataUsuario = data.session?.user;
     });
 
     this.clienteSupabase.auth.onAuthStateChange((_event, session) => {
       this.usuarioLogueado.set(!!session);
       this.cargarNombreUsuario(session?.user.email ?? null);
     });
+
   }
 
   registrar(correo: string, clave: string) {
@@ -63,7 +66,7 @@ export class Supabase {
     return true;
   }
   obtenerDatosUsuario() {
-    return this.clienteSupabase.from('usuariosTabla').select('*');
+    return this.clienteSupabase.from('usuarios_registrados').select('*');
   }
 
   private async cargarNombreUsuario(email: string | null) {
@@ -83,6 +86,42 @@ export class Supabase {
     this.nombreUsuario.set(data?.nombre ?? email);
   }
 
+
+
+  async getMessages() {
+    return this.clienteSupabase
+      .from('usuarios_post')
+      .select('*, usuarios_registrados(nombre)')
+      .order('created_at', { ascending: true });
+  }
+
+  subscribeToMessages(onNewMessage: () => void): RealtimeChannel {
+    return this.clienteSupabase
+      .channel('usuarios_post_changes')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'usuarios_post',
+        },
+        (payload) => {
+          console.log('Realtime usuarios_post payload:', payload);
+          onNewMessage();
+        }
+      )
+      .subscribe((status, error) => {
+        console.log('Realtime usuarios_post status:', status, error);
+      });
+  }
+
+  unsubscribe(channel: RealtimeChannel) {
+    return this.clienteSupabase.removeChannel(channel);
+  }
+
+  async postMessage() {
+
+  }
 }
 // Explicar las reglas como si nunca hubieran sido explicadas antes, y como si el interlocutor no tuviera ningún conocimiento previo sobre el tema.
 // El quien soy va en el home -> una vez logueado solo los juegos y el quien soy.
