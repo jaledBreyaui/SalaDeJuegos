@@ -1,4 +1,4 @@
-<div class="chatContainer flex flex-col lg:w-50 flex-1 justify-between p-4">
+<div class="chatContainer relative flex flex-col lg: flex-1 justify-between p-4">
   <div class="flex flex-col gap-4">
     @for (mensaje of mensajes(); track mensaje.id) {
       <div
@@ -21,20 +21,20 @@
     }
   </div>
 
-  <div class="bg-[rgb(47, 47, 47)]">
+  <div class="bg-[rgb(47, 47, 47)] mensajero-container mt-10">
     <form class="flex" (submit)="enviarMensaje($event)">
       <input
         [(ngModel)]="mensajeNuevo"
         name="mensajeNuevo"
-        class="flex-19/20 rounded border-slate-400 bg-white px-3 py-2 text-slate-900"
+        class="mensajero flex-19/20 rounded border-slate-400 bg-white px-3 py-2 text-slate-900"
         type="text"
         placeholder="Escribí tu mensaje"
       />
       <button
         type="submit"
-        class="w-full flex-1/20 rounded border-none bg-[rgb(98, 201, 174)] rounded-4xl bg-white px-3 py-2 text-slate-900"
+        class="boton-envio w-full flex-1/20 rounded border-none rounded bg-white px-3 py-3"
       >
-        <i class="pi pi-send" style="color: var(--primary-color)"> </i>
+        <i class="pi pi-send"> </i>
       </button>
     </form>
   </div>

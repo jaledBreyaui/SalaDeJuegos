@@ -31,6 +31,7 @@ export class Chat implements OnInit, OnDestroy {
         await this.cargarMensajes();
       });
     });
+    
   }
 
   ngOnDestroy(): void {
@@ -52,12 +53,9 @@ export class Chat implements OnInit, OnDestroy {
     e.preventDefault();
     if(this.dataUsuario?.email && this.mensajeNuevo.length > 1){
       let respuesta = await this.chat.obtenerUsuarioPorMail(this.dataUsuario.email)
-      await this.chat.postMessage(respuesta.id, this.mensajeNuevo)
-      // console.log(respuesta)
-    }
-
-      
-    this.mensajeNuevo= ''
+      await this.chat.postMessage(respuesta.id, this.mensajeNuevo.trim())  
+      this.mensajeNuevo= ''
+      }
   }
 
   esMensajePropio(mensaje: MensajeChat): boolean {

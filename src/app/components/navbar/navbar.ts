@@ -26,22 +26,31 @@ export class Navbar {
         icon: 'pi pi-user',
         routerLink: '/about'
       },
-      estaLogueado
-        ? {
-            label: 'Cerrar Sesion',
-            icon: 'pi pi-sign-out',
-            command: async () => {
-              await this.sb.cerrarSesion();
-              if (this.router.url.startsWith('/juegos')) {
-                await this.router.navigate(['/home']);
+      ...(estaLogueado
+        ? [
+            {
+              label: 'Chat',
+              icon: 'pi pi-comments',
+              routerLink: '/chat'
+            },
+            {
+              label: 'Cerrar Sesion',
+              icon: 'pi pi-sign-out',
+              command: async () => {
+                await this.sb.cerrarSesion();
+                if (this.router.url.startsWith('/juegos') || this.router.url.startsWith('/chat')) {
+                  await this.router.navigate(['/home']);
+                }
               }
             }
-          }
-        : {
-            label: 'Registrarse',
-            icon: 'pi pi-user-plus',
-            routerLink: '/register'
-          }
+          ]
+        : [
+            {
+              label: 'Registrarse',
+              icon: 'pi pi-user-plus',
+              routerLink: '/register'
+            }
+          ])
     ];
 
   });

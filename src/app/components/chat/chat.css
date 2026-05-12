@@ -46,5 +46,15 @@
     background-color: rgb(47, 47, 47);
 }
 
-.mensaje >span {
+.mensajero-container{
+    position: sticky;
+    bottom: 0;
+}
+
+.boton-envio{
+   background-color: rgb(98, 201, 174);
+}
+
+.mensajero{
+    border: 2px solid  rgba(98, 201, 174) ;
 }
