@@ -71,6 +71,9 @@ export class Supabase {
     const {data, error} = await this.clienteSupabase.from('usuarios_registrados').select(`*`).eq('email', email).single();
     return data
   }
+
+
+  ///////////////////////////////////////CHAT//////////////////////////////////////////////////
   async getMessages() {
     return this.clienteSupabase
       .from('usuarios_post')
@@ -111,6 +114,43 @@ export class Supabase {
     if (error) {
       console.error('Error: ', error.message)
     }
+  }
+
+
+  ////////////////////////////////////////PUNTOS////////////////////////////////////////////////////////
+
+  async obtenerPuntajes(){
+    const {data, error} = await this.clienteSupabase.from('usuarios_puntajes').select(`*`)
+    return data
+  }
+
+  async obtenerPuntajesPorJuego(juego:string){
+    if(!this.validarJuego(juego)){
+        return
+    }
+    
+  }
+
+  async guardarPuntajes(juego:string, id_usuario_registrado:number, puntaje:number){
+      if(!this.validarJuego(juego)){
+      return
+      }
+        const { error } = await this.clienteSupabase.from('usuarios_puntajes').insert([
+          {
+            id_usuario_registrado:id_usuario_registrado, juego:juego, puntaje:puntaje
+          }
+        ]);
+        if (error) {
+          console.error('Error: ', error.message)
+        }
+  }
+
+  validarJuego(juego:string):boolean{
+    if(juego !== 'ahorcado' && juego !== 'wordle' && juego !== 'preguntados' && juego !== 'mayormenor'){
+      console.error('ERROR', "juego no valido")
+      return false 
+    }
+    return true
   }
 }
 // Explicar las reglas como si nunca hubieran sido explicadas antes, y como si el interlocutor no tuviera ningún conocimiento previo sobre el tema.

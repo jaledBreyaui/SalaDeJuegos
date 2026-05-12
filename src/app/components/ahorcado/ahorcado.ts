@@ -1,10 +1,11 @@
 import { Component, signal, OnInit, computed } from '@angular/core';
 import { PALABRAS } from '../../../../public/data/palabrasAhorcado';
 import { Modal } from './components/modal/modal';
+import { Contador } from '../contador/contador';
 
 @Component({
   selector: 'app-ahorcado',
-  imports: [],
+  imports: [Contador],
   templateUrl: './ahorcado.html',
   styleUrl: './ahorcado.css',
 })
@@ -15,7 +16,7 @@ export class Ahorcado implements OnInit {
   errores = signal(7);
   ganar = signal(false)
   juegoPerdido = signal(false)
-  puntaje = 0
+  puntaje = signal(0)
 
   mostrarPalabra = computed(() => {
     return this.palabraSecreta()
@@ -37,6 +38,8 @@ export class Ahorcado implements OnInit {
     this.letrasElegidas.update(letras => [...letras, letra]);
     if (!this.palabraSecreta().includes(letra)) {
       this.errores.update(errores => errores - 1)
+    } else{
+      this.puntaje.set(this.puntaje() + 100)
     }
     this.verificarEstado()
   }
@@ -48,9 +51,12 @@ export class Ahorcado implements OnInit {
   }
 
   verificarEstado() {
+    console.log(this.puntaje)
     const palabraCompleta = this.mostrarPalabra().join('')
     if (palabraCompleta == this.palabraSecreta()) {
       this.ganar.set(true)
+      this.puntaje.set(this.puntaje() + (this.errores() * 100))
+      console.log(this.puntaje)
       this.reiniciarJuego()
     }
     if (this.errores() == 0) {
@@ -69,6 +75,8 @@ export class Ahorcado implements OnInit {
     this.juegoPerdido.set(false);
   }
 
+  abandonarjuego(){
 
+  }
 
 }
