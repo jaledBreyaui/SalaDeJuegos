@@ -67,6 +67,10 @@ export class Supabase {
     return this.clienteSupabase.from('usuarios_registrados').select('*');
   }
 
+  async obtenerUsuarioPorMail(email:string){
+    const {data, error} = await this.clienteSupabase.from('usuarios_registrados').select(`*`).eq('email', email).single();
+    return data
+  }
   async getMessages() {
     return this.clienteSupabase
       .from('usuarios_post')
@@ -98,8 +102,15 @@ export class Supabase {
     return this.clienteSupabase.removeChannel(channel);
   }
 
-  async postMessage() {
-
+  async postMessage(id_usuario_registrado:number, mensaje:string):Promise<void> {
+      const { error } = await this.clienteSupabase.from('usuarios_post').insert([
+        {
+          id_usuario_registrado:id_usuario_registrado, mensaje:mensaje
+        }
+    ]);
+    if (error) {
+      console.error('Error: ', error.message)
+    }
   }
 }
 // Explicar las reglas como si nunca hubieran sido explicadas antes, y como si el interlocutor no tuviera ningún conocimiento previo sobre el tema.

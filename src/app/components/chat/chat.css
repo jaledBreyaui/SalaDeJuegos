@@ -2,3 +2,49 @@
     display: flex;
     flex: 1;
 }
+
+.mensaje{
+    display: flex;
+    justify-content: center;
+    /* align-items:; */
+}
+
+.mensaje-ajeno{ 
+    align-items: flex-start;
+}
+
+.mensaje-propio{
+    align-items: flex-end;
+}
+
+.mensaje-propio>div>span{
+    display: none;
+}
+
+.mensaje>div{
+    display: flex;
+    align-items: end;
+    /* justify-content: ; */
+    border-radius: 10px;
+}
+
+.mensaje>div >div>span{
+    font-size: 10px;
+    font-weight: 100;
+    position: relative;
+    
+}
+
+
+.mensaje-propio >div{
+   text-align: left;
+   background-color: rgba(98, 201, 174);
+
+}
+
+.mensaje-ajeno > div {
+    background-color: rgb(47, 47, 47);
+}
+
+.mensaje >span {
+}

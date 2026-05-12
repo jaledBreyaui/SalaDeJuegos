@@ -1,16 +1,39 @@
-<div class="chatContainer flex flex-col flex-1 justify-between">
-  @for (mensaje of mensajes(); track mensaje.id) {
-  <div [ngClass]="">
-    <span>{{ mensaje.usuarios_registrados?.nombre ?? 'Usuario' }}</span>
-    <p>{{ mensaje.mensaje }}</p>
+<div class="chatContainer flex flex-col lg:w-50 flex-1 justify-between p-4">
+  <div class="flex flex-col gap-4">
+    @for (mensaje of mensajes(); track mensaje.id) {
+      <div
+        class="mensaje flex flex-col"
+        [ngClass]="{
+          'mensaje-propio': esMensajePropio(mensaje) === true,
+          'mensaje-ajeno': esMensajePropio(mensaje) === false,
+        }"
+      >
+        <div class="flex flex-col px-4 pt-2">
+          <span class="text-xs mb-2" style="align-self: self-start">{{
+            mensaje.usuarios_registrados?.nombre ?? 'Usuario'
+          }}</span>
+          <div>
+            <p>{{ mensaje.mensaje }}</p>
+            <span>{{ mensaje.created_at }}</span>
+          </div>
+        </div>
+      </div>
+    }
   </div>
-  }
 
-  <div class="">
-    <form class="flex">
-      <input class="flex-9/10 rounded border border-slate-400 bg-white px-3 py-2 text-slate-900" type="text"
-        placeholder="Escribí tu mensaje" />
-      <button type="submit" class="w-full flex-1/10 rounded border-none bg-white px-3 py-2 text-slate-900">
+  <div class="bg-[rgb(47, 47, 47)]">
+    <form class="flex" (submit)="enviarMensaje($event)">
+      <input
+        [(ngModel)]="mensajeNuevo"
+        name="mensajeNuevo"
+        class="flex-19/20 rounded border-slate-400 bg-white px-3 py-2 text-slate-900"
+        type="text"
+        placeholder="Escribí tu mensaje"
+      />
+      <button
+        type="submit"
+        class="w-full flex-1/20 rounded border-none bg-[rgb(98, 201, 174)] rounded-4xl bg-white px-3 py-2 text-slate-900"
+      >
         <i class="pi pi-send" style="color: var(--primary-color)"> </i>
       </button>
     </form>
