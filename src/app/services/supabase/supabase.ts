@@ -17,13 +17,11 @@ export class Supabase {
 
     this.clienteSupabase.auth.getSession().then(({ data }) => {
       this.usuarioLogueado.set(!!data.session);
-      this.cargarNombreUsuario(data.session?.user.email ?? null);
       this.dataUsuario = data.session?.user;
     });
 
     this.clienteSupabase.auth.onAuthStateChange((_event, session) => {
       this.usuarioLogueado.set(!!session);
-      this.cargarNombreUsuario(session?.user.email ?? null);
     });
 
   }
@@ -69,29 +67,10 @@ export class Supabase {
     return this.clienteSupabase.from('usuarios_registrados').select('*');
   }
 
-  private async cargarNombreUsuario(email: string | null) {
-    if (!email) {
-      this.nombreUsuario.set('');
-      return;
-    }
-    this.nombreUsuario.set(email);
-    const { data, error } = await this.clienteSupabase
-      .from('usuarios_registrados')
-      .select('nombre')
-      .eq('email', email)
-      .maybeSingle();
-    if (error) {
-      console.error('Error al cargar usuario: ', error.message);
-    }
-    this.nombreUsuario.set(data?.nombre ?? email);
-  }
-
-
-
   async getMessages() {
     return this.clienteSupabase
       .from('usuarios_post')
-      .select('*, usuarios_registrados(nombre)')
+      .select('*, usuarios_registrados(nombre, email)')
       .order('created_at', { ascending: true });
   }
 

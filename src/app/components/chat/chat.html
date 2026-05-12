@@ -1,19 +1,16 @@
-<div class="chatContainer">
-  @for (mensaje of mensajes(); track mensaje) {
-    <p>{{ mensaje }}</p>
+<div class="chatContainer flex flex-col flex-1 justify-between">
+  @for (mensaje of mensajes(); track mensaje.id) {
+  <div [ngClass]="">
+    <span>{{ mensaje.usuarios_registrados?.nombre ?? 'Usuario' }}</span>
+    <p>{{ mensaje.mensaje }}</p>
+  </div>
   }
 
   <div class="">
     <form class="flex">
-      <input
-        class="flex-9/10 rounded border border-slate-400 bg-white px-3 py-2 text-slate-900"
-        type="text"
-        placeholder="Escribí tu mensaje"
-      />
-      <button
-        type="submit"
-        class="w-full flex-1/10 bg-white w-full rounded border-none bg-white px-3 py-2 text-slate-900"
-      >
+      <input class="flex-9/10 rounded border border-slate-400 bg-white px-3 py-2 text-slate-900" type="text"
+        placeholder="Escribí tu mensaje" />
+      <button type="submit" class="w-full flex-1/10 rounded border-none bg-white px-3 py-2 text-slate-900">
         <i class="pi pi-send" style="color: var(--primary-color)"> </i>
       </button>
     </form>

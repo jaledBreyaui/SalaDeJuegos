@@ -1,35 +1,30 @@
 import { Component, NgZone, OnDestroy, OnInit, signal } from '@angular/core';
+import { NgClass } from '@angular/common';
 import { RealtimeChannel, User } from '@supabase/supabase-js';
 import { Supabase } from '../../services/supabase/supabase';
+import { MensajeChat } from '../../interfaces/chat';
 
-type MensajeChat = {
-  mensaje?: string;
-  texto?: string;
-  contenido?: string;
-  usuarios_registrados?: {
-    nombre?: string;
-  };
-};
 
 @Component({
   selector: 'app-chat',
-  imports: [],
+  imports: [NgClass],
   templateUrl: './chat.html',
   styleUrl: './chat.css',
 })
 export class Chat implements OnInit, OnDestroy {
 
-  mensajes = signal<string[]>([]);
+  mensajes = signal<MensajeChat[]>([]);
   private canalMensajes?: RealtimeChannel;
   dataUsuario: User | undefined
   constructor(
-    private chat:Supabase,
+    private chat: Supabase,
     private ngZone: NgZone
-  ){
+  ) {
   }
-  
+
   async ngOnInit(): Promise<void> {
     await this.cargarMensajes();
+    console.log(this.mensajes())
     this.dataUsuario = this.chat.dataUsuario
     console.log(this.dataUsuario)
 
@@ -48,18 +43,14 @@ export class Chat implements OnInit, OnDestroy {
 
   private async cargarMensajes(): Promise<void> {
     const { data, error } = await this.chat.getMessages();
-
     if (error) {
       console.error('Error al obtener mensajes:', error.message);
       return;
     }
+    this.mensajes.set((data ?? []) as MensajeChat[]);
+  }
 
-    this.mensajes.set(
-      (data as MensajeChat[]).map((mensaje) => {
-        const nombre = mensaje.usuarios_registrados?.nombre ?? 'Sin nombre';
-        const texto = mensaje.mensaje ?? mensaje.texto ?? mensaje.contenido ?? '';
-        return `${nombre}: ${texto}`;
-      })
-    );
+  esMensajePropio(mensaje: MensajeChat): boolean {
+    return mensaje.usuarios_registrados?.email === this.dataUsuario?.email;
   }
 }
