@@ -1,11 +1,16 @@
 import { Component, signal, OnInit, computed } from '@angular/core';
 import { PALABRAS } from '../../../../public/data/palabrasAhorcado';
-import { Modal } from './components/modal/modal';
 import { Contador } from '../contador/contador';
+import { DialogModule } from 'primeng/dialog';
+import { ButtonModule } from 'primeng/button';
+import { Router } from '@angular/router';
+import { Supabase } from '../../services/supabase/supabase';
+import { User } from '@supabase/supabase-js';
+
 
 @Component({
   selector: 'app-ahorcado',
-  imports: [Contador],
+  imports: [Contador, DialogModule, ButtonModule],
   templateUrl: './ahorcado.html',
   styleUrl: './ahorcado.css',
 })
@@ -17,7 +22,9 @@ export class Ahorcado implements OnInit {
   ganar = signal(false)
   juegoPerdido = signal(false)
   puntaje = signal(0)
-
+  visible = signal(false);
+  mensajeFinDejuego = '';
+  dataUsuario: User | undefined
   mostrarPalabra = computed(() => {
     return this.palabraSecreta()
       .split('')
@@ -28,7 +35,7 @@ export class Ahorcado implements OnInit {
     return `media/juegos/ahorcado/ahorcado-${this.errores()}.png`;
   });
 
-  constructor() { }
+  constructor(private router: Router, private sb: Supabase) { }
 
   ngOnInit() {
     this.sortearPalabra();
@@ -38,7 +45,7 @@ export class Ahorcado implements OnInit {
     this.letrasElegidas.update(letras => [...letras, letra]);
     if (!this.palabraSecreta().includes(letra)) {
       this.errores.update(errores => errores - 1)
-    } else{
+    } else {
       this.puntaje.set(this.puntaje() + 100)
     }
     this.verificarEstado()
@@ -51,32 +58,49 @@ export class Ahorcado implements OnInit {
   }
 
   verificarEstado() {
-    console.log(this.puntaje)
     const palabraCompleta = this.mostrarPalabra().join('')
     if (palabraCompleta == this.palabraSecreta()) {
       this.ganar.set(true)
       this.puntaje.set(this.puntaje() + (this.errores() * 100))
-      console.log(this.puntaje)
-      this.reiniciarJuego()
+      this.mensajeFinDejuego = `Adivinaste!`
+      this.showDialog()
     }
     if (this.errores() == 0) {
       this.juegoPerdido.set(true)
-      this.reiniciarJuego()
+      this.mensajeFinDejuego = `Perdiste!`
+      this.showDialog()
     }
 
-    console.log(this.errores());
   }
 
   reiniciarJuego() {
+    if (!this.ganar()) {
+      this.puntaje.set(0)
+    }
     this.errores.set(7);
     this.sortearPalabra()
     this.letrasElegidas.set([])
     this.ganar.set(false);
     this.juegoPerdido.set(false);
+    this.closeDialog()
   }
 
-  abandonarjuego(){
+  abandonarjuego() {
+    if (this.puntaje() > 0) {
+      this.sb.guardarPuntajes('ahorcado', this.puntaje())
+    }
+    this.router.navigate(['/home']);
+    this.closeDialog()
+  }
 
+
+  ////Modal
+  showDialog() {
+    this.visible.set(true);
+  }
+
+  closeDialog() {
+    this.visible.set(false);
   }
 
 }

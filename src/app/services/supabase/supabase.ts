@@ -22,8 +22,8 @@ export class Supabase {
 
     this.clienteSupabase.auth.onAuthStateChange((_event, session) => {
       this.usuarioLogueado.set(!!session);
+      this.dataUsuario = session?.user;
     });
-
   }
 
   registrar(correo: string, clave: string) {
@@ -39,6 +39,7 @@ export class Supabase {
       password: clave,
     });
     this.usuarioLogueado.set(!!respuesta.data.session);
+    this.dataUsuario = respuesta.data.session?.user;
     return respuesta;
   }
 
@@ -48,6 +49,7 @@ export class Supabase {
     if (!respuesta.error) {
       this.usuarioLogueado.set(false);
       this.nombreUsuario.set('');
+      this.dataUsuario = undefined;
     }
     return respuesta;
   }
@@ -67,8 +69,8 @@ export class Supabase {
     return this.clienteSupabase.from('usuarios_registrados').select('*');
   }
 
-  async obtenerUsuarioPorMail(email:string){
-    const {data, error} = await this.clienteSupabase.from('usuarios_registrados').select(`*`).eq('email', email).single();
+  async obtenerUsuarioPorMail(email: string) {
+    const { data, error } = await this.clienteSupabase.from('usuarios_registrados').select(`*`).eq('email', email).single();
     return data
   }
 
@@ -105,11 +107,11 @@ export class Supabase {
     return this.clienteSupabase.removeChannel(channel);
   }
 
-  async postMessage(id_usuario_registrado:number, mensaje:string):Promise<void> {
-      const { error } = await this.clienteSupabase.from('usuarios_post').insert([
-        {
-          id_usuario_registrado:id_usuario_registrado, mensaje:mensaje
-        }
+  async postMessage(id_usuario_registrado: number, mensaje: string): Promise<void> {
+    const { error } = await this.clienteSupabase.from('usuarios_post').insert([
+      {
+        id_usuario_registrado: id_usuario_registrado, mensaje: mensaje
+      }
     ]);
     if (error) {
       console.error('Error: ', error.message)
@@ -119,36 +121,49 @@ export class Supabase {
 
   ////////////////////////////////////////PUNTOS////////////////////////////////////////////////////////
 
-  async obtenerPuntajes(){
-    const {data, error} = await this.clienteSupabase.from('usuarios_puntajes').select(`*`)
+  async obtenerPuntajes() {
+    const { data, error } = await this.clienteSupabase.from('usuarios_puntajes').select(`*`)
     return data
   }
 
-  async obtenerPuntajesPorJuego(juego:string){
-    if(!this.validarJuego(juego)){
-        return
-    }
-    
-  }
-
-  async guardarPuntajes(juego:string, id_usuario_registrado:number, puntaje:number){
-      if(!this.validarJuego(juego)){
+  async obtenerPuntajesPorJuego(juego: string) {
+    if (!this.validarJuego(juego)) {
       return
-      }
-        const { error } = await this.clienteSupabase.from('usuarios_puntajes').insert([
-          {
-            id_usuario_registrado:id_usuario_registrado, juego:juego, puntaje:puntaje
-          }
-        ]);
-        if (error) {
-          console.error('Error: ', error.message)
-        }
+    }
+
   }
 
-  validarJuego(juego:string):boolean{
-    if(juego !== 'ahorcado' && juego !== 'wordle' && juego !== 'preguntados' && juego !== 'mayormenor'){
+  async guardarPuntajes(juego: string, puntaje: number) {
+    if (!this.validarJuego(juego)) {
+      return
+    }
+
+    const email = this.dataUsuario?.email;
+    if (!email) {
+      console.error('ERROR', 'No hay usuario logueado');
+      return;
+    }
+
+    const usuario = await this.obtenerUsuarioPorMail(email);
+    if (!usuario) {
+      console.error('ERROR', 'No se encontraron datos del usuario');
+      return;
+    }
+
+    const { error } = await this.clienteSupabase.from('usuarios_puntajes').insert([
+      {
+        id_usuario_registrado: usuario.id, juego: juego, puntaje: puntaje
+      }
+    ]);
+    if (error) {
+      console.error('Error: ', error.message)
+    }
+  }
+
+  validarJuego(juego: string): boolean {
+    if (juego !== 'ahorcado' && juego !== 'wordle' && juego !== 'preguntados' && juego !== 'mayormenor') {
       console.error('ERROR', "juego no valido")
-      return false 
+      return false
     }
     return true
   }

@@ -27,7 +27,10 @@ export const routes: Routes = [
         path: 'chat',
         canActivate: [authGuard],
         loadComponent: () => import("./components/chat/chat").then(m => m.Chat),
-
+    },
+    {
+        path: 'juegos/mayormenor',
+        loadComponent: () => import("./components/mayormenor/mayormenor").then(m => m.Mayormenor)
     }
 
 ];

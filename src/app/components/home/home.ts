@@ -6,7 +6,7 @@ import { Supabase } from '../../services/supabase/supabase';
 
 @Component({
   selector: 'app-home',
-  imports: [Animatedbg, About],
+  imports: [Animatedbg],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })

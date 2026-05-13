@@ -1,9 +1,10 @@
 <div class="card flex justify-center">
   <p-button (onClick)="showDialog()" icon="pi pi-user" size="large" label="Ingresar" />
-  <p-dialog maskStyleClass="backdrop-blur-sm" [visible]="visible()" (visibleChange)="visible.set($event)" styleClass="!border-0 !bg-transparent">
+  <p-dialog maskStyleClass="backdrop-blur-sm" [visible]="visible()" (visibleChange)="visible.set($event)"
+    styleClass="!border-0 !bg-transparent">
     <ng-template #headless>
       <form [formGroup]="formularioLogin"
-        class="flex flex-col justify-evenly p-8 gap-6 mx-auto w-full min-h-[450px] min-w-[450px] sm:px-6 md:max-w-2xl lg:max-w-xl bg-zinc-900 rounded-2xl"
+        class="flex flex-col justify-evenly p-8 gap-6 mx-auto w-full min-h-[450px]  sm:px-6 md:max-w-2xl lg:max-w-xl bg-zinc-900 rounded-2xl"
         style="border-radius: 12px">
         <h1 class="text-center font-bold text-2xl">Bienvenido</h1>
         <p-inputgroup class="flex w-full">
@@ -29,8 +30,9 @@
           No estoy registrado
         </a>
         <div class="flex flex-col items-center gap-4">
-          <p-button label="Ingresar" type="button" [disabled]="formularioLogin.invalid" (onClick)="iniciarSesion()" [text]="true"
-            styleClass="!p-4 w-full border-green !border-white/30 hover:!bg-green" class="w-full text-primary" />
+          <p-button label="Ingresar" type="button" [disabled]="formularioLogin.invalid" (onClick)="iniciarSesion()"
+            [text]="true" styleClass="!p-4 w-full border-green !border-white/30 hover:!bg-green"
+            class="w-full text-primary" />
           <p-button label="Volver" type="button" (click)="closeDialog()" [text]="true"
             styleClass="!p-4 w-full !text-primary-50 hover:!bg-white/10" class="w-full" />
         </div>

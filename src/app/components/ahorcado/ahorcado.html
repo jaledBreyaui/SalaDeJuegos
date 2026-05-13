@@ -9,24 +9,16 @@
     <img [src]="imagenAhorcado()" alt="Ahorcado" />
     <div class="mb-5 flex gap-5">
       @for (letra of mostrarPalabra(); track $index) {
-        <span class="text-3xl font-bold">
-          {{ letra }}
-        </span>
+      <span class="text-3xl font-bold">
+        {{ letra }}
+      </span>
       }
     </div>
   </div>
-  <!-- <p>errores: <span> {{errores()}}</span></p> -->
 
-  @if (ganar()) {
-    <h1>Ganaste!</h1>
-  }
   <div class="Teclado flex flex-col justify-center items-center gap-y-5">
     <div class="fila-teclado fila-superior">
-      <button
-        class="text-primary!"
-        (click)="elegirLetra('q')"
-        [disabled]="letrasElegidas().includes('q')"
-      >
+      <button class="text-primary!" (click)="elegirLetra('q')" [disabled]="letrasElegidas().includes('q')">
         Q
       </button>
       <button (click)="elegirLetra('w')" [disabled]="letrasElegidas().includes('w')">W</button>
@@ -63,4 +55,31 @@
       <button (click)="elegirLetra('m')" [disabled]="letrasElegidas().includes('m')">M</button>
     </div>
   </div>
+
+  <p-dialog maskStyleClass="backdrop-blur-sm" [visible]="visible()" (visibleChange)="visible.set($event)"
+    styleClass="!border-0 !bg-transparent">
+
+    <ng-template #headless>
+      <div
+        class="flex flex-col justify-evenly p-8 gap-6 mx-auto w-full min-h-112.5 min-w-112.5 sm:px-6 md:max-w-2xl lg:max-w-xl bg-zinc-900 rounded-2xl">
+        <h1 class="text-center font-bold text-2xl">{{mensajeFinDejuego}}</h1>
+        @if(!ganar()){
+
+        <h2 class="text-center font-bold text-xl">La palabra era {{this.palabraSecreta()}}</h2>
+        }
+        @if(ganar()){
+        <h1>Adivininaste la palabra!<span class="font-bold">{{this.palabraSecreta()}}</span>
+        </h1>
+        <h2> Sumaste {{puntaje()}} puntos! Volvé a jugar para seguir sumando</h2>
+        }
+        <div class="flex flex-col items-center gap-4">
+          <p-button label="Volver a Jugar" type="button" (click)="reiniciarJuego()" [text]="true"
+            styleClass="!p-4 w-full border-green !border-white/30 hover:!bg-green" class="w-full text-primary" />
+          <p-button label="Salir al Menu" type="button" (click)="abandonarjuego()" [text]="true"
+            styleClass="!p-4 w-full !text-white hover:!bg-white/10" class="w-full" />
+        </div>
+      </div>
+    </ng-template>
+  </p-dialog>
+
 </section>
