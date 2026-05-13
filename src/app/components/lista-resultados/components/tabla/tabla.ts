@@ -8,9 +8,6 @@ import { NgClass } from '@angular/common';
   templateUrl: './tabla.html',
   styleUrl: './tabla.css',
 })
-export class Tabla  {
-
-  @Input() resultado: any[] = []
-
- 
+export class Tabla {
+  @Input() resultado: any[] = [];
 }

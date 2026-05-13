@@ -37,5 +37,9 @@ export const routes: Routes = [
         path: 'juegos/mayormenor',
         loadComponent: () => import("./components/mayormenor/mayormenor").then(m => m.Mayormenor)
     },
+    {
+        path:'juegos/wordle',
+        loadComponent: () => import("./components/wordle/wordle").then( m => m.Wordle )
+    }
 
 ];
