@@ -130,7 +130,8 @@ export class Supabase {
     if (!this.validarJuego(juego)) {
       return
     }
-
+    const {data,error} = await this.clienteSupabase.from('usuarios_puntajes').select('*,usuarios_registrados(nombre, apellido)').eq('juego', juego).order('puntaje', {ascending: false}).limit(15)
+    return data
   }
 
   async guardarPuntajes(juego: string, puntaje: number) {

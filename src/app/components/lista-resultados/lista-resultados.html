@@ -1,0 +1,26 @@
+<div class="flex flex-1">
+  <div class="card h-100 flex flex-1 flex-col">
+    <p-tabs value="0">
+      <h1 class="text-center text-lg font-bold bg-gray-500">Mejores jugadores</h1>
+      <p-tablist>
+        <p-tab value="0">Ahorcado</p-tab>
+        <p-tab value="1">Mayor o Menor</p-tab>
+        <p-tab value="2">Preguntados</p-tab>
+        <p-tab value="3">Wordle</p-tab>
+      </p-tablist>
+      <p-tabpanels>
+        <p-tabpanel value="0">
+          <app-tabla [resultado]="ahorcado()"></app-tabla>
+        </p-tabpanel>
+        <p-tabpanel value="1">
+          <p class="m-0">
+            <app-tabla [resultado]="mayormenor()"></app-tabla></p
+        ></p-tabpanel>
+        <p-tabpanel value="2">
+          <app-tabla [resultado]="preguntados()"></app-tabla>
+        </p-tabpanel>
+        <p-tabpanel value="3"> <app-tabla [resultado]="wordle()"></app-tabla> </p-tabpanel>
+      </p-tabpanels>
+    </p-tabs>
+  </div>
+</div>

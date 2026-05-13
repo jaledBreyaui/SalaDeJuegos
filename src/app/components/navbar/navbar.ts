@@ -1,5 +1,5 @@
 import { Component, computed } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
 import { Supabase } from '../../services/supabase/supabase';
@@ -28,11 +28,23 @@ export class Navbar {
       },
       ...(estaLogueado
         ? [
-            {
+          { 
+            label:'Comunidad',
+            icon: 'pi pi-users',
+            items: [
+                {
               label: 'Chat',
               icon: 'pi pi-comments',
               routerLink: '/chat'
-            },
+                },
+                {
+                  label:'Mejores Jugadores',
+                  icon: 'pi pi-list',
+                  routerLink: '/resultados' 
+                }
+            ]
+          },
+            
             {
               label: 'Cerrar Sesion',
               icon: 'pi pi-sign-out',

@@ -5,20 +5,32 @@
     <h1 class="sm:sfont-l text-center">Sala de Juegos</h1>
 
     <div class="games-grid grid grid-cols-2 lg:grid-cols-4 gap-20">
-      <app-acceso-juego ruta="/juegos/ahorcado" imagen="media/juegos/ahorcado.png"></app-acceso-juego>
-      <app-acceso-juego ruta="/home" imagen="media/juegos/mayormenor.png"></app-acceso-juego>
+      <app-acceso-juego
+        ruta="/juegos/ahorcado"
+        imagen="media/juegos/ahorcado.png"
+      ></app-acceso-juego>
+      <app-acceso-juego
+        ruta="/juegos/mayormenor"
+        imagen="media/juegos/mayormenor.png"
+      ></app-acceso-juego>
       <app-acceso-juego ruta="/home" imagen="media/juegos/preguntad2.png"></app-acceso-juego>
       <app-acceso-juego ruta="/home" imagen="media/juegos/wordle.png"></app-acceso-juego>
     </div>
 
     <div class="auth-slot">
       @if (!sb.usuarioLogueado()) {
-      <div class="flex gap-10">
-        <app-login></app-login>
-        <p-button label="Registrarse" size="large" routerLink="/register" icon="pi pi-user-plus" class=""></p-button>
-      </div>
+        <div class="flex gap-10">
+          <app-login></app-login>
+          <p-button
+            label="Registrarse"
+            size="large"
+            routerLink="/register"
+            icon="pi pi-user-plus"
+            class=""
+          ></p-button>
+        </div>
       } @else {
-      <h2 class="text-center">Bienvenido, {{ sb.nombreUsuario() }}</h2>
+        <h2 class="text-center">Bienvenido, {{ sb.nombreUsuario() }}</h2>
       }
     </div>
   </div>

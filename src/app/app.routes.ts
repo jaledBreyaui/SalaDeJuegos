@@ -20,17 +20,22 @@ export const routes: Routes = [
         loadComponent: () => import("./components/about/about").then(m => m.About),
     },
     {
-        path: 'juegos/ahorcado',
-        canActivate: [authGuard],
-        loadComponent: () => import("./components/ahorcado/ahorcado").then(m => m.Ahorcado),
-    }, {
         path: 'chat',
         canActivate: [authGuard],
         loadComponent: () => import("./components/chat/chat").then(m => m.Chat),
     },
     {
+        path: 'resultados',
+        loadComponent: () => import("./components/lista-resultados/lista-resultados").then(m => m.ListaResultados)
+    },
+    {
+        path: 'juegos/ahorcado',
+        canActivate: [authGuard],
+        loadComponent: () => import("./components/ahorcado/ahorcado").then(m => m.Ahorcado),
+    },
+    {
         path: 'juegos/mayormenor',
         loadComponent: () => import("./components/mayormenor/mayormenor").then(m => m.Mayormenor)
-    }
+    },
 
 ];

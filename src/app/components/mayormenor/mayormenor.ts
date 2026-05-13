@@ -20,6 +20,7 @@ export class Mayormenor {
   darCarta() {
     this.deck.getCards().subscribe((data) => {
       if (data) {
+        console.log(data)
         this.imagenCarta.set(data.cards[0].image);
         this.valorCarta = this.verificarValor(data.cards[0].value)
         console.log(this.valorCarta);
