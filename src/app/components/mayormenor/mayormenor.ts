@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { Deck } from '../../services/deck/deck';
 
 @Component({
@@ -9,7 +9,7 @@ import { Deck } from '../../services/deck/deck';
 })
 export class Mayormenor {
   valorCarta: number = 0
-  imagenCarta: string = ''
+  imagenCarta = signal('')
   valorCartaPrevia: number = 0
   constructor(private deck: Deck) { }
 
@@ -18,27 +18,31 @@ export class Mayormenor {
   }
 
   darCarta() {
-    if (this.valorCarta !== 0) {
-      this.valorCartaPrevia = this.valorCarta
-    }
     this.deck.getCards().subscribe((data) => {
       if (data) {
-        console.log(data.cards);
-        this.imagenCarta = data.cards[0].image;
+        this.imagenCarta.set(data.cards[0].image);
+        this.valorCarta = this.verificarValor(data.cards[0].value)
+        console.log(this.valorCarta);
       }
     });
   }
 
   verificarValor(value: string): number {
-    let numero = 0
-    if (value == "ACE") {
-      numero = 13
-    } else if (value == "KING") {
-      numero = 12
-    } else if (value == "JACK") {
-      numero = 11
+    if (!isNaN(Number(value))) {
+      return Number(value);
     }
-    return numero
+
+    if (value === "ACE") {
+      return 14;
+    } else if (value === "KING") {
+      return 13;
+    } else if (value === "QUEEN") {
+      return 12;
+    } else if (value === "JACK") {
+      return 11;
+    }
+
+    return 0;
   }
 
   verificarEstado() {
