@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { mazoCarta } from '../../interfaces/mazoCarta';
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class Deck {
-  private url = "https://deckofcardsapi.com/api/deck/new/draw/?count=2"
-
-
+  private url = "https://deckofcardsapi.com/api/deck/new/draw/?count=1"
   constructor(private http: HttpClient) { }
 
 
   getCards() {
-    return this.http.get(this.url);
+    return this.http.get<mazoCarta>(this.url);
   }
 }
