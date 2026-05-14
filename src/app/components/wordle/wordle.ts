@@ -3,9 +3,10 @@ import { PALABRAS_WORDLE } from '../../../../public/data/palabras-wordle';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
+import { Pantallafindejuego } from '../pantallafindejuego/pantallafindejuego';
 @Component({
   selector: 'app-wordle',
-  imports: [InputTextModule, ReactiveFormsModule, NgClass],
+  imports: [InputTextModule, ReactiveFormsModule, NgClass, Pantallafindejuego],
   templateUrl: './wordle.html',
   standalone: true,
   styleUrl: './wordle.css',
@@ -18,7 +19,7 @@ export class Wordle implements OnInit {
   letras = ['letra1', 'letra2', 'letra3', 'letra4', 'letra5'];
   intentos: FormGroup[] = [];
   intentoActual = 0;
-  juegoTerminado = signal(false);
+  juegoTerminado = signal(true);
   mensajeJuegoTerminado = '';
   clasesLetrasProbadas: string[][] = [];
   puntaje = signal(0);
