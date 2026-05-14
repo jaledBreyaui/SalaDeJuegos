@@ -1,0 +1,33 @@
+:host {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.contenedor-intentos > form {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.contenedor-intentos > form > input {
+  height: 80px;
+  width: 80px;
+  caret-color: transparent;
+  font-size: 50px;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.correcta {
+  background-color: #65a30d;
+}
+
+.presente {
+  background-color: #fde047;
+}
+
+.incorrecta {
+  background-color: #374151;
+}

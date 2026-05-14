@@ -1,1 +1,28 @@
-<h1 class="text-center">wordle</h1>
+<div class="flex gap-20 flex-col">
+  <h1 class="text-center">wordle</h1>
+  <h1 class="text-center">{{ this.palabraSecreta() }}</h1>
+  <div class="contenedor-intentos flex flex-col gap-2">
+    @for (intento of intentos; track $index; let intentoIndex = $index) {
+      <form
+        [formGroup]="intento"
+        class="flex justify-center"
+        (keydown.enter)="verificarIntento(intento, intentoIndex, $event)"
+      >
+        @for (letra of letras; track letra; let letraIndex = $index) {
+          <input
+            #casillero
+            [ngClass]="clasesLetrasProbadas[intentoIndex][letraIndex]"
+            type="text"
+            pInputText
+            maxlength="1"
+            autocomplete="off"
+            [readOnly]="intentoIndex !== intentoActual"
+            [formControlName]="letra"
+            (input)="normalizarLetra(intento, letra, intentoIndex, letraIndex, $event)"
+            (keydown.backspace)="manejarBackspace(intento, letra, intentoIndex, letraIndex)"
+          />
+        }
+      </form>
+    }
+  </div>
+</div>
