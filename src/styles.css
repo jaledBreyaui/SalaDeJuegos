@@ -5,15 +5,23 @@
 
 html,
 body {
-    width: 100%;
-    min-height: 100%;
-    margin: 0;
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
 }
 
-body>app-root {
-    display: flex;
-    min-height: 100vh;
-    flex-direction: column;
+body > app-root {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.gradient-text-style {
+  font-size: 3rem !important;
+  font-weight: 700 !important;
+  text-align: center;
+  display: flex;
+  justify-content: center;
 }
 
 /*

@@ -11,7 +11,7 @@ import { ButtonModule } from 'primeng/button';
 export class Pantallafindejuego {
   @Input() puntaje: number = 0;
   @Input() victoria: boolean = false;
+  @Input() mensaje: string = '';
   @Input() reiniciar!: () => void;
-  @Input() abandonar!: () => void;
-
+  @Input() abandonar: () => void = () => {};
 }

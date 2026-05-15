@@ -6,14 +6,13 @@
   overflow: hidden;
   max-width: 100vw;
 }
-
-.contenedor-intentos>form {
+.contenedor-intentos > form {
   display: flex;
   gap: 8px;
   justify-content: center;
 }
 
-.contenedor-intentos>form>input {
+.contenedor-intentos > form > input {
   height: 80px;
   width: 80px;
   caret-color: transparent;
@@ -23,14 +22,40 @@
   font-weight: 600;
 }
 
-.correcta {
-  background-color: #65a30d;
+.contenedor-intentos > form > input.correcta {
+  background-color: #65a30d !important;
+  border-color: #65a30d !important;
+  color: white !important;
 }
 
-.presente {
-  background-color: #fde047;
+.contenedor-intentos > form > input.presente {
+  background-color: #fde047 !important;
+  border-color: #fde047 !important;
+  color: #111827 !important;
 }
 
-.incorrecta {
-  background-color: #374151;
+.contenedor-intentos > form > input.incorrecta {
+  background-color: #374151 !important;
+  border-color: #374151 !important;
+  color: white !important;
+}
+
+.fila-teclado {
+  display: flex;
+  gap: 10px;
+}
+
+.fila-teclado > button {
+  border: 2px solid white;
+  height: 60px;
+  width: 60px;
+  /* color: white;
+     */
+  color: white;
+  background-color: rgb(16, 16, 16);
+}
+.fila-teclado > button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  filter: grayscale(1);
 }

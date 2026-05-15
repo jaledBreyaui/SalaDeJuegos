@@ -4,9 +4,17 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { Pantallafindejuego } from '../pantallafindejuego/pantallafindejuego';
+import { NgxGradientTextComponent } from '@omnedia/ngx-gradient-text';
+
 @Component({
   selector: 'app-wordle',
-  imports: [InputTextModule, ReactiveFormsModule, NgClass, Pantallafindejuego],
+  imports: [
+    InputTextModule,
+    ReactiveFormsModule,
+    NgClass,
+    Pantallafindejuego,
+    NgxGradientTextComponent,
+  ],
   templateUrl: './wordle.html',
   standalone: true,
   styleUrl: './wordle.css',
@@ -16,21 +24,26 @@ export class Wordle implements OnInit {
 
   palabras = PALABRAS_WORDLE;
   palabraSecreta = signal<string>('');
+  puntaje = signal(0);
+
   letras = ['letra1', 'letra2', 'letra3', 'letra4', 'letra5'];
+  letrasElegidas: string[] = [];
   intentos: FormGroup[] = [];
+
   intentoActual = 0;
+  clasesLetrasProbadas: string[][] = [];
+
   juegoTerminado = signal(false);
   victoria = signal(false);
   mensajeJuegoTerminado = '';
-  clasesLetrasProbadas: string[][] = [];
-  puntaje = signal(0);
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
-    this.intentos = Array.from({ length: 5 }, () => this.crearIntento());
-    this.clasesLetrasProbadas = Array.from({ length: 5 }, () => ['', '', '', '', '']);
+    this.intentos = Array.from({ length: 6 }, () => this.crearIntento());
+    this.clasesLetrasProbadas = Array.from({ length: 6 }, () => ['', '', '', '', '']);
     this.sortearPalabra();
+    console.log(this.palabraSecreta());
   }
 
   sortearPalabra() {
@@ -70,6 +83,64 @@ export class Wordle implements OnInit {
     }
   }
 
+  obtenerLetras(intento: FormGroup): string[] {
+    return this.letras.map((letra) => intento.get(letra)?.value ?? '');
+  }
+
+  intentoCompleto(intento: FormGroup): boolean {
+    return this.obtenerLetras(intento).every((letra) => letra.length === 1);
+  }
+
+  verificarIntento(intento: FormGroup, index: number, event?: Event): void {
+    event?.preventDefault();
+
+    if (index !== this.intentoActual || !this.intentoCompleto(intento)) {
+      return;
+    }
+    const palabraIngresada = this.obtenerLetras(intento).join('');
+    const palabraSecreta = this.palabraSecreta();
+
+    for (let i = 0; i < palabraIngresada.length; i++) {
+      this.letrasElegidas.push(palabraIngresada[i]);
+      if (palabraIngresada[i] === palabraSecreta[i]) {
+        this.clasesLetrasProbadas[this.intentoActual][i] = 'correcta';
+      } else if (palabraSecreta.includes(palabraIngresada[i])) {
+        this.clasesLetrasProbadas[this.intentoActual][i] = 'presente';
+      } else {
+        this.clasesLetrasProbadas[this.intentoActual][i] = 'incorrecta';
+      }
+    }
+
+    this.intentoActual++;
+
+    if (this.intentoActual == 6) {
+      this.juegoTerminado.set(true);
+      this.victoria.set(false);
+      this.puntaje.set(0);
+    }
+    if (this.palabraSecreta() === palabraIngresada) {
+      this.juegoTerminado.set(true);
+      this.victoria.set(true);
+      this.puntaje.set(Math.round(this.puntaje() + 25000 / this.intentoActual));
+      console.log(this.puntaje());
+    }
+    console.log(this.intentoActual);
+  }
+
+  abandonarJuego = () => {};
+
+  reiniciarJuego = () => {
+    this.juegoTerminado.set(false);
+    this.intentoActual = 0;
+    this.clasesLetrasProbadas = [];
+    this.letrasElegidas = [];
+    this.ngOnInit();
+  };
+
+  mostrarFinJuego() {
+    this.juegoTerminado.set(true);
+  }
+
   manejarBackspace(
     intento: FormGroup,
     control: string,
@@ -91,50 +162,4 @@ export class Wordle implements OnInit {
     const indexGlobal = intentoIndex * this.letras.length + letraIndex;
     this.casilleros.get(indexGlobal)?.nativeElement.focus();
   }
-
-  obtenerLetras(intento: FormGroup): string[] {
-    return this.letras.map((letra) => intento.get(letra)?.value ?? '');
-  }
-
-  intentoCompleto(intento: FormGroup): boolean {
-    return this.obtenerLetras(intento).every((letra) => letra.length === 1);
-  }
-
-  verificarIntento(intento: FormGroup, index: number, event?: Event): void {
-    event?.preventDefault();
-
-    if (index !== this.intentoActual || !this.intentoCompleto(intento)) {
-      return;
-    }
-    const palabraIngresada = this.obtenerLetras(intento).join('');
-    const palabraSecreta = this.palabraSecreta();
-
-    for (let i = 0; i < palabraIngresada.length; i++) {
-      console.log('palabra ingresada[i] :', palabraIngresada[i]);
-      console.log('palabra secreta[i] :', palabraSecreta[i]);
-      if (palabraIngresada[i] === palabraSecreta[i]) {
-        this.clasesLetrasProbadas[this.intentoActual][i] = 'correcta';
-      } else if (palabraSecreta.includes(palabraIngresada[i])) {
-        this.clasesLetrasProbadas[this.intentoActual][i] = 'presente';
-      } else {
-        this.clasesLetrasProbadas[this.intentoActual][i] = 'incorrecta';
-      }
-    }
-
-    if (this.intentoActual < this.intentos.length - 1) {
-      this.intentoActual++;
-    }
-
-    if (this.intentoActual > 6) {
-      this.juegoTerminado.set(true);
-    }
-    if (this.palabraSecreta() === palabraIngresada) {
-      this.juegoTerminado.set;
-    }
-  }
-
-  mostrarFinJuego() {
-    this.juegoTerminado.set(true)
-  }
-  claseletra() { }
 }

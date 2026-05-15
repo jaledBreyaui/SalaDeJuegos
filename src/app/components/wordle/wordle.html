@@ -1,24 +1,84 @@
 <div class="flex gap-20 flex-col p-10">
-  <h1 class="text-center">wordle</h1>
-  <h1 class="text-center">{{ this.palabraSecreta() }}</h1>
+  <div class="flex flex-col justify-center gap-10">
+    <om-gradient-text
+      gradientStart="#65a30d"
+      gradientEnd="#fde047"
+      text="Wordle"
+      styleClass="gradient-text-style"
+    ></om-gradient-text>
+    <h2 class="text-center">
+      <span class="border py-2 px-10 font-bold font-xl underline">{{ puntaje() }}</span>
+    </h2>
+  </div>
+  <h1 class="text-center hidden">{{ this.palabraSecreta() }}</h1>
   <div class="contenedor-intentos flex flex-col gap-2">
     @for (intento of intentos; track $index; let intentoIndex = $index) {
-    <form [formGroup]="intento" class="flex justify-center"
-      (keydown.enter)="verificarIntento(intento, intentoIndex, $event)">
-      @for (letra of letras; track letra; let letraIndex = $index) {
-      <input #casillero [ngClass]="clasesLetrasProbadas[intentoIndex][letraIndex]" type="text" pInputText maxlength="1"
-        autocomplete="off" [readOnly]="intentoIndex !== intentoActual" [formControlName]="letra"
-        (input)="normalizarLetra(intento, letra, intentoIndex, letraIndex, $event)"
-        (keydown.backspace)="manejarBackspace(intento, letra, intentoIndex, letraIndex)" />
-      }
-    </form>
+      <form
+        [formGroup]="intento"
+        class="flex justify-center"
+        (keydown.enter)="verificarIntento(intento, intentoIndex, $event)"
+      >
+        @for (letra of letras; track letra; let letraIndex = $index) {
+          <input
+            #casillero
+            [ngClass]="clasesLetrasProbadas[intentoIndex][letraIndex]"
+            type="text"
+            pInputText
+            maxlength="1"
+            autocomplete="off"
+            [readOnly]="intentoIndex !== intentoActual"
+            [formControlName]="letra"
+            (input)="normalizarLetra(intento, letra, intentoIndex, letraIndex, $event)"
+            (keydown.backspace)="manejarBackspace(intento, letra, intentoIndex, letraIndex)"
+          />
+        }
+      </form>
     }
   </div>
-  <button (click)="mostrarFinJuego()">terminar</button>
+  <div class="Teclado flex flex-col justify-center items-center gap-y-5">
+    <div class="fila-teclado fila-superior">
+      <button class="text-primary!" [disabled]="letrasElegidas.includes('Q')">Q</button>
+      <button [disabled]="letrasElegidas.includes('W')">W</button>
+      <button [disabled]="letrasElegidas.includes('E')">E</button>
+      <button [disabled]="letrasElegidas.includes('R')">R</button>
+      <button [disabled]="letrasElegidas.includes('T')">T</button>
+      <button [disabled]="letrasElegidas.includes('Y')">Y</button>
+      <button [disabled]="letrasElegidas.includes('U')">U</button>
+      <button [disabled]="letrasElegidas.includes('I')">I</button>
+      <button [disabled]="letrasElegidas.includes('O')">O</button>
+      <button [disabled]="letrasElegidas.includes('P')">P</button>
+    </div>
+    <div class="fila-media fila-teclado">
+      <button [disabled]="letrasElegidas.includes('A')">A</button>
+      <button [disabled]="letrasElegidas.includes('S')">S</button>
+      <button [disabled]="letrasElegidas.includes('D')">D</button>
+      <button [disabled]="letrasElegidas.includes('F')">F</button>
+      <button [disabled]="letrasElegidas.includes('G')">G</button>
+      <button [disabled]="letrasElegidas.includes('H')">H</button>
+      <button [disabled]="letrasElegidas.includes('J')">J</button>
+      <button [disabled]="letrasElegidas.includes('K')">K</button>
+      <button [disabled]="letrasElegidas.includes('L')">L</button>
+      <button [disabled]="letrasElegidas.includes('\u00d1')">&Ntilde;</button>
+    </div>
+    <div class="fila-inferior fila-teclado">
+      <button [disabled]="letrasElegidas.includes('Z')">Z</button>
+      <button [disabled]="letrasElegidas.includes('X')">X</button>
+      <button [disabled]="letrasElegidas.includes('C')">C</button>
+      <button [disabled]="letrasElegidas.includes('V')">V</button>
+      <button [disabled]="letrasElegidas.includes('B')">B</button>
+      <button [disabled]="letrasElegidas.includes('N')">N</button>
+      <button [disabled]="letrasElegidas.includes('M')">M</button>
+    </div>
+  </div>
 </div>
-<app-pantallafindejuego [victoria]="victoria()" [ngClass]="{
-    'mostrar': juegoTerminado() === true,
-    'ocultar': juegoTerminado() === false,
-    'victoria': victoria() === true,
-    'derrota': victoria() === false,
-  }"></app-pantallafindejuego>
+ra
+<app-pantallafindejuego
+  [victoria]="victoria()"
+  [reiniciar]="reiniciarJuego"
+  [ngClass]="{
+    mostrar: juegoTerminado() === true,
+    ocultar: juegoTerminado() === false,
+    victoria: victoria() === true,
+    derrota: victoria() === false,
+  }"
+></app-pantallafindejuego>
