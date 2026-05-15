@@ -2,15 +2,18 @@
   display: flex;
   flex: 1;
   flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  max-width: 100vw;
 }
 
-.contenedor-intentos > form {
+.contenedor-intentos>form {
   display: flex;
   gap: 8px;
   justify-content: center;
 }
 
-.contenedor-intentos > form > input {
+.contenedor-intentos>form>input {
   height: 80px;
   width: 80px;
   caret-color: transparent;

@@ -19,12 +19,13 @@ export class Wordle implements OnInit {
   letras = ['letra1', 'letra2', 'letra3', 'letra4', 'letra5'];
   intentos: FormGroup[] = [];
   intentoActual = 0;
-  juegoTerminado = signal(true);
+  juegoTerminado = signal(false);
+  victoria = signal(false);
   mensajeJuegoTerminado = '';
   clasesLetrasProbadas: string[][] = [];
   puntaje = signal(0);
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.intentos = Array.from({ length: 5 }, () => this.crearIntento());
@@ -132,5 +133,8 @@ export class Wordle implements OnInit {
     }
   }
 
-  claseletra() {}
+  mostrarFinJuego() {
+    this.juegoTerminado.set(true)
+  }
+  claseletra() { }
 }

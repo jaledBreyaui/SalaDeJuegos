@@ -43,7 +43,6 @@ export class Mayormenor {
         }
 
         if (this.valorCartaPrevia > 0) {
-
           this.puntaje.set(this.puntaje() + 250)
         }
 
