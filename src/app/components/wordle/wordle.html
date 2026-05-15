@@ -71,14 +71,19 @@
     </div>
   </div>
 </div>
-ra
+
 <app-pantallafindejuego
   [victoria]="victoria()"
   [reiniciar]="reiniciarJuego"
+  [abandonar]="abandonarJuego"
+  [juegoTerminado]="juegoTerminado()"
+  [puntaje]="puntaje()"
+  [attr.aria-hidden]="!juegoTerminado()"
+  [attr.inert]="!juegoTerminado() ? '' : null"
   [ngClass]="{
     mostrar: juegoTerminado() === true,
     ocultar: juegoTerminado() === false,
-    victoria: victoria() === true,
-    derrota: victoria() === false,
+    victoria: victoria(),
+    derrota: !victoria() && juegoTerminado(),
   }"
 ></app-pantallafindejuego>

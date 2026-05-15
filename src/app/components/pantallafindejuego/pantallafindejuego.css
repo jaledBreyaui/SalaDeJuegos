@@ -5,8 +5,9 @@
   position: absolute;
   height: 100%;
   width: 100%;
-  animation: slide-in 1s linear;
-  transition: transform 1s linear;
+  transition:
+    transform 1s linear,
+    visibility 0s linear 1s;
 }
 
 .pantallafindejuego {
@@ -15,11 +16,16 @@
 }
 
 :host(.ocultar) {
-  transform: translateX(200%);
+  transform: translateX(100%);
+  visibility: hidden;
+  pointer-events: none;
 }
 
 :host(.mostrar) {
   transform: translateX(0);
+  visibility: visible;
+  pointer-events: auto;
+  transition: transform 1s linear;
 }
 
 :host(.victoria) {

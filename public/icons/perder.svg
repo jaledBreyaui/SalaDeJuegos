@@ -1,0 +1,71 @@
+<svg
+  width="122"
+  height="122"
+  viewBox="0 0 122 122"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  style="color: red"
+>
+  <style>
+    .circle {
+      animation: circle 1.5s linear forwards;
+    }
+
+    .line1 {
+      animation: line 1.5s linear forwards;
+    }
+
+    .line2 {
+      animation: line 1.5s linear forwards;
+    }
+
+    @keyframes circle {
+      0% {
+        stroke-dashoffset: 600;
+      }
+
+      100% {
+        stroke-dashoffset: 0;
+        opacity: 1;
+      }
+    }
+
+    @keyframes line {
+      0% {
+        stroke-dashoffset: 120;
+      }
+
+      100% {
+        stroke-dashoffset: 0;
+        opacity: 1;
+      }
+    }
+  </style>
+  <path
+    class="circle"
+    d="M61 117.538C92.2253 117.538 117.538 92.2252 117.538 60.9999C117.538 29.7746 92.2253 4.46143 61 4.46143C29.7747 4.46143 4.46155 29.7746 4.46155 60.9999C4.46155 92.2252 29.7747 117.538 61 117.538Z"
+    stroke="currentColor"
+    stroke-width="8"
+    stroke-miterlimit="10"
+    stroke-dasharray="600"
+    stroke-dashoffset="600"
+  />
+  <path
+    class="line1"
+    d="M83 39.8728L39.8728 83"
+    stroke="currentColor"
+    stroke-width="8"
+    stroke-linecap="round"
+    stroke-dasharray="120"
+    stroke-dashoffset="120"
+  />
+  <path
+    class="line2"
+    d="M39.8728 39.8728L83 83"
+    stroke="currentColor"
+    stroke-width="8"
+    stroke-linecap="round"
+    stroke-dasharray="120"
+    stroke-dashoffset="120"
+  />
+</svg>

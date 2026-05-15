@@ -12,6 +12,7 @@ export class Pantallafindejuego {
   @Input() puntaje: number = 0;
   @Input() victoria: boolean = false;
   @Input() mensaje: string = '';
+  @Input() juegoTerminado: boolean = false;
   @Input() reiniciar!: () => void;
   @Input() abandonar: () => void = () => {};
 }

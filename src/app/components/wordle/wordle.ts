@@ -5,6 +5,8 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { Pantallafindejuego } from '../pantallafindejuego/pantallafindejuego';
 import { NgxGradientTextComponent } from '@omnedia/ngx-gradient-text';
+import { Router } from '@angular/router';
+import { Supabase } from '../../services/supabase/supabase';
 
 @Component({
   selector: 'app-wordle',
@@ -37,7 +39,11 @@ export class Wordle implements OnInit {
   victoria = signal(false);
   mensajeJuegoTerminado = '';
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private sb: Supabase,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
     this.intentos = Array.from({ length: 6 }, () => this.crearIntento());
@@ -113,7 +119,7 @@ export class Wordle implements OnInit {
 
     this.intentoActual++;
 
-    if (this.intentoActual == 6) {
+    if (this.intentoActual >= 6) {
       this.juegoTerminado.set(true);
       this.victoria.set(false);
       this.puntaje.set(0);
@@ -121,13 +127,17 @@ export class Wordle implements OnInit {
     if (this.palabraSecreta() === palabraIngresada) {
       this.juegoTerminado.set(true);
       this.victoria.set(true);
-      this.puntaje.set(Math.round(this.puntaje() + 25000 / this.intentoActual));
+      this.puntaje.set(this.puntaje() + (7 - this.intentoActual) * 1000);
       console.log(this.puntaje());
     }
-    console.log(this.intentoActual);
   }
 
-  abandonarJuego = () => {};
+  abandonarJuego = () => {
+    if (this.puntaje() > 0) {
+      this.sb.guardarPuntajes('wordle', this.puntaje());
+    }
+    this.router.navigate(['/home']);
+  };
 
   reiniciarJuego = () => {
     this.juegoTerminado.set(false);
