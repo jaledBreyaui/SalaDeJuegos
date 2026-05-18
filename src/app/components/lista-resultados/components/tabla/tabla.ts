@@ -4,6 +4,7 @@ import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-tabla',
+  standalone: true,
   imports: [TableModule, NgClass],
   templateUrl: './tabla.html',
   styleUrl: './tabla.css',

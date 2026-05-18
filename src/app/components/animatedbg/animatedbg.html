@@ -13,7 +13,10 @@
         ruta="/juegos/mayormenor"
         imagen="media/juegos/mayormenor.png"
       ></app-acceso-juego>
-      <app-acceso-juego ruta="/home" imagen="media/juegos/preguntad2.png"></app-acceso-juego>
+      <app-acceso-juego
+        ruta="/juegos/preguntados"
+        imagen="media/juegos/preguntad2.png"
+      ></app-acceso-juego>
       <app-acceso-juego ruta="/juegos/wordle" imagen="media/juegos/wordle.png"></app-acceso-juego>
     </div>
 
@@ -30,7 +33,7 @@
           ></p-button>
         </div>
       } @else {
-        <h2 class="text-center">Bienvenido, {{ sb.nombreUsuario() }}</h2>
+        <h2 class="text-center">Bienvenido, {{ nombre() }}</h2>
       }
     </div>
   </div>

@@ -4,6 +4,7 @@ import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-pantallafindejuego',
+  standalone: true,
   imports: [NgClass, ButtonModule],
   templateUrl: './pantallafindejuego.html',
   styleUrl: './pantallafindejuego.css',

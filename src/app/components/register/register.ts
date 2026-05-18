@@ -14,6 +14,7 @@ import { Supabase } from '../../services/supabase/supabase';
 
 @Component({
   selector: 'app-register',
+  standalone: true,
   imports: [ReactiveFormsModule,
     RouterLink,
     InputGroupModule,

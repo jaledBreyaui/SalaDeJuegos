@@ -1,58 +1,68 @@
-<div class="flex flex-1 flex-col">
-    <button (click)="darCarta()">nuevaCarta</button>
-    <h1 class="text-center">{{valorCartaPrevia}}</h1>
-    <h1 class="text-center">{{valorCarta}}</h1>
-    <h1 class="text-center">{{puntaje()}}</h1>
-    <h1 class="text-center"></h1>
-    <div class="hidden" [ngClass]="{
-        'mostrar-animacion': mostrarAnimacionError() === true
-    }">
-        <svg width="122" height="122" viewBox="0 0 122 122" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path class="circle"
-                d="M61 117.538C92.2253 117.538 117.538 92.2252 117.538 60.9999C117.538 29.7746 92.2253 4.46143 61 4.46143C29.7747 4.46143 4.46155 29.7746 4.46155 60.9999C4.46155 92.2252 29.7747 117.538 61 117.538Z"
-                stroke="currentColor" stroke-width="8" stroke-miterlimit="10" stroke-dasharray="600"
-                stroke-dashoffset="600" />
-            <path class="line1" d="M83 39.8728L39.8728 83" stroke="currentColor" stroke-width="8" stroke-linecap="round"
-                stroke-dasharray="120" stroke-dashoffset="120" />
-            <path class="line2" d="M39.8728 39.8728L83 83" stroke="currentColor" stroke-width="8" stroke-linecap="round"
-                stroke-dasharray="120" stroke-dashoffset="120" />
-        </svg>
+<div class="flex flex-col flex-1 gap-30 p-10 bg-[rgba(16,16,16)]">
+  <div class="flex flex-col justify-center gap-10">
+    <om-gradient-text
+      gradientStart="#62c9ae"
+      gradientEnd="#43ff644d"
+      text="Mayor o Menor"
+      styleClass="gradient-text-style"
+    ></om-gradient-text>
+
+    <h2 class="text-center">
+      <app-contador [puntaje]="puntaje"></app-contador>
+    </h2>
+  </div>
+  <div class="flex flex-col justify-center">
+    <div class="carta flex justify-center align-bottom">
+      <div class="flex-1/3 self-end">
+        <img
+          class="h-50 m-auto"
+          [ngClass]="{ 'carta-previa': animarCarta() }"
+          [src]="imagenCartaPrevia()"
+          (animationend)="finalizarAnimacionCartaPrevia()"
+        />
+      </div>
+      <div class="flex-1/3">
+        <img
+          class="m-auto"
+          [ngClass]="{ 'carta-actual': animarCarta() }"
+          (animationend)="finalizarAnimacionCartaPrevia()"
+          [src]="imagenCarta()"
+        />
+      </div>
+      <div class="flex-1/3 self-end">
+        <img class="h-50 m-auto" src="/media/juegos/mayormenor/carta-misterio.png" />
+      </div>
     </div>
-    <div class="hidden" [ngClass]="{
-        'mostrar-animacion': mostrarAnimacionAcierto() === true
-    }">
-        <svg width="79" height="79" viewBox="0 0 79 79" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <style>
-            </style>
-            <!-- The rotating, scaling circle body -->
-            <path id="circleBody"
-                d="M37.3875 66.1151C34.4477 67.9519 30.5954 67.2663 28.4744 64.5286C27.1459 62.8138 25.0724 61.8431 22.9027 61.9199C19.4388 62.0424 16.4473 59.5236 15.9809 56.0918C15.6888 53.9422 14.3798 52.0649 12.4633 51.0474C9.40343 49.4229 8.07418 45.7456 9.38746 42.5393C10.2102 40.5309 10.0162 38.2504 8.86627 36.4111C7.03058 33.4747 7.71963 29.6244 10.4609 27.5027C12.1778 26.1735 13.1509 24.1008 13.0758 21.9326C12.9559 18.4711 15.4788 15.4794 18.9133 15.0108C21.0645 14.7172 22.9441 13.4076 23.9638 11.4913C25.5918 8.43245 29.2726 7.10092 32.48 8.41102C34.4891 9.23159 36.7713 9.03596 38.6127 7.88532C41.5525 6.04829 45.4049 6.73407 47.5258 9.47156C48.8546 11.1866 50.9279 12.1573 53.0975 12.0805C56.5614 11.9578 59.5532 14.4768 60.0194 17.9086C60.3115 20.0582 61.6207 21.9352 63.5372 22.953C66.5968 24.5775 67.9263 28.2548 66.6128 31.4611C65.7901 33.4695 65.9841 35.75 67.134 37.5893C68.9699 40.5257 68.2806 44.376 65.5396 46.4977C63.8226 47.8267 62.8494 49.8996 62.9245 52.0678C63.0446 55.5293 60.5215 58.5208 57.087 58.9896C54.9358 59.2832 53.0564 60.5928 52.0365 62.5089C50.4085 65.568 46.7277 66.8992 43.5203 65.5894C41.5112 64.7688 39.229 64.9645 37.3875 66.1151Z"
-                fill="#1EAC67" />
-
-            <!-- The top arc that rotates quickly then undraws -->
-            <!--   <path id="arcTop" d="M3.69602 42.3967C3.51963 41.3555 3.38864 40.2975 3.30526 39.2241C1.93872 21.6306 13.8371 6.0359 30.5353 2.40427" stroke="#1EAC68" stroke-width="2.25"/> -->
-
-            <!-- The bottom arc that rotates quickly then undraws -->
-            <!--   <path id="arcBottom" d="M76.1511 42.5586C73.8898 60.1668 59.3915 74.4089 40.8144 75.8454C38.7059 76.0085 36.6235 76.0004 34.581 75.8332" stroke="#1EAC68" stroke-width="2.25"/> -->
-
-            <!-- The check fades in after the scale, then fades out at the end -->
-            <g opacity="0.998221">
-                <path id="checkBody" d="M24.5 38.75L32.25 46.5L52 26.75" stroke="white" stroke-width="5"
-                    stroke-linecap="round" />
-            </g>
-        </svg>
-    </div>
-
-    <h1 class="text-center">{{this.juegoPerdido()}}</h1>
-
-
-    <div class="carta flex justify-center flex-2/4 items-center">
-        <img [src]="imagenCarta()">
-    </div>
-    <div class="flex flex-2/4  justify-center gap-30">
-        <p-button label="Menor" severity="danger" (onClick)="elijeMenor()"></p-button>
-        <p-button label="Mayor" severity="success" (onClick)="elijeMayor()"></p-button>
-    </div>
-
+  </div>
+  <div class="flex justify-center gap-30">
+    <p-button
+      label="Menor"
+      [disabled]="deshabilitarBotones()"
+      size="large"
+      severity="danger"
+      (onClick)="elijeMenor()"
+    ></p-button>
+    <p-button
+      label="Mayor"
+      [disabled]="deshabilitarBotones()"
+      size="large"
+      severity="success"
+      (onClick)="elijeMayor()"
+    ></p-button>
+  </div>
 </div>
-<!-- <div class="abosulte bg-amber-400 w-full h-full"></div> -->
+<app-pantallafindejuego
+  [victoria]="victoria()"
+  [reiniciar]="reiniciarJuego"
+  [abandonar]="abandonarJuego"
+  [juegoTerminado]="juegoTerminado()"
+  [puntaje]="puntaje()"
+  [attr.aria-hidden]="!juegoTerminado()"
+  [attr.inert]="!juegoTerminado() ? '' : null"
+  [ngClass]="{
+    mostrar: juegoTerminado() === true,
+    ocultar: juegoTerminado() === false,
+    victoria: victoria(),
+    derrota: !victoria() && juegoTerminado(),
+  }"
+></app-pantallafindejuego>

@@ -12,6 +12,7 @@ import { Supabase } from '../../services/supabase/supabase';
 
 @Component({
   selector: 'app-login',
+  standalone: true,
   imports: [ReactiveFormsModule, RouterLink, DialogModule, InputGroupModule, InputGroupAddonModule, InputTextModule, ButtonModule, CheckboxModule],
   templateUrl: './login.html',
   styleUrl: './login.css',

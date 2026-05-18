@@ -3,6 +3,7 @@ import { Button, ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 @Component({
   selector: 'app-modal',
+  standalone: true,
   imports: [ButtonModule, DialogModule],
   templateUrl: './modal.html',
   styleUrl: './modal.css',

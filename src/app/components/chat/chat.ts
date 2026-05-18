@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-chat',
+  standalone: true,
   imports: [NgClass, FormsModule],
   templateUrl: './chat.html',
   styleUrl: './chat.css',

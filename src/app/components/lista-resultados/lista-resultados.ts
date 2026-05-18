@@ -4,6 +4,7 @@ import { Supabase } from '../../services/supabase/supabase';
 import { Tabla } from "./components/tabla/tabla";
 @Component({
   selector: 'app-lista-resultados',
+  standalone: true,
   imports: [TabsModule, Tabla],
   templateUrl: './lista-resultados.html',
   styleUrl: './lista-resultados.css',

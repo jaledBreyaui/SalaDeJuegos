@@ -5,6 +5,7 @@ import { Spinner } from '../spinner/spinner';
 
 @Component({
   selector: 'app-about',
+  standalone: true,
   imports: [Spinner],
   templateUrl: './about.html',
   styleUrl: './about.css',

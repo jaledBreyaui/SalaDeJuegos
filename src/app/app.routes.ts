@@ -4,8 +4,7 @@ import { authGuard } from './guards/auth-guard';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'home',
-    pathMatch: 'full',
+    loadComponent: () => import('./components/home/home').then((m) => m.Home),
   },
   {
     path: 'home',
@@ -43,5 +42,10 @@ export const routes: Routes = [
     path: 'juegos/wordle',
     canActivate: [authGuard],
     loadComponent: () => import('./components/wordle/wordle').then((m) => m.Wordle),
+  },
+  {
+    path: 'juegos/preguntados',
+    canActivate: [authGuard],
+    loadComponent: () => import('./components/preguntados/preguntados').then((m) => m.Preguntados),
   },
 ];

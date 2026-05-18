@@ -1,62 +1,93 @@
 import { Component, signal } from '@angular/core';
 import { Deck } from '../../services/deck/deck';
 import { ButtonModule } from 'primeng/button';
-import { DialogModule } from 'primeng/dialog';
-import { NgClass } from "@angular/common";
+import { Contador } from '../contador/contador';
+import { Pantallafindejuego } from '../pantallafindejuego/pantallafindejuego';
+import { Router } from '@angular/router';
+
+import { NgClass } from '@angular/common';
+import { NgxGradientTextComponent } from '@omnedia/ngx-gradient-text';
+import { carta } from '../../interfaces/carta';
+import { Supabase } from '../../services/supabase/supabase';
+
 @Component({
   selector: 'app-mayormenor',
-  imports: [ButtonModule, NgClass],
+  standalone: true,
+  imports: [ButtonModule, NgClass, NgxGradientTextComponent, Contador, Pantallafindejuego],
   templateUrl: './mayormenor.html',
   styleUrl: './mayormenor.css',
 })
 export class Mayormenor {
-  valorCarta: number = 0
-  imagenCarta = signal('')
-  valorCartaPrevia: number = 0
-  puntaje = signal(0)
-  juegoPerdido = signal(false)
-  eleccionJugador = signal('')
-  mostrarAnimacionError = signal(false)
-  mostrarAnimacionAcierto = signal(false)
+  mazo = signal<carta[]>([]);
+  valorCarta: number = 0;
+  valorCartaPrevia: number = 0;
+  imagenCarta = signal<string>('');
+  imagenCartaPrevia = signal<string>('');
+  animarCarta = signal<boolean>(false);
 
-  constructor(private deck: Deck) { }
+  puntaje = signal<number>(0);
+  puntajeAcumulado = signal<number>(0);
+
+  juegoTerminado = signal<boolean>(false);
+  victoria = signal<boolean>(false);
+
+  eleccionJugador = signal<string>('');
+  contadorCarta: number = 0;
+
+  deshabilitarBotones = signal<boolean>(false);
+
+  constructor(
+    private deck: Deck,
+    private sb: Supabase,
+    private router: Router,
+  ) {}
 
   ngOnInit() {
-    this.darCarta()
-  }
-
-  darCarta(eleccion?: string) {
     this.deck.getCards().subscribe((data) => {
       if (data) {
-        this.valorCartaPrevia = this.valorCarta
-        this.imagenCarta.set(data.cards[0].image);
-        this.valorCarta = this.verificarValor(data.cards[0].value)
-
-        if (eleccion === 'mayor' && this.valorCarta <= this.valorCartaPrevia) {
-          this.juegoPerdido.set(true)
-          this.mostrarAnimacionError.set(true)
-        }
-
-        if (eleccion === 'menor' && this.valorCarta >= this.valorCartaPrevia) {
-          this.juegoPerdido.set(true)
-          this.mostrarAnimacionError.set(true)
-        }
-
-        if (this.valorCartaPrevia > 0) {
-          this.puntaje.set(this.puntaje() + 250)
-        }
-
-
+        this.mazo.set(data.cards);
+        this.darCarta();
       }
     });
   }
 
+  darCarta(eleccion?: string) {
+    const cartaActual = this.mazo()[this.contadorCarta];
+    if (this.contadorCarta > 0) {
+      this.valorCartaPrevia = this.valorCarta;
+      this.imagenCartaPrevia.set(this.imagenCarta());
+      this.animarCarta.set(false);
+      setTimeout(() => this.animarCarta.set(true));
+    }
+    this.imagenCarta.set(cartaActual.image);
+    this.valorCarta = this.verificarValor(cartaActual.value);
+
+    if (eleccion === 'mayor' && this.valorCarta <= this.valorCartaPrevia) {
+      this.deshabilitarBotones.set(true);
+      setTimeout(() => {
+        this.juegoTerminado.set(true);
+        this.victoria.set(false);
+      }, 1000);
+    } else if (eleccion === 'menor' && this.valorCarta >= this.valorCartaPrevia) {
+      this.deshabilitarBotones.set(true);
+      setTimeout(() => {
+        this.juegoTerminado.set(true);
+        this.victoria.set(false);
+      }, 1000);
+    } else {
+      if (this.valorCartaPrevia > 0) {
+        this.puntaje.set(this.puntaje() + 250);
+      }
+    }
+    this.contadorCarta++;
+  }
+
   elijeMayor() {
-    this.darCarta('mayor')
+    this.darCarta('mayor');
   }
 
   elijeMenor() {
-    this.darCarta('menor')
+    this.darCarta('menor');
   }
 
   verificarValor(value: string): number {
@@ -64,21 +95,47 @@ export class Mayormenor {
       return Number(value);
     }
 
-    if (value === "ACE") {
+    if (value === 'ACE') {
       return 14;
-    } else if (value === "KING") {
+    } else if (value === 'KING') {
       return 13;
-    } else if (value === "QUEEN") {
+    } else if (value === 'QUEEN') {
       return 12;
-    } else if (value === "JACK") {
+    } else if (value === 'JACK') {
       return 11;
     }
 
     return 0;
   }
 
-  verificarEstado() {
+  reiniciarJuego = () => {
+    this.guardarPuntos;
+    this.ngOnInit();
+    this.puntaje.set(0);
+    this.valorCartaPrevia = 0;
+    this.juegoTerminado.set(false);
+    this.victoria.set(false);
+    this.imagenCartaPrevia.set('');
+    this.imagenCarta.set('');
+    this.deshabilitarBotones.set(false);
+  };
 
+  abandonarJuego = () => {
+    if (this.puntaje() > 1500) {
+      this.guardarPuntos();
+    }
+    this.router.navigate(['/home']);
+  };
+
+  finalizarAnimacionCartaPrevia() {
+    this.animarCarta.set(false);
   }
 
+  guardarPuntos() {
+    if (this.puntaje() > 1500) {
+      this.sb.guardarPuntajes('mayormenor', this.puntaje());
+    }
+  }
+
+  verificarEstado() {}
 }

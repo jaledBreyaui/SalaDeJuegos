@@ -1,0 +1,62 @@
+<div
+  class="preguntados-elegir-categoria p-10"
+  [ngClass]="{
+    ocultar: ocultarCategoria(),
+  }"
+>
+  <div class="flex flex-col flex-1 justify-evenly align-middle">
+    <om-gradient-text
+      class="mb-10"
+      gradientStart="#62c9ae"
+      gradientEnd="#43ff644d"
+      text="Preguntados"
+      styleClass="gradient-text-style"
+    ></om-gradient-text>
+    <h1 class="flex-1/4 text-center">Elegí la categoría</h1>
+    <div class="flex items-center flex-col gap-15 flex-3/4">
+      <div class="flex gap-15">
+        <p-button size="large" label="General" (onClick)="elegirCategoria('general')"></p-button>
+        <p-button size="large" label="Deportes" (onClick)="elegirCategoria('deportes')"></p-button>
+      </div>
+      <div class="flex gap-15">
+        <p-button size="large" label="Música" (onClick)="elegirCategoria('musica')"></p-button>
+        <p-button size="large" label="Historia" (onClick)="elegirCategoria('historia')"></p-button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="flex flex-1 flex-col justify-evenly p-10">
+  <om-gradient-text
+    class="flex-1/5"
+    gradientStart="#62c9ae"
+    gradientEnd="#43ff644d"
+    text="Preguntados"
+    styleClass="gradient-text-style"
+  ></om-gradient-text>
+  <h2 class="text-center">{{ contadorPregunta() + 1 }}/10</h2>
+  <div class="pregunta flex-1/5">
+    <div class="border-2 text-center border-[#62c9ae] p-5 rounded-2xl">
+      {{ preguntaActual() }}
+    </div>
+  </div>
+  <div class="flex-3/5 grid items-start justify-items-center grid-cols-2 grid-rows-2 gap-10">
+    @for (rta of arrayRespuestas; track $index) {
+      <p-button [label]="rta" (click)="verificarRespuesta(rta)"> </p-button>
+    }
+  </div>
+  <!-- <app-pantallafindejuego
+  [victoria]="victoria()"
+  [reiniciar]="reiniciarJuego"
+  [abandonar]="abandonarJuego"
+  [juegoTerminado]="juegoTerminado()"
+  [puntaje]="puntaje()"
+  [attr.aria-hidden]="!juegoTerminado()"
+  [attr.inert]="!juegoTerminado() ? '' : null"
+  [ngClass]="{
+    mostrar: juegoTerminado() === true,
+    ocultar: juegoTerminado() === false,
+    victoria: victoria(),
+    derrota: !victoria() && juegoTerminado(),
+  }"
+></app-pantallafindejuego> -->
+</div>
