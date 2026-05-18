@@ -20,10 +20,11 @@ export class Animatedbg implements OnInit {
   constructor(public sb: Supabase) {}
 
   ngOnInit() {
-    if (!this.nombreGuardado) {
-      this.obtenerNombreUsuario();
-    } else {
+    if (this.nombreGuardado) {
       this.nombre.set(this.nombreGuardado);
+    } else {
+      this.obtenerNombreUsuario();
+      sessionStorage.setItem('nombreJugador', this.nombre());
     }
   }
 
@@ -31,7 +32,6 @@ export class Animatedbg implements OnInit {
     const data = await this.sb.obtenerUsuarioPorMail(this.sb.dataUsuario?.email || '');
     if (data) {
       this.nombre.set(data?.nombre || '');
-      sessionStorage.setItem('nombreJugador', this.nombre());
     }
   }
 }

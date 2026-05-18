@@ -181,4 +181,27 @@ export class Wordle implements OnInit {
   showDialog() {
     this.visible = true;
   }
+
+  //   private guardarLocalStorage(): void {
+  //   const partidaEmpezada = {
+  //     palabraSecreta: this.palabraSecreta(),
+  //     letrasElegidas: this.letrasElegidas(),
+  //     errores: this.errores(),
+  //     puntajeAcumulado: this.puntajeAcumulado(),
+  //     puntaje: this.puntaje(),
+  //   };
+  //   localStorage.setItem(this.localStoragekey, JSON.stringify(partidaEmpezada));
+  // }
+
+  // private traerEstado(): void {
+  //   const estadoGuardado = localStorage.getItem(this.localStoragekey);
+  //   if (!estadoGuardado) return;
+  //   const estadoRetriveado = JSON.parse(estadoGuardado);
+
+  //   this.palabraSecreta.set(estadoRetriveado.palabraSecreta);
+  //   this.letrasElegidas.set(estadoRetriveado.letrasElegidas);
+  //   this.errores.set(estadoRetriveado.errores);
+  //   this.puntajeAcumulado.set(estadoRetriveado.puntajeAcumulado);
+  //   this.puntaje.set(estadoRetriveado.puntaje);
+  // }
 }

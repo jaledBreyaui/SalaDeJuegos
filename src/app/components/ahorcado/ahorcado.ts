@@ -28,12 +28,12 @@ export class Ahorcado implements OnInit {
   palabras = PALABRAS;
   palabraSecreta = signal<string>('');
   letrasElegidas = signal<string[]>([]);
-  errores = signal(7);
-  victoria = signal(false);
-  juegoTerminado = signal(false);
-  puntajeAcumulado = signal(0);
-  puntaje = signal(0);
-  mensajeFinDejuego = '';
+  errores = signal<number>(7);
+  victoria = signal<boolean>(false);
+  juegoTerminado = signal<boolean>(false);
+  puntajeAcumulado = signal<number>(0);
+  puntaje = signal<number>(0);
+  mensajeFinDejuego: string = '';
   dataUsuario: User | undefined;
   mostrarPalabra = computed(() => {
     return this.palabraSecreta()
@@ -45,37 +45,40 @@ export class Ahorcado implements OnInit {
     return `media/juegos/ahorcado/ahorcado-${this.errores()}.png`;
   });
 
+  localStoragekey: string = 'estado-ahorcado';
+
   constructor(
     private router: Router,
     private sb: Supabase,
   ) {}
 
   ngOnInit() {
-    this.sortearPalabra();
+    this.traerEstado();
+    if (!this.palabraSecreta()) {
+      this.sortearPalabra();
+    }
     console.log(this.palabraSecreta());
   }
 
-  elegirLetra(letra: string) {
+  elegirLetra(letra: string): void {
     this.letrasElegidas.update((letras) => [...letras, letra]);
-    console.log(this.errores());
     if (!this.palabraSecreta().includes(letra)) {
       this.errores.update((errores) => errores - 1);
     } else {
       this.puntaje.set(this.puntaje() + 1000);
     }
-    console.log(this.errores());
+    this.guardarLocalStorage();
     this.verificarEstado();
   }
 
-  sortearPalabra() {
+  sortearPalabra(): void {
     const indiceAleatorio = Math.floor(Math.random() * this.palabras.length);
     const palabraSorteada = this.palabras[indiceAleatorio];
     this.palabraSecreta.set(palabraSorteada);
   }
 
-  verificarEstado() {
+  verificarEstado(): void {
     const palabraCompleta = this.mostrarPalabra().join('');
-    console.log(palabraCompleta, this.palabraSecreta());
     if (palabraCompleta == this.palabraSecreta()) {
       this.victoria.set(true);
       this.juegoTerminado.set(true);
@@ -98,12 +101,41 @@ export class Ahorcado implements OnInit {
     this.letrasElegidas.set([]);
     this.victoria.set(false);
     this.juegoTerminado.set(false);
+    this.borrarLocalStorage();
   };
 
   abandonarJuego = () => {
+    this.borrarLocalStorage();
     if (this.puntaje() > 0) {
       this.sb.guardarPuntajes('ahorcado', this.puntajeAcumulado());
     }
     this.router.navigate(['/home']);
   };
+
+  private guardarLocalStorage(): void {
+    const partidaEmpezada = {
+      palabraSecreta: this.palabraSecreta(),
+      letrasElegidas: this.letrasElegidas(),
+      errores: this.errores(),
+      puntajeAcumulado: this.puntajeAcumulado(),
+      puntaje: this.puntaje(),
+    };
+    localStorage.setItem(this.localStoragekey, JSON.stringify(partidaEmpezada));
+  }
+
+  private traerEstado(): void {
+    const estadoGuardado = localStorage.getItem(this.localStoragekey);
+    if (!estadoGuardado) return;
+    const estadoRetriveado = JSON.parse(estadoGuardado);
+
+    this.palabraSecreta.set(estadoRetriveado.palabraSecreta);
+    this.letrasElegidas.set(estadoRetriveado.letrasElegidas);
+    this.errores.set(estadoRetriveado.errores);
+    this.puntajeAcumulado.set(estadoRetriveado.puntajeAcumulado);
+    this.puntaje.set(estadoRetriveado.puntaje);
+  }
+
+  private borrarLocalStorage(): void {
+    localStorage.removeItem(this.localStoragekey);
+  }
 }

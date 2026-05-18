@@ -24,6 +24,11 @@ body > app-root {
   justify-content: center;
 }
 
+* {
+  font-family: 'Oxanium', sans-serif;
+  font-style: normal;
+}
+
 /*
 Color Fondo
 rgba(16, 16, 16)

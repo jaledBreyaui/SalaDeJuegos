@@ -9,7 +9,7 @@ export class Supabase {
   usuarioLogueado = signal(false);
   nombreUsuario = signal('');
 
-  dataUsuario: User | undefined
+  dataUsuario: User | undefined;
   clienteSupabase: SupabaseClient;
 
   constructor() {
@@ -43,7 +43,6 @@ export class Supabase {
     return respuesta;
   }
 
-
   async cerrarSesion() {
     const respuesta = await this.clienteSupabase.auth.signOut();
     if (!respuesta.error) {
@@ -51,14 +50,20 @@ export class Supabase {
       this.nombreUsuario.set('');
       this.dataUsuario = undefined;
     }
+    sessionStorage.clear();
+    localStorage.clear();
     return respuesta;
   }
 
-
-  async guardarDatosUsuario(email: string, nombre: string, edad: number, apellido: string): Promise<boolean> {
-    const { error } = await this.clienteSupabase.from('usuarios_registrados').insert([
-      { email: email, nombre: nombre, edad: edad, apellido: apellido }
-    ]);
+  async guardarDatosUsuario(
+    email: string,
+    nombre: string,
+    edad: number,
+    apellido: string,
+  ): Promise<boolean> {
+    const { error } = await this.clienteSupabase
+      .from('usuarios_registrados')
+      .insert([{ email: email, nombre: nombre, edad: edad, apellido: apellido }]);
     if (error) {
       console.error('Error: ', error.message);
       return false;
@@ -70,10 +75,13 @@ export class Supabase {
   }
 
   async obtenerUsuarioPorMail(email: string) {
-    const { data, error } = await this.clienteSupabase.from('usuarios_registrados').select(`*`).eq('email', email).single();
-    return data
+    const { data, error } = await this.clienteSupabase
+      .from('usuarios_registrados')
+      .select(`*`)
+      .eq('email', email)
+      .single();
+    return data;
   }
-
 
   ///////////////////////////////////////CHAT//////////////////////////////////////////////////
   async getMessages() {
@@ -96,7 +104,7 @@ export class Supabase {
         (payload) => {
           console.log('Realtime usuarios_post payload:', payload);
           onNewMessage();
-        }
+        },
       )
       .subscribe((status, error) => {
         console.log('Realtime usuarios_post status:', status, error);
@@ -110,33 +118,38 @@ export class Supabase {
   async postMessage(id_usuario_registrado: number, mensaje: string): Promise<void> {
     const { error } = await this.clienteSupabase.from('usuarios_post').insert([
       {
-        id_usuario_registrado: id_usuario_registrado, mensaje: mensaje
-      }
+        id_usuario_registrado: id_usuario_registrado,
+        mensaje: mensaje,
+      },
     ]);
     if (error) {
-      console.error('Error: ', error.message)
+      console.error('Error: ', error.message);
     }
   }
-
 
   ////////////////////////////////////////PUNTOS////////////////////////////////////////////////////////
 
   async obtenerPuntajes() {
-    const { data, error } = await this.clienteSupabase.from('usuarios_puntajes').select(`*`)
-    return data
+    const { data, error } = await this.clienteSupabase.from('usuarios_puntajes').select(`*`);
+    return data;
   }
 
   async obtenerPuntajesPorJuego(juego: string) {
     if (!this.validarJuego(juego)) {
-      return
+      return;
     }
-    const {data,error} = await this.clienteSupabase.from('usuarios_puntajes').select('*,usuarios_registrados(nombre, apellido)').eq('juego', juego).order('puntaje', {ascending: false}).limit(15)
-    return data
+    const { data, error } = await this.clienteSupabase
+      .from('usuarios_puntajes')
+      .select('*,usuarios_registrados(nombre, apellido)')
+      .eq('juego', juego)
+      .order('puntaje', { ascending: false })
+      .limit(15);
+    return data;
   }
 
   async guardarPuntajes(juego: string, puntaje: number) {
     if (!this.validarJuego(juego)) {
-      return
+      return;
     }
 
     const email = this.dataUsuario?.email;
@@ -153,23 +166,30 @@ export class Supabase {
 
     const { error } = await this.clienteSupabase.from('usuarios_puntajes').insert([
       {
-        id_usuario_registrado: usuario.id, juego: juego, puntaje: puntaje
-      }
+        id_usuario_registrado: usuario.id,
+        juego: juego,
+        puntaje: puntaje,
+      },
     ]);
     if (error) {
-      console.error('Error: ', error.message)
+      console.error('Error: ', error.message);
     }
   }
 
   validarJuego(juego: string): boolean {
-    if (juego !== 'ahorcado' && juego !== 'wordle' && juego !== 'preguntados' && juego !== 'mayormenor') {
-      console.error('ERROR', "juego no valido")
-      return false
+    if (
+      juego !== 'ahorcado' &&
+      juego !== 'wordle' &&
+      juego !== 'preguntados' &&
+      juego !== 'mayormenor'
+    ) {
+      console.error('ERROR', 'juego no valido');
+      return false;
     }
-    return true
+    return true;
   }
 }
 // Explicar las reglas como si nunca hubieran sido explicadas antes, y como si el interlocutor no tuviera ningún conocimiento previo sobre el tema.
 // El quien soy va en el home -> una vez logueado solo los juegos y el quien soy.
 // Registro validar los campos minimo de caracteres de contraseña. Si ya esta registrado no te deja. Usar email. Usuario es email .
-// Usar modales -> toastify 
+// Usar modales -> toastify

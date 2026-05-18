@@ -29,3 +29,26 @@
   pointer-events: auto;
   transition: transform 1s linear;
 }
+
+.boton-respuestas {
+  width: 90%;
+  height: 25%;
+  display: inline-flex;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  color: white;
+  border: 1px solid var(--p-button-primary-border-color);
+  padding: var(--p-button-padding-y) var(--p-button-padding-x);
+  font-size: 1rem;
+  font-family: inherit;
+  font-feature-settings: inherit;
+  gap: var(--p-button-gap);
+  transition: 0.5s linear;
+}
+
+.boton-respuestas:hover {
+  background: var(--p-button-primary-background);
+}
