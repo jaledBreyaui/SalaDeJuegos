@@ -1,10 +1,9 @@
-import { Component, NgZone, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild, signal } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { RealtimeChannel, User } from '@supabase/supabase-js';
 import { Supabase } from '../../services/supabase/supabase';
 import { MensajeChat } from '../../interfaces/chat';
 import { FormsModule } from '@angular/forms';
-
 
 @Component({
   selector: 'app-chat',
@@ -14,25 +13,25 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './chat.css',
 })
 export class Chat implements OnInit, OnDestroy {
-  mensajeNuevo=''
+  @ViewChild('finMensajes') private finMensajes?: ElementRef<HTMLDivElement>;
+
+  mensajeNuevo = '';
   mensajes = signal<MensajeChat[]>([]);
   private canalMensajes?: RealtimeChannel;
-  dataUsuario: User | undefined
+  dataUsuario: User | undefined;
   constructor(
     private chat: Supabase,
-    private ngZone: NgZone
-  ) {
-  }
+    private ngZone: NgZone,
+  ) {}
 
   async ngOnInit(): Promise<void> {
     await this.cargarMensajes();
-    this.dataUsuario = this.chat.dataUsuario
+    this.dataUsuario = this.chat.dataUsuario;
     this.canalMensajes = this.chat.subscribeToMessages(() => {
       this.ngZone.run(async () => {
         await this.cargarMensajes();
       });
     });
-    
   }
 
   ngOnDestroy(): void {
@@ -48,15 +47,25 @@ export class Chat implements OnInit, OnDestroy {
       return;
     }
     this.mensajes.set(this.convertirTimeStamp((data ?? []) as MensajeChat[]));
+    this.scrollearAlFinal();
   }
 
-  async enviarMensaje(e:Event):Promise< void>{
+  async enviarMensaje(e: Event): Promise<void> {
     e.preventDefault();
-    if(this.dataUsuario?.email && this.mensajeNuevo.length > 1){
-      let respuesta = await this.chat.obtenerUsuarioPorMail(this.dataUsuario.email)
-      await this.chat.postMessage(respuesta.id, this.mensajeNuevo.trim())  
-      this.mensajeNuevo= ''
-      }
+    if (this.dataUsuario?.email && this.mensajeNuevo.length > 1) {
+      let respuesta = await this.chat.obtenerUsuarioPorMail(this.dataUsuario.email);
+      await this.chat.postMessage(respuesta.id, this.mensajeNuevo.trim());
+      this.mensajeNuevo = '';
+    }
+  }
+
+  private scrollearAlFinal(): void {
+    setTimeout(() => {
+      this.finMensajes?.nativeElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'end',
+      });
+    });
   }
 
   esMensajePropio(mensaje: MensajeChat): boolean {

@@ -1,11 +1,16 @@
-<div class="flex gap-20 flex-col p-10">
+<div class="flex flex-1 gap-20 flex-col p-10">
   <div class="flex flex-col justify-center gap-10">
-    <om-gradient-text
-      gradientStart="#65a30d"
-      gradientEnd="#fde047"
-      text="Wordle"
-      styleClass="gradient-text-style"
-    ></om-gradient-text>
+    <div class="flex flex-row justify-center items-center">
+      <om-gradient-text
+        gradientStart="#65a30d"
+        gradientEnd="#fde047"
+        text="Wordle"
+        styleClass="gradient-text-style"
+      ></om-gradient-text>
+      <button class="ml-3 mt-4" (click)="showDialog()">
+        <i class="pi pi-info-circle"></i>
+      </button>
+    </div>
     <h2 class="text-center">
       <span class="border py-2 px-10 font-bold font-xl underline">{{ puntaje() }}</span>
     </h2>
@@ -87,3 +92,24 @@
     derrota: !victoria() && juegoTerminado(),
   }"
 ></app-pantallafindejuego>
+<div class="card flex justify-center">
+  <p-dialog
+    header="Wordle"
+    [modal]="true"
+    [(visible)]="visible"
+    [style]="{ width: '35rem' }"
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+  >
+    <p class="mb-4">
+      Tenés 6 intentos para Advinir una palabra de 5 letras.<br />
+      El color de cada letra te acerca dependiendo del color <br />
+      Si es <span class="text-green-600 font-bold">VERDE</span> la letra es correcta y esta en el
+      lugar correcto.
+      <br />
+      Si es <span class="text-yellow-300 font-bold">AMARILLA</span> la letra es correcta pero esta
+      en el lugar incorrecto <br />
+      Por último si se pinta de <span class="text-gray-700 font-bold">GRIS</span> la letra no está
+      presente en la palabra.
+    </p>
+  </p-dialog>
+</div>

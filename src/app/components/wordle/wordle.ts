@@ -7,7 +7,8 @@ import { Pantallafindejuego } from '../pantallafindejuego/pantallafindejuego';
 import { NgxGradientTextComponent } from '@omnedia/ngx-gradient-text';
 import { Router } from '@angular/router';
 import { Supabase } from '../../services/supabase/supabase';
-
+import { DialogModule } from 'primeng/dialog';
+import { ButtonModule } from 'primeng/button';
 @Component({
   selector: 'app-wordle',
   imports: [
@@ -16,6 +17,8 @@ import { Supabase } from '../../services/supabase/supabase';
     NgClass,
     Pantallafindejuego,
     NgxGradientTextComponent,
+    DialogModule,
+    ButtonModule,
   ],
   templateUrl: './wordle.html',
   standalone: true,
@@ -38,6 +41,8 @@ export class Wordle implements OnInit {
   juegoTerminado = signal(false);
   victoria = signal(false);
   mensajeJuegoTerminado = '';
+
+  visible: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -171,5 +176,9 @@ export class Wordle implements OnInit {
 
     const indexGlobal = intentoIndex * this.letras.length + letraIndex;
     this.casilleros.get(indexGlobal)?.nativeElement.focus();
+  }
+
+  showDialog() {
+    this.visible = true;
   }
 }
