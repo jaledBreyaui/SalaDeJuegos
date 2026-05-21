@@ -1,81 +1,102 @@
-<div class="flex flex-1 gap-20 flex-col p-10">
-  <div class="flex flex-col justify-center gap-10">
-    <div class="flex flex-row justify-center items-center">
-      <om-gradient-text
-        gradientStart="#65a30d"
-        gradientEnd="#fde047"
-        text="Wordle"
-        styleClass="gradient-text-style"
-      ></om-gradient-text>
-      <button class="ml-3 mt-4" (click)="showDialog()">
-        <i class="pi pi-info-circle"></i>
-      </button>
+<section class="wordle-page">
+  <header class="game-header">
+    <div class="game-header-copy">
+      <p class="game-eyebrow">Juego Propio</p>
+      <div class="game-title-row">
+        <om-gradient-text
+          gradientStart="#65a30d"
+          gradientEnd="#fde047"
+          text="Wordle"
+          styleClass="gradient-text-style"
+        ></om-gradient-text>
+        <button class="info-button" (click)="showDialog()" aria-label="Ver reglas de Wordle">
+          <i class="pi pi-info-circle"></i>
+        </button>
+      </div>
+      <p class="game-lead">
+        Descubre la palabra correcta en seis intentos usando las pistas visuales de cada letra.
+      </p>
+      <div class="score-panel">
+        <span class="score-label">Puntaje actual</span>
+        <span class="score-value">{{ puntaje() }}</span>
+      </div>
     </div>
-    <h2 class="text-center">
-      <span class="border py-2 px-10 font-bold font-xl underline">{{ puntaje() }}</span>
-    </h2>
-  </div>
-  <h1 class="text-center hidden">{{ this.palabraSecreta() }}</h1>
-  <div class="contenedor-intentos flex flex-col gap-2">
-    @for (intento of intentos; track $index; let intentoIndex = $index) {
-      <form
-        [formGroup]="intento"
-        class="flex justify-center"
-        (keydown.enter)="verificarIntento(intento, intentoIndex, $event)"
-      >
-        @for (letra of letras; track letra; let letraIndex = $index) {
-          <input
-            #casillero
-            [ngClass]="clasesLetrasProbadas[intentoIndex][letraIndex]"
-            type="text"
-            pInputText
-            maxlength="1"
-            autocomplete="off"
-            [readOnly]="intentoIndex !== intentoActual"
-            [formControlName]="letra"
-            (input)="normalizarLetra(intento, letra, intentoIndex, letraIndex, $event)"
-            (keydown.backspace)="manejarBackspace(intento, letra, intentoIndex, letraIndex)"
-          />
+  </header>
+
+  <div class="game-shell">
+    <article class="board-panel">
+      <div class="board-panel-head">
+        <div>
+          <p class="board-eyebrow">Tablero</p>
+          <h2>Intento {{ intentoActual + 1 }} de 6</h2>
+        </div>
+      </div>
+
+      <div class="contenedor-intentos">
+        @for (intento of intentos; track $index; let intentoIndex = $index) {
+          <form
+            [formGroup]="intento"
+            class="word-row"
+            (keydown.enter)="verificarIntento(intento, intentoIndex, $event)"
+          >
+            @for (letra of letras; track letra; let letraIndex = $index) {
+              <input
+                #casillero
+                [ngClass]="clasesLetrasProbadas[intentoIndex][letraIndex]"
+                type="text"
+                pInputText
+                maxlength="1"
+                autocomplete="off"
+                [readOnly]="intentoIndex !== intentoActual"
+                [formControlName]="letra"
+                (input)="normalizarLetra(intento, letra, intentoIndex, letraIndex, $event)"
+                (keydown.backspace)="manejarBackspace(intento, letra, intentoIndex, letraIndex)"
+              />
+            }
+          </form>
         }
-      </form>
-    }
+      </div>
+    </article>
+
+    <article class="keyboard-panel">
+      <div class="teclado">
+        <div class="fila-teclado fila-superior">
+          <button class="tecla" [disabled]="letrasElegidas.includes('Q')">Q</button>
+          <button class="tecla" [disabled]="letrasElegidas.includes('W')">W</button>
+          <button class="tecla" [disabled]="letrasElegidas.includes('E')">E</button>
+          <button class="tecla" [disabled]="letrasElegidas.includes('R')">R</button>
+          <button class="tecla" [disabled]="letrasElegidas.includes('T')">T</button>
+          <button class="tecla" [disabled]="letrasElegidas.includes('Y')">Y</button>
+          <button class="tecla" [disabled]="letrasElegidas.includes('U')">U</button>
+          <button class="tecla" [disabled]="letrasElegidas.includes('I')">I</button>
+          <button class="tecla" [disabled]="letrasElegidas.includes('O')">O</button>
+          <button class="tecla" [disabled]="letrasElegidas.includes('P')">P</button>
+        </div>
+        <div class="fila-media fila-teclado">
+          <button class="tecla" [disabled]="letrasElegidas.includes('A')">A</button>
+          <button class="tecla" [disabled]="letrasElegidas.includes('S')">S</button>
+          <button class="tecla" [disabled]="letrasElegidas.includes('D')">D</button>
+          <button class="tecla" [disabled]="letrasElegidas.includes('F')">F</button>
+          <button class="tecla" [disabled]="letrasElegidas.includes('G')">G</button>
+          <button class="tecla" [disabled]="letrasElegidas.includes('H')">H</button>
+          <button class="tecla" [disabled]="letrasElegidas.includes('J')">J</button>
+          <button class="tecla" [disabled]="letrasElegidas.includes('K')">K</button>
+          <button class="tecla" [disabled]="letrasElegidas.includes('L')">L</button>
+          <button class="tecla" [disabled]="letrasElegidas.includes('\u00d1')">&Ntilde;</button>
+        </div>
+        <div class="fila-inferior fila-teclado">
+          <button class="tecla" [disabled]="letrasElegidas.includes('Z')">Z</button>
+          <button class="tecla" [disabled]="letrasElegidas.includes('X')">X</button>
+          <button class="tecla" [disabled]="letrasElegidas.includes('C')">C</button>
+          <button class="tecla" [disabled]="letrasElegidas.includes('V')">V</button>
+          <button class="tecla" [disabled]="letrasElegidas.includes('B')">B</button>
+          <button class="tecla" [disabled]="letrasElegidas.includes('N')">N</button>
+          <button class="tecla" [disabled]="letrasElegidas.includes('M')">M</button>
+        </div>
+      </div>
+    </article>
   </div>
-  <div class="Teclado flex flex-col justify-center items-center gap-y-5">
-    <div class="fila-teclado fila-superior">
-      <button class="text-primary!" [disabled]="letrasElegidas.includes('Q')">Q</button>
-      <button [disabled]="letrasElegidas.includes('W')">W</button>
-      <button [disabled]="letrasElegidas.includes('E')">E</button>
-      <button [disabled]="letrasElegidas.includes('R')">R</button>
-      <button [disabled]="letrasElegidas.includes('T')">T</button>
-      <button [disabled]="letrasElegidas.includes('Y')">Y</button>
-      <button [disabled]="letrasElegidas.includes('U')">U</button>
-      <button [disabled]="letrasElegidas.includes('I')">I</button>
-      <button [disabled]="letrasElegidas.includes('O')">O</button>
-      <button [disabled]="letrasElegidas.includes('P')">P</button>
-    </div>
-    <div class="fila-media fila-teclado">
-      <button [disabled]="letrasElegidas.includes('A')">A</button>
-      <button [disabled]="letrasElegidas.includes('S')">S</button>
-      <button [disabled]="letrasElegidas.includes('D')">D</button>
-      <button [disabled]="letrasElegidas.includes('F')">F</button>
-      <button [disabled]="letrasElegidas.includes('G')">G</button>
-      <button [disabled]="letrasElegidas.includes('H')">H</button>
-      <button [disabled]="letrasElegidas.includes('J')">J</button>
-      <button [disabled]="letrasElegidas.includes('K')">K</button>
-      <button [disabled]="letrasElegidas.includes('L')">L</button>
-      <button [disabled]="letrasElegidas.includes('\u00d1')">&Ntilde;</button>
-    </div>
-    <div class="fila-inferior fila-teclado">
-      <button [disabled]="letrasElegidas.includes('Z')">Z</button>
-      <button [disabled]="letrasElegidas.includes('X')">X</button>
-      <button [disabled]="letrasElegidas.includes('C')">C</button>
-      <button [disabled]="letrasElegidas.includes('V')">V</button>
-      <button [disabled]="letrasElegidas.includes('B')">B</button>
-      <button [disabled]="letrasElegidas.includes('N')">N</button>
-      <button [disabled]="letrasElegidas.includes('M')">M</button>
-    </div>
-  </div>
-</div>
+</section>
 
 <app-pantallafindejuego
   [victoria]="victoria()"
@@ -92,24 +113,38 @@
     derrota: !victoria() && juegoTerminado(),
   }"
 ></app-pantallafindejuego>
+
 <div class="card flex justify-center">
   <p-dialog
+    styleClass="wordle-dialog"
     header="Wordle"
     [modal]="true"
     [(visible)]="visible"
     [style]="{ width: '35rem' }"
     [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
   >
-    <p class="mb-4">
-      Tenés 6 intentos para Advinir una palabra de 5 letras.<br />
-      El color de cada letra te acerca dependiendo del color <br />
-      Si es <span class="text-green-600 font-bold">VERDE</span> la letra es correcta y esta en el
-      lugar correcto.
-      <br />
-      Si es <span class="text-yellow-300 font-bold">AMARILLA</span> la letra es correcta pero esta
-      en el lugar incorrecto <br />
-      Por último si se pinta de <span class="text-gray-700 font-bold">GRIS</span> la letra no está
-      presente en la palabra.
-    </p>
+    <section class="dialog-body">
+      <p class="dialog-copy dialog-intro">
+        Tenes 6 intentos para adivinar una palabra de 5 letras. Cada fila que completes devuelve
+        una pista visual sobre las letras ingresadas.
+      </p>
+
+      <div class="dialog-legend">
+        <article class="dialog-legend-item">
+          <span class="dialog-chip dialog-chip--correct">Verde</span>
+          <p class="dialog-copy">La letra es correcta y esta en la posicion correcta.</p>
+        </article>
+
+        <article class="dialog-legend-item">
+          <span class="dialog-chip dialog-chip--present">Amarillo</span>
+          <p class="dialog-copy">La letra existe en la palabra, pero corresponde a otra posicion.</p>
+        </article>
+
+        <article class="dialog-legend-item">
+          <span class="dialog-chip dialog-chip--miss">Gris</span>
+          <p class="dialog-copy">La letra no forma parte de la palabra secreta.</p>
+        </article>
+      </div>
+    </section>
   </p-dialog>
 </div>

@@ -1,5 +1,5 @@
 import { Component, computed } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
 import { Supabase } from '../../services/supabase/supabase';
@@ -12,6 +12,8 @@ import { Supabase } from '../../services/supabase/supabase';
   imports: [MenubarModule]
 })
 export class Navbar {
+  readonly marca = 'Sala De Juegos';
+
   items = computed<MenuItem[]>(() => {
     const estaLogueado = this.sb.usuarioLogueado();
 
@@ -66,6 +68,10 @@ export class Navbar {
     ];
 
   });
+
+  readonly textoEstadoSesion = computed(() =>
+    this.sb.usuarioLogueado() ? 'Sesion iniciada' : 'Modo invitado',
+  );
 
   constructor(public sb: Supabase, private router: Router) {}
 }

@@ -4,66 +4,93 @@
     ocultar: ocultarCategoria(),
   }"
 >
-  <div class="flex flex-col flex-1 justify-evenly align-middle">
+  <div class="preguntados-selector-shell">
+    <div class="preguntados-selector-copy">
+      <p class="selector-eyebrow">Trivia</p>
+      <om-gradient-text
+        gradientStart="#62c9ae"
+        gradientEnd="#43ff644d"
+        text="Preguntados"
+        styleClass="gradient-text-style"
+      ></om-gradient-text>
+      <h1>Elegi una categoria para comenzar la ronda</h1>
+      <p>
+        Selecciona el tema con el que queres jugar. Cada partida incluye 10 preguntas y suma
+        puntos segun la dificultad de las respuestas correctas.
+      </p>
+    </div>
+
+    <div class="selector-categories">
+      <button type="button" class="selector-card" (click)="elegirCategoria('general')">
+        <span class="selector-card-eyebrow">Categoria</span>
+        <strong>General</strong>
+        <p>Preguntas variadas para una ronda amplia y equilibrada.</p>
+      </button>
+
+      <button type="button" class="selector-card" (click)="elegirCategoria('deportes')">
+        <span class="selector-card-eyebrow">Categoria</span>
+        <strong>Deportes</strong>
+        <p>Desafia tus conocimientos sobre disciplinas, equipos y competencias.</p>
+      </button>
+
+      <button type="button" class="selector-card" (click)="elegirCategoria('musica')">
+        <span class="selector-card-eyebrow">Categoria</span>
+        <strong>Musica</strong>
+        <p>Explora artistas, canciones y datos clave del mundo musical.</p>
+      </button>
+
+      <button type="button" class="selector-card" (click)="elegirCategoria('historia')">
+        <span class="selector-card-eyebrow">Categoria</span>
+        <strong>Historia</strong>
+        <p>Recorre hechos, personajes y momentos importantes del pasado.</p>
+      </button>
+    </div>
+  </div>
+</div>
+<section class="preguntados-game-shell">
+  <header class="preguntados-game-header">
+    <p class="game-eyebrow">Trivia</p>
     <om-gradient-text
-      class="mb-10"
       gradientStart="#62c9ae"
       gradientEnd="#43ff644d"
       text="Preguntados"
       styleClass="gradient-text-style"
     ></om-gradient-text>
-    <h1 class="text-center">Elegí la categoría</h1>
-    <div class="flex items-center justify-center flex-col gap-15 flex-3/4">
-      <div class="flex gap-15">
-        <p-button size="large" label="General" (onClick)="elegirCategoria('general')"></p-button>
-        <p-button size="large" label="Deportes" (onClick)="elegirCategoria('deportes')"></p-button>
-      </div>
-      <div class="flex gap-15">
-        <p-button size="large" label="Música" (onClick)="elegirCategoria('musica')"></p-button>
-        <p-button size="large" label="Historia" (onClick)="elegirCategoria('historia')"></p-button>
-      </div>
-    </div>
+    <p class="game-lead">Responde 10 preguntas y suma puntos segun la dificultad.</p>
+  </header>
+
+  <div class="preguntados-status-panel">
+    <article class="status-card">
+      <span class="status-label">Pregunta actual</span>
+      <strong>{{ contadorPregunta() + 1 }}/10</strong>
+    </article>
+    <article class="status-card">
+      <span class="status-label">Respuestas correctas</span>
+      <strong class="status-success">{{ respuestasCorrectas() }}</strong>
+    </article>
+    <article class="status-card">
+      <span class="status-label">Respuestas incorrectas</span>
+      <strong class="status-danger">{{ respuestasIncorrectas() }}</strong>
+    </article>
+    <article class="status-card">
+      <span class="status-label">Puntaje</span>
+      <strong>{{ puntaje() }}</strong>
+    </article>
   </div>
-</div>
-<div class="grid flex-1 grid-rows-[auto_auto_0.3fr_0.7fr] gap-8 p-10 justify-items-center">
-  <om-gradient-text
-    class=""
-    gradientStart="#62c9ae"
-    gradientEnd="#43ff644d"
-    text="Preguntados"
-    styleClass="gradient-text-style"
-  ></om-gradient-text>
-  <div class="grid grid-cols-1 grid-rows-2 justify-items-center w-full gap-10">
-    <div class="flex justify-center w-full gap-50">
-      <h2 class="text-center">{{ contadorPregunta() + 1 }}/10</h2>
-      <h2>cronometro</h2>
-      <h2>{{ puntaje() }}</h2>
-    </div>
-    <div class="flex justify-center w-full gap-50">
-      <div class="flex justify-center items-center">
-        <i class="pi pi-times" style="color: red; margin-right: 15px"></i>
-        {{ respuestasIncorrectas() }}
-      </div>
-      <div class="flex justify-center items-center">
-        <i class="pi pi-check" style="color: green; margin-right: 15px"></i
-        >{{ respuestasCorrectas() }}
-      </div>
-    </div>
-  </div>
-  <!-- <div class="pregunta flex-1/5 flex justify-center items-start"> -->
-  <div class="pregunta flex justify-center w-full">
-    <div class="border-2 text-center self-center border-[#62c9ae] p-10 rounded-2xl text-xl">
-      {{ preguntaActual() }}
-    </div>
-  </div>
-  <div class="grid items-center justify-items-center grid-cols-2 grid-rows-2 gap-10 gap-y-0 w-full">
+
+  <article class="pregunta-panel">
+    <p class="pregunta-label">Pregunta</p>
+    <h2>{{ preguntaActual() }}</h2>
+  </article>
+
+  <div class="respuestas-grid">
     @for (rta of arrayRespuestas; track $index) {
-      <button class="boton-respuestas rounded-2xl" (click)="verificarRespuesta(rta)">
+      <button class="boton-respuestas" (click)="verificarRespuesta(rta)">
         {{ rta }}
       </button>
     }
   </div>
-</div>
+</section>
 <app-pantallafindejuego
   [victoria]="victoria()"
   [reiniciar]="reiniciarJuego"

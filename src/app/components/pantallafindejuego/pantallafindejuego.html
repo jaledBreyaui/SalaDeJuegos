@@ -1,50 +1,59 @@
 @if (juegoTerminado) {
-  <div class="pantallafindejuego flex flex-col justify-around items-center">
-    <div class="flex-2/4 w-full flex gap-20 flex-col justify-center">
-      @if (victoria) {
-        <h1 class="text-center font-bold text-4xl">Felicitaciones!</h1>
-        <div
-          class="hidden"
-          [ngClass]="{
-            'mostrar-animacion': victoria === true,
-          }"
-        >
-          <img src="/icons/ganar.svg" alt="Ganaste" width="79" height="79" />
-        </div>
-      } @else {
-        <h1 class="text-center font-bold text-4xl">Perdiste</h1>
-        <div
-          class="hidden"
-          [ngClass]="{
-            'mostrar-animacion': victoria === false,
-          }"
-        >
-          <img src="/icons/perder.svg" alt="Perdiste" width="122" height="122" />
-        </div>
-      }
-    </div>
-    <div class="flex flex-1/4 justify-center">
-      <p class="text-2xl">
-        Tenes <span class="font-bold">{{ puntaje }}</span> puntos
-      </p>
-    </div>
-    <div class="flex-1/4">
-      <p-button
-        label="Seguir Jugando"
-        type="button"
-        (click)="reiniciar()"
-        [text]="true"
-        styleClass="!p-4 w-full border-green !border-white/30 hover:!bg-green"
-        class="w-full text-primary"
-      />
-      <p-button
-        label="Salir al Menu"
-        type="button"
-        (click)="abandonar()"
-        [text]="true"
-        styleClass="!p-4 w-full !text-white hover:!bg-white/10"
-        class="w-full"
-      />
-    </div>
+  <div class="pantallafindejuego">
+    <article class="endgame-card">
+      <div class="endgame-badge" [ngClass]="victoria ? 'endgame-badge--win' : 'endgame-badge--lose'">
+        {{ victoria ? 'Ronda superada' : 'Ronda finalizada' }}
+      </div>
+
+      <div class="endgame-copy">
+        @if (victoria) {
+          <h1>Felicitaciones</h1>
+          <p>Resolviste la partida con exito y el puntaje obtenido ya forma parte de tu progreso.</p>
+          <div
+            class="endgame-icon"
+            [ngClass]="{
+              'mostrar-animacion': victoria === true,
+            }"
+          >
+            <img src="/icons/ganar.svg" alt="Ganaste" width="79" height="79" />
+          </div>
+        } @else {
+          <h1>Partida terminada</h1>
+          <p>La ronda llego a su fin. Podes volver a intentarlo para mejorar tu resultado.</p>
+          <div
+            class="endgame-icon"
+            [ngClass]="{
+              'mostrar-animacion': victoria === false,
+            }"
+          >
+            <img src="/icons/perder.svg" alt="Perdiste" width="122" height="122" />
+          </div>
+        }
+      </div>
+
+      <div class="score-summary">
+        <span class="score-summary__label">Puntaje obtenido</span>
+        <strong class="score-summary__value">{{ puntaje }}</strong>
+      </div>
+
+      <div class="endgame-actions">
+        <p-button
+          label="Seguir jugando"
+          type="button"
+          (click)="reiniciar()"
+          [text]="true"
+          styleClass="endgame-btn endgame-btn--primary"
+          class="w-full"
+        />
+        <p-button
+          label="Salir al menu"
+          type="button"
+          (click)="abandonar()"
+          [text]="true"
+          styleClass="endgame-btn endgame-btn--secondary"
+          class="w-full"
+        />
+      </div>
+    </article>
   </div>
 }

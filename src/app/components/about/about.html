@@ -1,32 +1,85 @@
-<section
-  class="gap-16 h-100 flex justify-center items-center py-8 px-4 mx-auto max-w-7xl lg:py-16 lg:px-6 telg:grid lg:grid-cols-2xt-center"
->
-  @if (usuario(); as usuario) {
-    <div class="font-light text-gray-500 sm:text-lg dark:text-gray-400">
-      <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
-        Me llamo {{ usuario.name }}
-      </h2>
-      <p class="mb-4">{{ usuario.bio }}</p>
-      <p class="mb-4">
-        El juego propio que elegí es el Wordle. Tenés 6 intentos para Advinir una palabra de 5
-        letras. El color de cada letra te acerca dependiendo del color <br />
-        Si es <span class="text-green-600 font-bold">VERDE</span> la letra es correcta y esta en el
-        lugar correcto.
-        <br />
-        Si es <span class="text-yellow-300 font-bold">AMARILLA</span> la letra es correcta pero esta
-        en el lugar incorrecto <br />
-        Por último si se pinta de <span class="text-gray-700 font-bold">GRIS</span> la letra no está
-        presente en la palabra.
-      </p>
-      <a class="underline" [href]="usuario.html_url" target="_blank">Visitá mi GitHub</a>
-    </div>
-    <div class="flex justify-center">
-      <img class="w-80 rounded-lg" [src]="usuario.avatar_url" alt="Avatar" />
-    </div>
-  } @else {
-    <div class="w-full lg:col-span-2">
+<section class="about-page">
+  @if (cargando()) {
+    <div class="about-state">
       <app-spinner></app-spinner>
+    </div>
+  } @else if (errorCarga()) {
+    <div class="about-state">
+      <article class="about-panel about-panel--message">
+        <p class="about-eyebrow">Quien Soy</p>
+        <h1>No se pudo cargar el perfil</h1>
+        <p>
+          La informacion externa de GitHub no esta disponible en este momento, pero la seccion se
+          mantiene enfocada en presentar el perfil del autor y el juego propio desarrollado.
+        </p>
+      </article>
+    </div>
+  } @else if (usuario(); as usuario) {
+    <div class="about-layout">
+      <article class="about-panel about-panel--profile">
+        <p class="about-eyebrow">Quien Soy</p>
+        <h1>{{ usuario.name }}</h1>
+        <p class="about-lead">
+          Estudiante enfocado en construir experiencias web claras, funcionales y visualmente
+          cuidadas, con interes en frontend, integracion con APIs y productos interactivos.
+        </p>
+
+        <div class="about-summary">
+          <div>
+            <span class="about-label">Perfil profesional</span>
+            <p>
+              Este proyecto busca mostrar no solo resolucion tecnica, sino tambien criterio para
+              organizar la interfaz, comunicar reglas de juego y ofrecer una experiencia mas
+              solida para el usuario.
+            </p>
+          </div>
+
+          <div>
+            <span class="about-label">Bio</span>
+            <p>{{ usuario.bio || 'Desarrollador en formacion con interes en interfaces modernas.' }}</p>
+          </div>
+        </div>
+
+        <div class="about-actions">
+          <a class="about-link" [href]="usuario.html_url" target="_blank" rel="noreferrer">
+            Ver perfil en GitHub
+          </a>
+        </div>
+      </article>
+
+      <aside class="about-panel about-panel--spotlight">
+        <div class="about-avatar-wrap">
+          <img class="about-avatar" [src]="usuario.avatar_url" alt="Avatar de {{ usuario.name }}" />
+        </div>
+
+        <div class="about-wordle-card">
+          <p class="about-eyebrow">Juego Propio</p>
+          <h2>Wordle</h2>
+          <p>
+            El juego propio desarrollado para esta entrega es Wordle. Fue la eleccion personal del
+            proyecto, mientras que el resto de los juegos responden a la consigna general.
+          </p>
+          <p>
+            La dinamica es simple: el jugador tiene 6 intentos para adivinar una palabra de 5
+            letras. Cada intento devuelve una pista visual.
+          </p>
+
+          <ul class="wordle-legend">
+            <li>
+              <span class="wordle-chip wordle-chip--correct">Verde</span>
+              La letra es correcta y esta en la posicion correcta.
+            </li>
+            <li>
+              <span class="wordle-chip wordle-chip--present">Amarillo</span>
+              La letra existe en la palabra, pero esta ubicada en otra posicion.
+            </li>
+            <li>
+              <span class="wordle-chip wordle-chip--miss">Gris</span>
+              La letra no forma parte de la palabra secreta.
+            </li>
+          </ul>
+        </div>
+      </aside>
     </div>
   }
 </section>
-<!-- lg:grid lg:grid-cols-2 -->

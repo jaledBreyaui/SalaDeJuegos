@@ -3,57 +3,320 @@
   flex: 1;
   position: relative;
   overflow: hidden;
+  background:
+    radial-gradient(circle at top left, rgba(101, 163, 13, 0.12), transparent 28%),
+    radial-gradient(circle at bottom right, rgba(253, 224, 71, 0.08), transparent 24%),
+    #101010;
 }
-.contenedor-intentos > form {
+
+.wordle-page {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 1.25rem;
+  width: min(980px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 1.5rem 0 2.5rem;
+  flex: 1;
+}
+
+.game-header {
+  display: grid;
+  justify-items: center;
+  gap: 0.85rem;
+  text-align: center;
+}
+
+.game-header-copy {
+  display: grid;
+  gap: 0.75rem;
+  justify-items: center;
+}
+
+.game-eyebrow,
+.board-eyebrow,
+.score-label,
+.keyboard-eyebrow {
+  margin: 0;
+  color: rgba(191, 255, 142, 0.9);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.game-title-row {
   display: flex;
-  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.info-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.8rem;
+  height: 2.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #f7fbfa;
+}
+
+.game-lead {
+  margin: 0;
+  max-width: 42rem;
+  color: rgba(232, 238, 235, 0.78);
+  line-height: 1.75;
+}
+
+.score-panel,
+.board-panel,
+.keyboard-panel {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 28px;
+  background: rgba(19, 19, 19, 0.84);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(18px);
+}
+
+.score-panel {
+  display: grid;
+  justify-items: center;
+  gap: 0.4rem;
+  min-width: 12rem;
+  padding: 0.95rem 1rem;
+}
+
+.score-value {
+  color: #ffffff;
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.game-shell {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.board-panel,
+.keyboard-panel {
+  width: 50%;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.board-panel {
+  display: grid;
+  gap: 1rem;
+}
+
+.board-panel-head h2 {
+  margin: 0.35rem 0 0;
+  color: #f5f7f6;
+  font-size: 1.5rem;
+}
+
+.contenedor-intentos {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.word-row {
+  display: flex;
+  gap: 0.5rem;
   justify-content: center;
 }
 
-.contenedor-intentos > form > input {
-  height: 80px;
-  width: 80px;
+.word-row > input {
+  width: 3.5rem;
+  height: 3.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
   caret-color: transparent;
-  font-size: 50px;
+  color: #f7fbfa;
+  font-size: 1.8rem;
   text-align: center;
   text-transform: uppercase;
-  font-weight: 600;
+  font-weight: 700;
 }
 
-.contenedor-intentos > form > input.correcta {
+.word-row > input.correcta {
   background-color: #65a30d !important;
   border-color: #65a30d !important;
   color: white !important;
 }
 
-.contenedor-intentos > form > input.presente {
+.word-row > input.presente {
   background-color: #fde047 !important;
   border-color: #fde047 !important;
   color: #111827 !important;
 }
 
-.contenedor-intentos > form > input.incorrecta {
+.word-row > input.incorrecta {
   background-color: #374151 !important;
   border-color: #374151 !important;
   color: white !important;
 }
 
-.fila-teclado {
-  display: flex;
-  gap: 10px;
+.dialog-copy {
+  margin: 0;
+  color: rgba(232, 238, 235, 0.76);
+  line-height: 1.7;
 }
 
-.fila-teclado > button {
-  border: 2px solid white;
-  height: 60px;
-  width: 60px;
-  /* color: white;
-     */
-  color: white;
-  background-color: rgb(16, 16, 16);
+.dialog-body {
+  display: grid;
+  gap: 1rem;
 }
-.fila-teclado > button:disabled {
+
+.dialog-intro {
+  color: rgba(232, 238, 235, 0.82);
+}
+
+.dialog-legend {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.dialog-legend-item {
+  display: grid;
+  gap: 0.55rem;
+  padding: 0.95rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.dialog-chip {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.dialog-chip--correct {
+  background: rgba(101, 163, 13, 0.24);
+  color: #b8f08b;
+}
+
+.dialog-chip--present {
+  background: rgba(250, 204, 21, 0.2);
+  color: #ffe58a;
+}
+
+.dialog-chip--miss {
+  background: rgba(107, 114, 128, 0.22);
+  color: #d1d5db;
+}
+
+:host ::ng-deep .wordle-dialog {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 28px;
+  background: rgba(19, 19, 19, 0.94);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(20px);
+  overflow: hidden;
+}
+
+:host ::ng-deep .wordle-dialog .p-dialog-header {
+  border: 0;
+  background: transparent;
+  color: #f5f7f6;
+  padding: 1.2rem 1.25rem 0.6rem;
+}
+
+:host ::ng-deep .wordle-dialog .p-dialog-title {
+  font-size: 1.45rem;
+  font-weight: 700;
+}
+
+:host ::ng-deep .wordle-dialog .p-dialog-header-actions {
+  gap: 0.35rem;
+}
+
+:host ::ng-deep .wordle-dialog .p-dialog-header-close-button {
+  border-radius: 14px;
+  color: rgba(243, 248, 246, 0.88);
+}
+
+:host ::ng-deep .wordle-dialog .p-dialog-header-close-button:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+:host ::ng-deep .wordle-dialog .p-dialog-content {
+  background: transparent;
+  padding: 0.6rem 1.25rem 1.25rem;
+}
+
+.keyboard-panel {
+  display: grid;
+}
+
+.teclado {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.fila-teclado {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  justify-content: center;
+}
+
+.tecla {
+  min-width: 2.8rem;
+  height: 2.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  color: #f3f8f6;
+  background: rgba(255, 255, 255, 0.06);
+  font-weight: 700;
+}
+
+.tecla:disabled {
   opacity: 0.35;
   cursor: not-allowed;
   filter: grayscale(1);
+}
+
+@media (max-width: 980px) {
+  .score-panel,
+  .board-panel,
+  .keyboard-panel {
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .wordle-page {
+    width: min(100%, calc(100% - 1rem));
+    padding: 1rem 0 2rem;
+  }
+
+  .score-panel,
+  .board-panel,
+  .keyboard-panel {
+    padding: 1rem;
+    border-radius: 22px;
+  }
+
+  .word-row > input {
+    width: 3rem;
+    height: 3.2rem;
+    font-size: 1.5rem;
+  }
+
+  .tecla {
+    min-width: 2.55rem;
+    height: 2.55rem;
+  }
 }

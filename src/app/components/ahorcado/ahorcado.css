@@ -3,29 +3,230 @@
   flex: 1;
   position: relative;
   overflow: hidden;
+  background:
+    radial-gradient(circle at top left, rgba(98, 201, 174, 0.12), transparent 28%),
+    radial-gradient(circle at bottom right, rgba(98, 201, 174, 0.06), transparent 25%),
+    #101010;
 }
 
 .ahorcado-page {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  gap: 1rem;
+  width: min(860px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 1.5rem 0 2.25rem;
   flex: 1;
+}
+
+.game-header {
+  display: grid;
+  justify-items: center;
+  gap: 0.8rem;
+  text-align: center;
+}
+
+.game-eyebrow {
+  margin: 0;
+  color: rgba(98, 201, 174, 0.9);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.game-lead {
+  margin: 0;
+  max-width: 42rem;
+  color: rgba(232, 238, 235, 0.78);
+  line-height: 1.75;
+}
+
+.hangman-stage,
+.keyboard-panel {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 28px;
+  background: rgba(19, 19, 19, 0.84);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(18px);
+}
+
+.score-panel {
+  display: grid;
+  justify-items: center;
+  gap: 0.5rem;
+  padding: 0.15rem 0;
+}
+
+.score-label,
+.keyboard-eyebrow,
+.stage-chip {
+  color: rgba(98, 201, 174, 0.88);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.game-shell {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+  min-height: 0;
+}
+
+.hangman-stage {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  width: 50%;
+  margin: 0 auto;
+}
+
+.stage-topbar {
+  display: grid;
+  justify-items: center;
+  gap: 0.45rem;
+  text-align: center;
+}
+
+.stage-topbar strong {
+  color: #ffffff;
+  font-size: 1.8rem;
+}
+
+.hangman-illustration {
+  display: grid;
+  place-items: center;
+  min-height: 16rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.hangman-illustration img {
+  max-width: min(100%, 18rem);
+  width: 100%;
+  height: auto;
+}
+
+.word-panel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.word-slot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.9rem;
+  height: 3.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #f7fbfa;
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.keyboard-panel {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  width: 50%;
+  margin: 0 auto;
+}
+
+.keyboard-copy {
+  display: grid;
+  justify-items: center;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+.keyboard-copy p {
+  margin: 0;
+  max-width: 40rem;
+  color: rgba(232, 238, 235, 0.74);
+  line-height: 1.7;
+}
+
+.teclado {
+  display: grid;
+  gap: 0.75rem;
 }
 
 .fila-teclado {
   display: flex;
-  gap: 10px;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  justify-content: center;
 }
 
 .fila-teclado > button {
-  border: 2px solid white;
-  height: 60px;
-  width: 60px;
-  /* color: white;
-     */
-  color: black;
-  background-color: rgba(98, 201, 174);
+  min-width: 2.8rem;
+  height: 2.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  color: #f3f8f6;
+  background: rgba(98, 201, 174, 0.12);
+  font-weight: 700;
+  transition:
+    transform 140ms ease,
+    background-color 140ms ease,
+    border-color 140ms ease,
+    opacity 140ms ease;
+}
+
+.fila-teclado > button:hover:not(:disabled),
+.fila-teclado > button:focus-visible:not(:disabled) {
+  transform: translateY(-1px);
+  background: rgba(98, 201, 174, 0.18);
+  border-color: rgba(98, 201, 174, 0.3);
 }
 
 .fila-teclado > button:disabled {
   opacity: 0.35;
   cursor: not-allowed;
   filter: grayscale(1);
+}
+
+@media (max-width: 640px) {
+  .ahorcado-page {
+    width: min(100%, calc(100% - 1rem));
+    padding: 1rem 0 2rem;
+  }
+
+  .hangman-stage,
+  .keyboard-panel {
+    width: 100%;
+  }
+
+  .hangman-stage,
+  .keyboard-panel,
+  .score-panel {
+    padding: 1rem;
+    border-radius: 22px;
+  }
+
+  .score-panel {
+    padding: 0.15rem 0;
+  }
+
+  .hangman-illustration {
+    min-height: 15rem;
+  }
+
+  .word-slot {
+    width: 2.8rem;
+    height: 3.5rem;
+    font-size: 1.35rem;
+  }
+
+  .fila-teclado > button {
+    min-width: 2.8rem;
+    height: 2.8rem;
+  }
 }

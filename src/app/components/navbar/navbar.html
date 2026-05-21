@@ -1,3 +1,14 @@
-<p-menubar [model]="items()" class="">
-  <h1 class="font-bold text-center">SalaDeJuegos</h1>
+<p-menubar [model]="items()" styleClass="app-menubar">
+  <ng-template #start>
+    <div class="brand-block" aria-label="Marca del sitio">
+      <span class="brand-mark">SJ</span>
+    </div>
+  </ng-template>
+
+  <ng-template #end>
+    <div class="session-chip" [attr.data-logged-in]="sb.usuarioLogueado()">
+      <span class="session-dot"></span>
+      <span>{{ textoEstadoSesion() }}</span>
+    </div>
+  </ng-template>
 </p-menubar>

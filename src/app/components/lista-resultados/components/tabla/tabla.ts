@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { NgClass } from '@angular/common';
 
@@ -10,5 +10,6 @@ import { NgClass } from '@angular/common';
   styleUrl: './tabla.css',
 })
 export class Tabla {
+  @Input() juego = '';
   @Input() resultado: any[] = [];
 }

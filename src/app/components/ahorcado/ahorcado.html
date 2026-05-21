@@ -1,70 +1,90 @@
-<section class="ahorcado-page flex flex-col justify-evenly bg-[rgba(16,16,16)]">
-  <om-gradient-text
-    gradientStart="#62c9ae"
-    gradientEnd="#43ff644d"
-    text="Ahorcado"
-    styleClass="gradient-text-style"
-  ></om-gradient-text>
+<section class="ahorcado-page">
+  <header class="game-header">
+    <p class="game-eyebrow">Juego Clasico</p>
+    <om-gradient-text
+      gradientStart="#62c9ae"
+      gradientEnd="#43ff644d"
+      text="Ahorcado"
+      styleClass="gradient-text-style"
+    ></om-gradient-text>
+    <p class="game-lead">
+      Descubre la palabra letra por letra antes de consumir todos los intentos disponibles.
+    </p>
+  </header>
 
-  <h2 class="text-center">
+  <div class="score-panel">
+    <span class="score-label">Puntaje actual</span>
     <app-contador [puntaje]="puntaje"></app-contador>
-  </h2>
-
-  <div class="text-center flex flex-col justify-center items-center">
-    <img [src]="imagenAhorcado()" alt="Ahorcado" />
-    <div class="mb-5 flex gap-5">
-      @for (letra of mostrarPalabra(); track $index) {
-        <span class="text-3xl font-bold">
-          {{ letra }}
-        </span>
-      }
-    </div>
   </div>
 
-  <div class="Teclado flex flex-col justify-center items-center gap-y-5">
-    <div class="fila-teclado fila-superior">
-      <button
-        class="text-primary!"
-        (click)="elegirLetra('q')"
-        [disabled]="letrasElegidas().includes('q')"
-      >
-        Q
-      </button>
-      <button (click)="elegirLetra('w')" [disabled]="letrasElegidas().includes('w')">W</button>
-      <button (click)="elegirLetra('e')" [disabled]="letrasElegidas().includes('e')">E</button>
-      <button (click)="elegirLetra('r')" [disabled]="letrasElegidas().includes('r')">R</button>
-      <button (click)="elegirLetra('t')" [disabled]="letrasElegidas().includes('t')">T</button>
-      <button (click)="elegirLetra('y')" [disabled]="letrasElegidas().includes('y')">Y</button>
-      <button (click)="elegirLetra('u')" [disabled]="letrasElegidas().includes('u')">U</button>
-      <button (click)="elegirLetra('i')" [disabled]="letrasElegidas().includes('i')">I</button>
-      <button (click)="elegirLetra('o')" [disabled]="letrasElegidas().includes('o')">O</button>
-      <button (click)="elegirLetra('p')" [disabled]="letrasElegidas().includes('p')">P</button>
-    </div>
-    <div class="fila-media fila-teclado">
-      <button (click)="elegirLetra('a')" [disabled]="letrasElegidas().includes('a')">A</button>
-      <button (click)="elegirLetra('s')" [disabled]="letrasElegidas().includes('s')">S</button>
-      <button (click)="elegirLetra('d')" [disabled]="letrasElegidas().includes('d')">D</button>
-      <button (click)="elegirLetra('f')" [disabled]="letrasElegidas().includes('f')">F</button>
-      <button (click)="elegirLetra('g')" [disabled]="letrasElegidas().includes('g')">G</button>
-      <button (click)="elegirLetra('h')" [disabled]="letrasElegidas().includes('h')">H</button>
-      <button (click)="elegirLetra('j')" [disabled]="letrasElegidas().includes('j')">J</button>
-      <button (click)="elegirLetra('k')" [disabled]="letrasElegidas().includes('k')">K</button>
-      <button (click)="elegirLetra('l')" [disabled]="letrasElegidas().includes('l')">L</button>
-      <button (click)="elegirLetra('\u00f1')" [disabled]="letrasElegidas().includes('\u00f1')">
-        &Ntilde;
-      </button>
-    </div>
-    <div class="fila-inferior fila-teclado">
-      <button (click)="elegirLetra('z')" [disabled]="letrasElegidas().includes('z')">Z</button>
-      <button (click)="elegirLetra('x')" [disabled]="letrasElegidas().includes('x')">X</button>
-      <button (click)="elegirLetra('c')" [disabled]="letrasElegidas().includes('c')">C</button>
-      <button (click)="elegirLetra('v')" [disabled]="letrasElegidas().includes('v')">V</button>
-      <button (click)="elegirLetra('b')" [disabled]="letrasElegidas().includes('b')">B</button>
-      <button (click)="elegirLetra('n')" [disabled]="letrasElegidas().includes('n')">N</button>
-      <button (click)="elegirLetra('m')" [disabled]="letrasElegidas().includes('m')">M</button>
-    </div>
+  <div class="game-shell">
+    <article class="hangman-stage">
+      <div class="stage-topbar">
+        <span class="stage-chip">Intentos restantes</span>
+        <strong>{{ errores() }}</strong>
+      </div>
+
+      <div class="hangman-illustration">
+        <img [src]="imagenAhorcado()" alt="Estado actual del ahorcado" />
+      </div>
+
+      <div class="word-panel">
+        @for (letra of mostrarPalabra(); track $index) {
+          <span class="word-slot">
+            {{ letra }}
+          </span>
+        }
+      </div>
+    </article>
+
+    <article class="keyboard-panel">
+      <div class="keyboard-copy">
+        <p>
+          Cada acierto revela parte de la palabra. Cada error te acerca al final de la ronda.
+        </p>
+      </div>
+
+      <div class="teclado">
+        <div class="fila-teclado fila-superior">
+          <button (click)="elegirLetra('q')" [disabled]="letrasElegidas().includes('q')">Q</button>
+          <button (click)="elegirLetra('w')" [disabled]="letrasElegidas().includes('w')">W</button>
+          <button (click)="elegirLetra('e')" [disabled]="letrasElegidas().includes('e')">E</button>
+          <button (click)="elegirLetra('r')" [disabled]="letrasElegidas().includes('r')">R</button>
+          <button (click)="elegirLetra('t')" [disabled]="letrasElegidas().includes('t')">T</button>
+          <button (click)="elegirLetra('y')" [disabled]="letrasElegidas().includes('y')">Y</button>
+          <button (click)="elegirLetra('u')" [disabled]="letrasElegidas().includes('u')">U</button>
+          <button (click)="elegirLetra('i')" [disabled]="letrasElegidas().includes('i')">I</button>
+          <button (click)="elegirLetra('o')" [disabled]="letrasElegidas().includes('o')">O</button>
+          <button (click)="elegirLetra('p')" [disabled]="letrasElegidas().includes('p')">P</button>
+        </div>
+        <div class="fila-media fila-teclado">
+          <button (click)="elegirLetra('a')" [disabled]="letrasElegidas().includes('a')">A</button>
+          <button (click)="elegirLetra('s')" [disabled]="letrasElegidas().includes('s')">S</button>
+          <button (click)="elegirLetra('d')" [disabled]="letrasElegidas().includes('d')">D</button>
+          <button (click)="elegirLetra('f')" [disabled]="letrasElegidas().includes('f')">F</button>
+          <button (click)="elegirLetra('g')" [disabled]="letrasElegidas().includes('g')">G</button>
+          <button (click)="elegirLetra('h')" [disabled]="letrasElegidas().includes('h')">H</button>
+          <button (click)="elegirLetra('j')" [disabled]="letrasElegidas().includes('j')">J</button>
+          <button (click)="elegirLetra('k')" [disabled]="letrasElegidas().includes('k')">K</button>
+          <button (click)="elegirLetra('l')" [disabled]="letrasElegidas().includes('l')">L</button>
+          <button (click)="elegirLetra('\u00f1')" [disabled]="letrasElegidas().includes('\u00f1')">
+            &Ntilde;
+          </button>
+        </div>
+        <div class="fila-inferior fila-teclado">
+          <button (click)="elegirLetra('z')" [disabled]="letrasElegidas().includes('z')">Z</button>
+          <button (click)="elegirLetra('x')" [disabled]="letrasElegidas().includes('x')">X</button>
+          <button (click)="elegirLetra('c')" [disabled]="letrasElegidas().includes('c')">C</button>
+          <button (click)="elegirLetra('v')" [disabled]="letrasElegidas().includes('v')">V</button>
+          <button (click)="elegirLetra('b')" [disabled]="letrasElegidas().includes('b')">B</button>
+          <button (click)="elegirLetra('n')" [disabled]="letrasElegidas().includes('n')">N</button>
+          <button (click)="elegirLetra('m')" [disabled]="letrasElegidas().includes('m')">M</button>
+        </div>
+      </div>
+    </article>
   </div>
 </section>
+
 <app-pantallafindejuego
   [victoria]="victoria()"
   [reiniciar]="reiniciarJuego"

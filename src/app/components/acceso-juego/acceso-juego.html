@@ -1,7 +1,11 @@
-<button type="button" class="game-cube-link" aria-label="Acceder al juego" (click)="acceder()">
+<button type="button" class="game-cube-link" [attr.aria-label]="'Acceder a ' + titulo" (click)="acceder()">
+  <div class="game-card-copy">
+    <h3>{{ titulo }}</h3>
+    <p>{{ descripcion }}</p>
+  </div>
   <div class="game-cube">
     <span class="cube-face cube-front">
-      <img [src]="imagen" alt="" />
+      <img [src]="imagen" [alt]="titulo" />
     </span>
     <span class="cube-face cube-back"></span>
     <span class="cube-face cube-right"></span>

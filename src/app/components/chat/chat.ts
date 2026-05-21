@@ -74,8 +74,11 @@ export class Chat implements OnInit, OnDestroy {
 
   convertirTimeStamp(arr: MensajeChat[]): MensajeChat[] {
     for (const mensaje of arr) {
-      mensaje.created_at = new Date(mensaje.created_at).toLocaleTimeString('es-AR', {
+      mensaje.created_at = new Date(mensaje.created_at).toLocaleString('es-AR', {
         timeZone: 'America/Argentina/Buenos_Aires',
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
         hour: '2-digit',
         minute: '2-digit',
         hour12: false,

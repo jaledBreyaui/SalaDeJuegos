@@ -12,11 +12,20 @@ import { Spinner } from '../spinner/spinner';
 })
 export class About {
   usuario = signal<GithubUser | null>(null);
+  cargando = signal(true);
+  errorCarga = signal(false);
 
   constructor(private githubApi: GithubApi) { }
   ngOnInit() {
-    this.githubApi.getUserInfo('jaledBreyaui').subscribe((data: GithubUser) => {
-      this.usuario.set(data);
+    this.githubApi.getUserInfo('jaledBreyaui').subscribe({
+      next: (data: GithubUser) => {
+        this.usuario.set(data);
+        this.cargando.set(false);
+      },
+      error: () => {
+        this.errorCarga.set(true);
+        this.cargando.set(false);
+      },
     });
   }
 }

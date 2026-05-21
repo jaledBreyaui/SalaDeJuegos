@@ -1,40 +1,67 @@
 <om-retro-grid [gridColor]="'#fff'" [fadeColor]="'rgb(15, 15, 15)'">
   <p-toast />
 
-  <div class="content">
-    <h1 class="sm:sfont-l text-center">Sala de Juegos</h1>
+  <section class="content">
+    <div class="hero-copy">
+      <p class="hero-eyebrow">Arcade academico</p>
+      <h1>Sala de Juegos</h1>
+      <p class="hero-lead">
+        Cuatro experiencias interactivas en una misma plataforma para jugar, sumar puntaje y
+        participar de la comunidad.
+      </p>
+    </div>
 
-    <div class="games-grid grid grid-cols-2 lg:grid-cols-4 gap-20">
+    <div class="games-grid grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
       <app-acceso-juego
         ruta="/juegos/ahorcado"
         imagen="media/juegos/ahorcado.png"
+        titulo="Ahorcado"
+        descripcion="Adivina la palabra antes de quedarte sin intentos."
       ></app-acceso-juego>
       <app-acceso-juego
         ruta="/juegos/mayormenor"
         imagen="media/juegos/mayormenor.png"
+        titulo="Mayor o Menor"
+        descripcion="Predice si la proxima carta sera mas alta o mas baja."
       ></app-acceso-juego>
       <app-acceso-juego
         ruta="/juegos/preguntados"
         imagen="media/juegos/preguntad2.png"
+        titulo="Preguntados"
+        descripcion="Responde preguntas y suma puntos por conocimiento."
       ></app-acceso-juego>
-      <app-acceso-juego ruta="/juegos/wordle" imagen="media/juegos/wordle.png"></app-acceso-juego>
+      <app-acceso-juego
+        ruta="/juegos/wordle"
+        imagen="media/juegos/wordle.png"
+        titulo="Wordle"
+        descripcion="Descubre la palabra correcta usando pistas visuales."
+      ></app-acceso-juego>
     </div>
 
     <div class="auth-slot">
       @if (!sb.usuarioLogueado()) {
-        <div class="flex gap-10">
-          <app-login></app-login>
-          <p-button
-            label="Registrarse"
-            size="large"
-            routerLink="/register"
-            icon="pi pi-user-plus"
-            class=""
-          ></p-button>
+        <div class="auth-card">
+          <div>
+            <p class="auth-card-eyebrow">Acceso</p>
+            <h2>Ingresa para jugar, chatear y guardar tus puntajes.</h2>
+          </div>
+          <div class="auth-actions">
+            <app-login></app-login>
+            <p-button
+              label="Registrarse"
+              size="large"
+              routerLink="/register"
+              icon="pi pi-user-plus"
+            ></p-button>
+          </div>
         </div>
       } @else {
-        <h2 class="text-center">Bienvenido, {{ nombre() }}</h2>
+        <div class="welcome-card">
+          <p class="auth-card-eyebrow">Sesion activa</p>
+          <h2>Bienvenido, {{ nombre() }}</h2>
+          <p>Ya podes entrar a cualquier juego, participar del chat y competir en el ranking.</p>
+        </div>
       }
     </div>
-  </div>
+  </section>
 </om-retro-grid>

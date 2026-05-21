@@ -10,6 +10,8 @@ import { Router } from '@angular/router';
 export class AccesoJuego {
   @Input({ required: true }) ruta = '';
   @Input({ required: true }) imagen = '';
+  @Input({ required: true }) titulo = '';
+  @Input({ required: true }) descripcion = '';
 
   constructor(private router: Router) {}
 

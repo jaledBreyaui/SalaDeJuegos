@@ -1,5 +1,155 @@
-:host{
-    display: flex;
-    min-height: 100vh;
+:host {
+  display: flex;
+  flex: 1;
+  background:
+    radial-gradient(circle at top left, rgba(98, 201, 174, 0.14), transparent 28%),
+    radial-gradient(circle at bottom right, rgba(98, 201, 174, 0.07), transparent 25%),
+    #0f0f0f;
+}
+
+.ranking-page {
+  display: flex;
+  flex: 1;
+  width: 100%;
+}
+
+.ranking-shell {
+  width: min(1180px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 2rem 0 3rem;
+}
+
+.ranking-header {
+  display: grid;
+  gap: 0.85rem;
+  margin-bottom: 1.5rem;
+}
+
+.ranking-eyebrow {
+  margin: 0;
+  color: rgba(98, 201, 174, 0.9);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.ranking-header h1 {
+  margin: 0;
+  color: #f5f7f6;
+  font-size: clamp(2.4rem, 4vw, 4rem);
+  line-height: 1;
+}
+
+.ranking-lead {
+  margin: 0;
+  max-width: 46rem;
+  color: rgba(232, 238, 235, 0.78);
+  line-height: 1.75;
+}
+
+.ranking-highlights {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.highlight-card,
+.ranking-panel {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 26px;
+  background: rgba(19, 19, 19, 0.84);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(18px);
+}
+
+.highlight-card {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1.1rem 1.2rem;
+}
+
+.highlight-label {
+  color: rgba(98, 201, 174, 0.9);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.highlight-card strong {
+  color: #ffffff;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.highlight-card p {
+  margin: 0;
+  color: rgba(232, 238, 235, 0.7);
+  font-size: 0.92rem;
+}
+
+.ranking-panel {
+  padding: 1.1rem;
+}
+
+:host ::ng-deep .p-tabs {
+  display: grid;
+  gap: 1rem;
+}
+
+:host ::ng-deep .p-tablist {
+  gap: 0.5rem;
+  border: 0;
+  background: transparent;
+}
+
+:host ::ng-deep .p-tab {
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(235, 240, 238, 0.78);
+  transition:
+    background-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+:host ::ng-deep .p-tab:hover,
+:host ::ng-deep .p-tab:focus-visible,
+:host ::ng-deep .p-tab-active {
+  background: rgba(98, 201, 174, 0.12);
+  color: #f7fffc;
+  transform: translateY(-1px);
+}
+
+:host ::ng-deep .p-tabpanels,
+:host ::ng-deep .p-tabpanel {
+  padding: 0;
+  background: transparent;
+  border: 0;
+}
+
+@media (max-width: 960px) {
+  .ranking-highlights {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .ranking-shell {
+    width: min(100%, calc(100% - 1rem));
+    padding: 1rem 0 2rem;
+  }
+
+  .ranking-highlights {
+    grid-template-columns: 1fr;
+  }
+
+  .ranking-panel {
+    padding: 0.8rem;
+    border-radius: 20px;
+  }
 }
 

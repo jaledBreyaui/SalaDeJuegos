@@ -1,26 +1,60 @@
-<div class="flex mt-25 flex-1 w-50">
-  <div class="card h-100 flex flex-1 flex-col">
-    <p-tabs value="0">
-      <h1 class="text-center text-3xl font-bold">Mejores jugadores</h1>
-      <p-tablist class="mt-10">
-        <p-tab value="0">Ahorcado</p-tab>
-        <p-tab value="1">Mayor o Menor</p-tab>
-        <p-tab value="2">Preguntados</p-tab>
-        <p-tab value="3">Wordle</p-tab>
-      </p-tablist>
-      <p-tabpanels>
-        <p-tabpanel value="0">
-          <app-tabla [resultado]="ahorcado()"></app-tabla>
-        </p-tabpanel>
-        <p-tabpanel value="1">
-          <p class="m-0">
-            <app-tabla [resultado]="mayormenor()"></app-tabla></p
-        ></p-tabpanel>
-        <p-tabpanel value="2">
-          <app-tabla [resultado]="preguntados()"></app-tabla>
-        </p-tabpanel>
-        <p-tabpanel value="3"> <app-tabla [resultado]="wordle()"></app-tabla> </p-tabpanel>
-      </p-tabpanels>
-    </p-tabs>
+<section class="ranking-page">
+  <div class="ranking-shell">
+    <header class="ranking-header">
+      <p class="ranking-eyebrow">Comunidad</p>
+      <h1>Mejores jugadores</h1>
+      <p class="ranking-lead">
+        Consulta los puntajes mas altos de cada juego y compara el rendimiento de la comunidad en
+        una vista mas clara y ordenada.
+      </p>
+    </header>
+
+    <div class="ranking-highlights" aria-hidden="true">
+      <article class="highlight-card">
+        <span class="highlight-label">Ahorcado</span>
+        <strong>{{ ahorcado().length }}</strong>
+        <p>jugadores con puntaje registrado</p>
+      </article>
+      <article class="highlight-card">
+        <span class="highlight-label">Mayor o Menor</span>
+        <strong>{{ mayormenor().length }}</strong>
+        <p>jugadores con puntaje registrado</p>
+      </article>
+      <article class="highlight-card">
+        <span class="highlight-label">Preguntados</span>
+        <strong>{{ preguntados().length }}</strong>
+        <p>jugadores con puntaje registrado</p>
+      </article>
+      <article class="highlight-card">
+        <span class="highlight-label">Wordle</span>
+        <strong>{{ wordle().length }}</strong>
+        <p>jugadores con puntaje registrado</p>
+      </article>
+    </div>
+
+    <div class="ranking-panel">
+      <p-tabs value="0">
+        <p-tablist>
+          <p-tab value="0">Ahorcado</p-tab>
+          <p-tab value="1">Mayor o Menor</p-tab>
+          <p-tab value="2">Preguntados</p-tab>
+          <p-tab value="3">Wordle</p-tab>
+        </p-tablist>
+        <p-tabpanels>
+          <p-tabpanel value="0">
+            <app-tabla juego="Ahorcado" [resultado]="ahorcado()"></app-tabla>
+          </p-tabpanel>
+          <p-tabpanel value="1">
+            <app-tabla juego="Mayor o Menor" [resultado]="mayormenor()"></app-tabla>
+          </p-tabpanel>
+          <p-tabpanel value="2">
+            <app-tabla juego="Preguntados" [resultado]="preguntados()"></app-tabla>
+          </p-tabpanel>
+          <p-tabpanel value="3">
+            <app-tabla juego="Wordle" [resultado]="wordle()"></app-tabla>
+          </p-tabpanel>
+        </p-tabpanels>
+      </p-tabs>
+    </div>
   </div>
-</div>
+</section>

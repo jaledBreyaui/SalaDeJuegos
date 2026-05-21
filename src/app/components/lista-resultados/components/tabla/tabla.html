@@ -1,26 +1,43 @@
-<div class="card">
-  <p-table [value]="resultado" [tableStyle]="{ 'min-heigth': '100vh' }">
-    <ng-template #header>
-      <tr>
-        <th>Ranking</th>
-        <th>Nombre</th>
-        <th>Apellido</th>
-        <th>Puntos</th>
-      </tr>
-    </ng-template>
-    <ng-template #body let-jugador let-rowIndex="rowIndex">
-      <tr
-        [ngClass]="{
-          ganador: rowIndex === 0,
-          segundo: rowIndex === 1,
-          tercero: rowIndex === 2,
-        }"
-      >
-        <td>{{ rowIndex + 1 }}</td>
-        <td>{{ jugador.usuarios_registrados.nombre }}</td>
-        <td>{{ jugador.usuarios_registrados.apellido }}</td>
-        <td>{{ jugador.puntaje }}</td>
-      </tr>
-    </ng-template>
-  </p-table>
-</div>
+<section class="ranking-table-shell">
+  <header class="ranking-table-header">
+    <div>
+      <p class="ranking-table-eyebrow">Ranking</p>
+      <h2>{{ juego }}</h2>
+    </div>
+    <span class="ranking-table-count">{{ resultado.length }} jugadores</span>
+  </header>
+
+  @if (resultado.length > 0) {
+    <p-table [value]="resultado" responsiveLayout="scroll">
+      <ng-template #header>
+        <tr>
+          <th>Posicion</th>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Puntaje</th>
+        </tr>
+      </ng-template>
+      <ng-template #body let-jugador let-rowIndex="rowIndex">
+        <tr
+          [ngClass]="{
+            ganador: rowIndex === 0,
+            segundo: rowIndex === 1,
+            tercero: rowIndex === 2,
+          }"
+        >
+          <td>
+            <span class="position-badge">#{{ rowIndex + 1 }}</span>
+          </td>
+          <td>{{ jugador.usuarios_registrados.nombre }}</td>
+          <td>{{ jugador.usuarios_registrados.apellido }}</td>
+          <td class="score-cell">{{ jugador.puntaje }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  } @else {
+    <div class="ranking-empty-state">
+      <p>Todavia no hay puntajes cargados para {{ juego }}.</p>
+      <span>Cuando los jugadores terminen una partida, el ranking aparecera aca.</span>
+    </div>
+  }
+</section>

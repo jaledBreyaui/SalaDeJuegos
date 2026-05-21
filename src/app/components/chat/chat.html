@@ -1,41 +1,75 @@
-<div class="chatContainer relative flex flex-col lg: flex-1 justify-between p-4">
-  <div class="flex flex-col gap-4">
-    @for (mensaje of mensajes(); track mensaje.id) {
-      <div
-        class="mensaje flex flex-col"
-        [ngClass]="{
-          'mensaje-propio': esMensajePropio(mensaje) === true,
-          'mensaje-ajeno': esMensajePropio(mensaje) === false,
-        }"
-      >
-        <div class="flex flex-col px-4 pt-2 max-w-[50%] break-all">
-          <span class="text-xs mb-2" style="align-self: self-start">{{
-            mensaje.usuarios_registrados?.nombre ?? 'Usuario'
-          }}</span>
-          <div>
-            <p>{{ mensaje.mensaje }}</p>
-            <span>{{ mensaje.created_at }}</span>
-          </div>
-        </div>
+<section class="chat-page">
+  <div class="chat-shell">
+    <header class="chat-header">
+      <div>
+        <p class="chat-eyebrow">Comunidad</p>
+        <h1>Chat en tiempo real</h1>
+        <p class="chat-lead">
+          Espacio para conversar con otros jugadores dentro de la sala y compartir la experiencia
+          de cada partida.
+        </p>
       </div>
-    }
+
+      <div class="chat-status-pill">
+        <span class="chat-status-dot"></span>
+        <span>En linea</span>
+      </div>
+    </header>
+
+    <div class="chat-panel">
+      <div class="chat-panel-head">
+        <div>
+          <p class="chat-room-label">Canal general</p>
+          <h2>Conversacion activa</h2>
+        </div>
+        <span class="chat-count">{{ mensajes().length }} mensajes</span>
+      </div>
+
+      <div class="chat-messages" [class.chat-messages--empty]="mensajes().length === 0">
+        @if (mensajes().length === 0) {
+          <div class="chat-empty-state">
+            <p>Todavia no hay mensajes en la sala.</p>
+            <span>Se el primero en iniciar la conversacion.</span>
+          </div>
+        } @else {
+          @for (mensaje of mensajes(); track mensaje.id) {
+            <div
+              class="mensaje"
+              [ngClass]="{
+                'mensaje-propio': esMensajePropio(mensaje) === true,
+                'mensaje-ajeno': esMensajePropio(mensaje) === false,
+              }"
+            >
+              <div class="mensaje-burbuja">
+                <div class="mensaje-meta">
+                  <span class="mensaje-autor">{{ mensaje.usuarios_registrados?.nombre ?? 'Usuario' }}</span>
+                  <span class="mensaje-hora">{{ mensaje.created_at }}</span>
+                </div>
+                <p class="mensaje-texto">{{ mensaje.mensaje }}</p>
+              </div>
+            </div>
+          }
+        }
+        <div #finMensajes aria-hidden="true" class="h-px"></div>
+      </div>
+
+      <div class="mensajero-container">
+        <form class="chat-form" (submit)="enviarMensaje($event)">
+          <div class="chat-input-wrap">
+            <i class="pi pi-comments chat-input-icon"></i>
+            <input
+              [(ngModel)]="mensajeNuevo"
+              name="mensajeNuevo"
+              class="mensajero"
+              type="text"
+              placeholder="Escribi tu mensaje"
+            />
+          </div>
+          <button type="submit" class="boton-envio" aria-label="Enviar mensaje">
+            <i class="pi pi-send"></i>
+          </button>
+        </form>
+      </div>
+    </div>
   </div>
-  <div class="bg-[rgb(47, 47, 47)] mensajero-container mt-10">
-    <form class="flex" (submit)="enviarMensaje($event)">
-      <input
-        [(ngModel)]="mensajeNuevo"
-        name="mensajeNuevo"
-        class="mensajero flex-19/20 rounded border-slate-400 bg-white px-3 py-2 text-slate-900"
-        type="text"
-        placeholder="Escribí tu mensaje"
-      />
-      <button
-        type="submit"
-        class="boton-envio w-full flex-1/20 rounded border-none bg-white px-3 py-3"
-      >
-        <i class="pi pi-send"> </i>
-      </button>
-    </form>
-  </div>
-  <div #finMensajes aria-hidden="true" class="h-px"></div>
-</div>
+</section>
