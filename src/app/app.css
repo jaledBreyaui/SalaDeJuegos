@@ -9,3 +9,39 @@
     flex: 1;
     flex-direction: column;
 } 
+
+.app-content--game-enter {
+    animation: game-route-enter 1s ease-out both;
+}
+
+.app-content--community-enter {
+    animation: community-route-enter 1s ease-out both;
+}
+
+@keyframes game-route-enter {
+    from {
+        opacity: 0;
+        transform: translateY(14px) scale(0.985);
+        filter: blur(4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+    }
+}
+
+@keyframes community-route-enter {
+    from {
+        opacity: 0;
+        transform: translateX(18px);
+        filter: blur(3px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+        filter: blur(0);
+    }
+}

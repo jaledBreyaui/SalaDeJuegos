@@ -1,8 +1,12 @@
 <main class="app-shell">
   <app-navbar></app-navbar>
 
-  <section class="app-content">
-    <router-outlet />
+  <section
+    class="app-content"
+    [class.app-content--game-enter]="animarEntradaJuego()"
+    [class.app-content--community-enter]="animarEntradaComunidad()"
+  >
+    <router-outlet (activate)="activarRuta()" />
   </section>
 
   <p-confirmdialog />
