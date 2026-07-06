@@ -31,6 +31,13 @@
         }
       </div>
 
+      @if (palabra) {
+        <div class="word-summary">
+          <span class="word-summary__label">Palabra</span>
+          <strong class="word-summary__value">{{ palabra }}</strong>
+        </div>
+      }
+
       <div class="score-summary">
         <span class="score-summary__label">Puntaje obtenido</span>
         <strong class="score-summary__value">{{ puntaje }}</strong>

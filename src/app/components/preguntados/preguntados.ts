@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, OnDestroy, signal } from '@angular/core';
 import { Trivia } from '../../services/trivia/trivia';
 import { Pregunta } from '../../interfaces/pregunta';
 import { NgClass } from '@angular/common';
@@ -7,6 +7,7 @@ import { ButtonModule } from 'primeng/button';
 import { Pantallafindejuego } from '../pantallafindejuego/pantallafindejuego';
 import { Router } from '@angular/router';
 import { Supabase } from '../../services/supabase/supabase';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-preguntados',
@@ -14,7 +15,7 @@ import { Supabase } from '../../services/supabase/supabase';
   templateUrl: './preguntados.html',
   styleUrl: './preguntados.css',
 })
-export class Preguntados {
+export class Preguntados implements OnDestroy {
   preguntas: Pregunta[] = [];
   categoriaSeleccionada: string = '';
   ocultarCategoria = signal<boolean>(false);
@@ -30,11 +31,16 @@ export class Preguntados {
 
   respuestasCorrectas = signal<number>(0);
   respuestasIncorrectas = signal<number>(0);
+  mostrandoResultado = signal<boolean>(false);
+  respuestaSeleccionada = signal<string | null>(null);
+  private timeoutRespuesta?: ReturnType<typeof setTimeout>;
+  private salidaConfirmada = false;
 
   constructor(
     private trivia: Trivia,
     private sb: Supabase,
     private router: Router,
+    private confirmationService: ConfirmationService,
   ) {}
 
   elegirCategoria(categoria: string) {
@@ -65,7 +71,7 @@ export class Preguntados {
   }
 
   armarRespuestas() {
-    this.arrayRespuestas.push(this.respuestaActual());
+    this.arrayRespuestas = [this.respuestaActual()];
     this.preguntas[this.contadorPregunta()].incorrect_answers.map((rta) => {
       let rtaParseada = this.parsearPregunta(rta);
       this.arrayRespuestas.push(rtaParseada);
@@ -75,6 +81,13 @@ export class Preguntados {
   }
 
   verificarRespuesta(respuesta: string) {
+    if (this.mostrandoResultado()) {
+      return;
+    }
+
+    this.respuestaSeleccionada.set(respuesta);
+    this.mostrandoResultado.set(true);
+
     let dificultad = this.preguntas[this.contadorPregunta()].difficulty;
     if (respuesta === this.respuestaActual()) {
       this.sumarPuntaje(dificultad);
@@ -82,9 +95,48 @@ export class Preguntados {
     } else {
       this.respuestasIncorrectas.update((r) => r + 1);
     }
-    this.contadorPregunta.set(this.contadorPregunta() + 1);
+
+    this.timeoutRespuesta = setTimeout(() => {
+      this.contadorPregunta.set(this.contadorPregunta() + 1);
+      this.arrayRespuestas = [];
+      this.respuestaSeleccionada.set(null);
+      this.mostrandoResultado.set(false);
+      this.configurarRonda();
+    }, 2000);
+  }
+
+  claseRespuesta(respuesta: string): string {
+    if (!this.mostrandoResultado()) {
+      return '';
+    }
+
+    if (respuesta === this.respuestaActual()) {
+      return 'respuesta-correcta';
+    }
+
+    if (respuesta === this.respuestaSeleccionada()) {
+      return 'respuesta-incorrecta';
+    }
+
+    return 'respuesta-bloqueada';
+  }
+
+  private limpiarTimeoutRespuesta(): void {
+    if (this.timeoutRespuesta) {
+      clearTimeout(this.timeoutRespuesta);
+      this.timeoutRespuesta = undefined;
+    }
+  }
+
+  private limpiarEstadoRespuesta(): void {
+    this.limpiarTimeoutRespuesta();
     this.arrayRespuestas = [];
-    this.configurarRonda();
+    this.respuestaSeleccionada.set(null);
+    this.mostrandoResultado.set(false);
+  }
+
+  ngOnDestroy(): void {
+    this.limpiarTimeoutRespuesta();
   }
 
   sumarPuntaje(dificultad: string) {
@@ -100,6 +152,8 @@ export class Preguntados {
   }
 
   reiniciarJuego = () => {
+    this.salidaConfirmada = false;
+    this.limpiarEstadoRespuesta();
     this.puntaje.set(0);
     this.juegoTerminado.set(false);
     this.victoria.set(false);
@@ -108,7 +162,12 @@ export class Preguntados {
     this.respuestasCorrectas.set(0);
     this.respuestasIncorrectas.set(0);
   };
-  abandonarJuego = () => {
+  abandonarJuego = async () => {
+    if (!(await this.puedeSalirDePartida())) {
+      return;
+    }
+
+    this.limpiarTimeoutRespuesta();
     this.guardarPuntos();
     this.router.navigate(['/home']);
   };
@@ -122,5 +181,30 @@ export class Preguntados {
     const txt = document.createElement('textarea');
     txt.innerHTML = pregunta;
     return txt.value;
+  }
+
+  puedeSalirDePartida(): boolean | Promise<boolean> {
+    if (this.salidaConfirmada || this.juegoTerminado() || !this.ocultarCategoria()) {
+      return true;
+    }
+
+    return this.confirmarSalida();
+  }
+
+  private confirmarSalida(): Promise<boolean> {
+    return new Promise((resolve) => {
+      this.confirmationService.confirm({
+        header: 'Abandonar partida',
+        message: 'Si salis ahora vas a perder el progreso de la partida.',
+        icon: 'pi pi-exclamation-triangle',
+        acceptLabel: 'Abandonar',
+        rejectLabel: 'Seguir jugando',
+        accept: () => {
+          this.salidaConfirmada = true;
+          resolve(true);
+        },
+        reject: () => resolve(false),
+      });
+    });
   }
 }

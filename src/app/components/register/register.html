@@ -1,78 +1,168 @@
-<div class="mx-auto w-full min-h-[90vh] px-4 py-6 sm:px-6 md:max-w-2xl lg:max-w-3xl xl:max-w-4xl">
-    <p-toast />
-    <h2 class="mb-10 font-semibold text-white text-center text-2xl">Crea Tu Cuenta</h2>
-    <section class="flex w-full min-h-135 flex-col rounded-lg bg-zinc-900 p-5 shadow-md sm:p-7">
-        <form [formGroup]="formularioRegistro" class="flex w-full flex-1 flex-col px-5 justify-evenly">
-            <div class="flex flex-col justify-center gap-10 flex-1">
-                <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                    <p-inputgroup class="flex w-full">
-                        <p-inputgroup-addon class="flex w-12 shrink-0 items-center justify-center text-slate-300">
-                            <i class="pi pi-envelope text-sm text-slate-300"></i>
-                        </p-inputgroup-addon>
-                        <input class="w-full min-w-0" pInputText name="correo" type="email" formControlName="correo"
-                            placeholder="Email" autocomplete="email" />
-                    </p-inputgroup>
+<section class="register-page">
+  <p-toast />
 
-                    <p-inputgroup class="flex w-full min-w-0">
-                        <p-inputgroup-addon class="flex w-12 shrink-0 items-center justify-center text-slate-300">
-                            <i class="pi pi-id-card text-sm text-slate-300"></i>
-                        </p-inputgroup-addon>
-                        <input class="w-full min-w-0" pInputText name="nombre" formControlName="nombre"
-                            placeholder="Nombre" autocomplete="given-name" />
-                    </p-inputgroup>
-                </div>
+  <div class="register-shell">
+    <aside class="register-intro" aria-label="Sala de Juegos">
+      <p class="register-eyebrow">Nuevo jugador</p>
+      <h1>Crea tu cuenta</h1>
+      <p>
+        Elegi tus datos de acceso y deja listo tu perfil para guardar partidas, puntajes y entrar
+        a la comunidad.
+      </p>
+    </aside>
 
-                <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                    <p-inputgroup class="flex w-full min-w-0">
-                        <p-inputgroup-addon class="flex w-12 shrink-0 items-center justify-center text-slate-300">
-                            <i class="pi pi-id-card text-sm text-slate-300"></i>
-                        </p-inputgroup-addon>
-                        <input class="w-full min-w-0" pInputText name="apellido" formControlName="apellido"
-                            placeholder="Apellido" autocomplete="family-name" />
-                    </p-inputgroup>
-                    <p-inputgroup class="flex w-full">
-                        <p-inputgroup-addon class="flex w-12 shrink-0 items-center justify-center text-slate-300">
-                            <i class="pi pi-calendar text-sm text-slate-300"></i>
-                        </p-inputgroup-addon>
-                        <input class="w-full min-w-0" pInputText name="edad" type="number" formControlName="edad"
-                            placeholder="Edad" autocomplete="off" />
-                    </p-inputgroup>
-                </div>
+    <section class="register-panel">
+      <div class="panel-header">
+        <div>
+          <p class="panel-kicker">Registro</p>
+          <h2>Datos del perfil</h2>
+        </div>
+        <a routerLink="/home" class="signin-link">Ya estoy registrado</a>
+      </div>
 
-                <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                    <p-inputgroup class="flex w-full">
-                        <p-inputgroup-addon class="flex w-12 shrink-0 items-center justify-center text-slate-300">
-                            <i class="pi pi-lock text-sm text-slate-300"></i>
-                        </p-inputgroup-addon>
-                        <input class="w-full min-w-0" pInputText name="password" type="password"
-                            formControlName="password" placeholder="Contraseña" autocomplete="current-password" />
-                    </p-inputgroup>
-                    <div class="flex w-full flex-col gap-1">
-                        <p-inputgroup class="flex w-full">
-                            <p-inputgroup-addon class="flex w-12 shrink-0 items-center justify-center text-slate-300">
-                                <i class="pi pi-lock text-sm text-slate-300"></i>
-                            </p-inputgroup-addon>
-                            <input class="w-full min-w-0" pInputText name="password" type="password"
-                                formControlName="repitePassword" placeholder="Confirmar contraseña"
-                                autocomplete="current-password" />
-                        </p-inputgroup>
-                    </div>
-                </div>
+      <form [formGroup]="formularioRegistro" class="register-form">
+        <div class="field field--wide">
+          <label for="correo">Correo electronico</label>
+          <p-inputgroup>
+            <p-inputgroup-addon>
+              <i class="pi pi-envelope"></i>
+            </p-inputgroup-addon>
+            <input
+              id="correo"
+              pInputText
+              name="correo"
+              type="email"
+              formControlName="correo"
+              placeholder="jugador@email.com"
+              autocomplete="email"
+            />
+          </p-inputgroup>
+          @if (formularioRegistro.get('correo')?.invalid && formularioRegistro.get('correo')?.touched) {
+            <small>Ingresa un correo valido.</small>
+          }
+        </div>
 
-                <a routerLink="/home"
-                    class="-mt-3 ml-1 text-sm text-gray-400 underline underline-offset-4 transition-colors hover:text-gray-300">
-                    Ya estoy registrado
-                </a>
-            </div>
-            @if (
+        <div class="field">
+          <label for="nombre">Nombre</label>
+          <p-inputgroup>
+            <p-inputgroup-addon>
+              <i class="pi pi-user"></i>
+            </p-inputgroup-addon>
+            <input
+              id="nombre"
+              pInputText
+              name="nombre"
+              formControlName="nombre"
+              placeholder="Nombre"
+              autocomplete="given-name"
+            />
+          </p-inputgroup>
+          @if (formularioRegistro.get('nombre')?.invalid && formularioRegistro.get('nombre')?.touched) {
+            <small>Usa solo letras.</small>
+          }
+        </div>
+
+        <div class="field">
+          <label for="apellido">Apellido</label>
+          <p-inputgroup>
+            <p-inputgroup-addon>
+              <i class="pi pi-id-card"></i>
+            </p-inputgroup-addon>
+            <input
+              id="apellido"
+              pInputText
+              name="apellido"
+              formControlName="apellido"
+              placeholder="Apellido"
+              autocomplete="family-name"
+            />
+          </p-inputgroup>
+          @if (formularioRegistro.get('apellido')?.invalid && formularioRegistro.get('apellido')?.touched) {
+            <small>Usa solo letras.</small>
+          }
+        </div>
+
+        <div class="field">
+          <label for="edad">Edad</label>
+          <p-inputgroup>
+            <p-inputgroup-addon>
+              <i class="pi pi-calendar"></i>
+            </p-inputgroup-addon>
+            <input
+              id="edad"
+              pInputText
+              name="edad"
+              type="number"
+              formControlName="edad"
+              placeholder="18 a 99"
+              autocomplete="off"
+            />
+          </p-inputgroup>
+          @if (formularioRegistro.get('edad')?.invalid && formularioRegistro.get('edad')?.touched) {
+            <small>La edad debe estar entre 18 y 99.</small>
+          }
+        </div>
+
+        <div class="field">
+          <label for="password">Contrasena</label>
+          <p-inputgroup>
+            <p-inputgroup-addon>
+              <i class="pi pi-lock"></i>
+            </p-inputgroup-addon>
+            <input
+              id="password"
+              pInputText
+              name="password"
+              type="password"
+              formControlName="password"
+              placeholder="Minimo 4 caracteres"
+              autocomplete="new-password"
+            />
+          </p-inputgroup>
+          @if (formularioRegistro.get('password')?.invalid && formularioRegistro.get('password')?.touched) {
+            <small>Debe tener al menos 4 caracteres.</small>
+          }
+        </div>
+
+        <div class="field">
+          <label for="repitePassword">Confirmar contrasena</label>
+          <p-inputgroup>
+            <p-inputgroup-addon>
+              <i class="pi pi-shield"></i>
+            </p-inputgroup-addon>
+            <input
+              id="repitePassword"
+              pInputText
+              name="repitePassword"
+              type="password"
+              formControlName="repitePassword"
+              placeholder="Repeti la contrasena"
+              autocomplete="new-password"
+            />
+          </p-inputgroup>
+          @if (
             formularioRegistro.get('repitePassword')?.hasError('noCoincide') &&
             formularioRegistro.get('repitePassword')?.touched
-            ) {
-            <p class="ml-1 text-sm text-red-400">Las contrasenas no coinciden</p>
-            }
-            <div class="card flex mt-10 justify-center">
-                <p-button label="Crear Cuenta" (onClick)="registrarUsuario()" [disabled]="formularioRegistro.invalid" />
-            </div>
-        </form>
+          ) {
+            <small>Las contrasenas no coinciden.</small>
+          } @else if (
+            formularioRegistro.get('repitePassword')?.invalid &&
+            formularioRegistro.get('repitePassword')?.touched
+          ) {
+            <small>Confirma tu contrasena.</small>
+          }
+        </div>
+
+        <div class="form-actions">
+          <p-button
+            label="Crear cuenta"
+            icon="pi pi-user-plus"
+            type="button"
+            (onClick)="registrarUsuario()"
+            styleClass="register-submit"
+          />
+        </div>
+      </form>
     </section>
-</div>
+  </div>
+</section>

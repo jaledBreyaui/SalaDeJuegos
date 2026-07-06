@@ -169,6 +169,24 @@
   background: rgba(24, 24, 24, 0.92);
 }
 
+.boton-respuestas:disabled {
+  cursor: default;
+}
+
+.respuesta-correcta {
+  border-color: #86efac !important;
+  background: #166534 !important;
+}
+
+.respuesta-incorrecta {
+  border-color: #fca5a5 !important;
+  background: #7f1d1d !important;
+}
+
+.respuesta-bloqueada {
+  opacity: 0.48;
+}
+
 .preguntados-game-shell {
   display: grid;
   grid-template-rows: auto auto auto 1fr;

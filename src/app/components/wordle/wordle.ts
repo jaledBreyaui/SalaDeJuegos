@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { Supabase } from '../../services/supabase/supabase';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
+import { ConfirmationService } from 'primeng/api';
 @Component({
   selector: 'app-wordle',
   imports: [
@@ -41,6 +42,7 @@ export class Wordle implements OnInit {
   juegoTerminado = signal(false);
   victoria = signal(false);
   mensajeJuegoTerminado = '';
+  private salidaConfirmada = false;
 
   visible: boolean = false;
 
@@ -48,6 +50,7 @@ export class Wordle implements OnInit {
     private fb: FormBuilder,
     private sb: Supabase,
     private router: Router,
+    private confirmationService: ConfirmationService,
   ) {}
 
   ngOnInit(): void {
@@ -137,7 +140,11 @@ export class Wordle implements OnInit {
     }
   }
 
-  abandonarJuego = () => {
+  abandonarJuego = async () => {
+    if (!(await this.puedeSalirDePartida())) {
+      return;
+    }
+
     if (this.puntaje() > 0) {
       this.sb.guardarPuntajes('wordle', this.puntaje());
     }
@@ -145,6 +152,7 @@ export class Wordle implements OnInit {
   };
 
   reiniciarJuego = () => {
+    this.salidaConfirmada = false;
     this.juegoTerminado.set(false);
     this.intentoActual = 0;
     this.clasesLetrasProbadas = [];
@@ -204,4 +212,36 @@ export class Wordle implements OnInit {
   //   this.puntajeAcumulado.set(estadoRetriveado.puntajeAcumulado);
   //   this.puntaje.set(estadoRetriveado.puntaje);
   // }
+
+  puedeSalirDePartida(): boolean | Promise<boolean> {
+    if (this.salidaConfirmada || this.juegoTerminado() || !this.partidaIniciada()) {
+      return true;
+    }
+
+    return this.confirmarSalida();
+  }
+
+  private partidaIniciada(): boolean {
+    return (
+      this.intentoActual > 0 ||
+      this.intentos.some((intento) => this.obtenerLetras(intento).some((letra) => letra.length > 0))
+    );
+  }
+
+  private confirmarSalida(): Promise<boolean> {
+    return new Promise((resolve) => {
+      this.confirmationService.confirm({
+        header: 'Abandonar partida',
+        message: 'Si salis ahora vas a perder el progreso de la partida.',
+        icon: 'pi pi-exclamation-triangle',
+        acceptLabel: 'Abandonar',
+        rejectLabel: 'Seguir jugando',
+        accept: () => {
+          this.salidaConfirmada = true;
+          resolve(true);
+        },
+        reject: () => resolve(false),
+      });
+    });
+  }
 }

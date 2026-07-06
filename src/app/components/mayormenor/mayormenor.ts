@@ -9,6 +9,7 @@ import { NgClass } from '@angular/common';
 import { NgxGradientTextComponent } from '@omnedia/ngx-gradient-text';
 import { carta } from '../../interfaces/carta';
 import { Supabase } from '../../services/supabase/supabase';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-mayormenor',
@@ -35,11 +36,13 @@ export class Mayormenor {
   contadorCarta: number = 0;
 
   deshabilitarBotones = signal<boolean>(false);
+  private salidaConfirmada = false;
 
   constructor(
     private deck: Deck,
     private sb: Supabase,
     private router: Router,
+    private confirmationService: ConfirmationService,
   ) {}
 
   ngOnInit() {
@@ -109,6 +112,7 @@ export class Mayormenor {
   }
 
   reiniciarJuego = () => {
+    this.salidaConfirmada = false;
     this.guardarPuntos;
     this.ngOnInit();
     this.puntaje.set(0);
@@ -120,7 +124,11 @@ export class Mayormenor {
     this.deshabilitarBotones.set(false);
   };
 
-  abandonarJuego = () => {
+  abandonarJuego = async () => {
+    if (!(await this.puedeSalirDePartida())) {
+      return;
+    }
+
     if (this.puntaje() > 1500) {
       this.guardarPuntos();
     }
@@ -138,4 +146,29 @@ export class Mayormenor {
   }
 
   verificarEstado() {}
+
+  puedeSalirDePartida(): boolean | Promise<boolean> {
+    if (this.salidaConfirmada || this.juegoTerminado() || this.contadorCarta <= 1) {
+      return true;
+    }
+
+    return this.confirmarSalida();
+  }
+
+  private confirmarSalida(): Promise<boolean> {
+    return new Promise((resolve) => {
+      this.confirmationService.confirm({
+        header: 'Abandonar partida',
+        message: 'Si salis ahora vas a perder el progreso de la partida.',
+        icon: 'pi pi-exclamation-triangle',
+        acceptLabel: 'Abandonar',
+        rejectLabel: 'Seguir jugando',
+        accept: () => {
+          this.salidaConfirmada = true;
+          resolve(true);
+        },
+        reject: () => resolve(false),
+      });
+    });
+  }
 }

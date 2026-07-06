@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth-guard';
 import { adminGuard } from './guards/admin-guard';
+import { partidaEnCursoGuard } from './guards/partida-en-curso.guard';
 
 export const routes: Routes = [
   {
@@ -50,16 +51,19 @@ export const routes: Routes = [
   {
     path: 'juegos/mayormenor',
     canActivate: [authGuard],
+    canDeactivate: [partidaEnCursoGuard],
     loadComponent: () => import('./components/mayormenor/mayormenor').then((m) => m.Mayormenor),
   },
   {
     path: 'juegos/wordle',
     canActivate: [authGuard],
+    canDeactivate: [partidaEnCursoGuard],
     loadComponent: () => import('./components/wordle/wordle').then((m) => m.Wordle),
   },
   {
     path: 'juegos/preguntados',
     canActivate: [authGuard],
+    canDeactivate: [partidaEnCursoGuard],
     loadComponent: () => import('./components/preguntados/preguntados').then((m) => m.Preguntados),
   },
   {

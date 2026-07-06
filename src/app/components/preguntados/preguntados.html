@@ -85,7 +85,12 @@
 
   <div class="respuestas-grid">
     @for (rta of arrayRespuestas; track $index) {
-      <button class="boton-respuestas" (click)="verificarRespuesta(rta)">
+      <button
+        class="boton-respuestas"
+        [ngClass]="claseRespuesta(rta)"
+        [disabled]="mostrandoResultado()"
+        (click)="verificarRespuesta(rta)"
+      >
         {{ rta }}
       </button>
     }

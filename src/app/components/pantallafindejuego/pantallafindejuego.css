@@ -81,7 +81,8 @@
   min-height: 6rem;
 }
 
-.score-summary {
+.score-summary,
+.word-summary {
   display: grid;
   gap: 0.4rem;
   padding: 1rem;
@@ -90,7 +91,8 @@
   background: rgba(255, 255, 255, 0.03);
 }
 
-.score-summary__label {
+.score-summary__label,
+.word-summary__label {
   color: rgba(98, 201, 174, 0.88);
   font-size: 0.78rem;
   font-weight: 700;
@@ -102,6 +104,14 @@
   color: #ffffff;
   font-size: clamp(2rem, 6vw, 3rem);
   line-height: 1;
+}
+
+.word-summary__value {
+  color: #ffffff;
+  font-size: clamp(1.6rem, 5vw, 2.35rem);
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
 }
 
 .endgame-actions {
