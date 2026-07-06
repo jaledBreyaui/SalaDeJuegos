@@ -53,7 +53,11 @@ export class Chat implements OnInit, OnDestroy {
   async enviarMensaje(e: Event): Promise<void> {
     e.preventDefault();
     if (this.dataUsuario?.email && this.mensajeNuevo.length > 1) {
-      let respuesta = await this.chat.obtenerUsuarioPorMail(this.dataUsuario.email);
+      const respuesta = await this.chat.obtenerUsuarioPorMail(this.dataUsuario.email);
+      if (!respuesta) {
+        return;
+      }
+
       await this.chat.postMessage(respuesta.id, this.mensajeNuevo.trim());
       this.mensajeNuevo = '';
     }

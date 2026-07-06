@@ -1,0 +1,151 @@
+:host {
+  display: flex;
+  flex: 1;
+  background:
+    radial-gradient(circle at top left, rgba(98, 201, 174, 0.14), transparent 28%),
+    radial-gradient(circle at bottom right, rgba(98, 201, 174, 0.08), transparent 25%),
+    #0f0f0f;
+}
+
+.survey-results-page {
+  display: flex;
+  flex: 1;
+  width: 100%;
+}
+
+.survey-results-shell {
+  width: min(1240px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 2rem 0 3rem;
+}
+
+.survey-results-header {
+  display: grid;
+  gap: 0.85rem;
+  margin-bottom: 1.5rem;
+}
+
+.survey-results-eyebrow {
+  margin: 0;
+  color: rgba(98, 201, 174, 0.9);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.survey-results-header h1 {
+  margin: 0;
+  color: #f5f7f6;
+  font-size: clamp(2.3rem, 4vw, 3.9rem);
+  line-height: 1;
+}
+
+.survey-results-lead {
+  margin: 0;
+  max-width: 48rem;
+  color: rgba(232, 238, 235, 0.78);
+  line-height: 1.75;
+}
+
+.survey-results-highlights {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.highlight-card,
+.survey-results-panel {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 26px;
+  background: rgba(19, 19, 19, 0.84);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(18px);
+}
+
+.highlight-card {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1.1rem 1.2rem;
+}
+
+.highlight-label {
+  color: rgba(98, 201, 174, 0.9);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.highlight-card strong {
+  color: #ffffff;
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.highlight-card p {
+  margin: 0;
+  color: rgba(232, 238, 235, 0.7);
+}
+
+.survey-results-panel {
+  padding: 1rem;
+}
+
+.survey-results-empty {
+  display: grid;
+  gap: 0.45rem;
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+.survey-results-empty p {
+  margin: 0;
+  color: #ffffff;
+  font-size: 1.1rem;
+}
+
+.survey-results-empty span {
+  color: rgba(232, 238, 235, 0.72);
+}
+
+:host ::ng-deep .p-datatable-table-container {
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+:host ::ng-deep .p-datatable-table {
+  background: transparent;
+}
+
+:host ::ng-deep .p-datatable-thead > tr > th {
+  background: rgba(98, 201, 174, 0.09);
+  color: #eff7f4;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+:host ::ng-deep .p-datatable-tbody > tr > td {
+  background: rgba(15, 15, 15, 0.72);
+  color: rgba(239, 247, 244, 0.9);
+  border-color: rgba(255, 255, 255, 0.06);
+  vertical-align: top;
+}
+
+@media (max-width: 900px) {
+  .survey-results-highlights {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .survey-results-shell {
+    width: min(100%, calc(100% - 1rem));
+    padding: 1rem 0 2rem;
+  }
+
+  .survey-results-panel {
+    padding: 0.8rem;
+    border-radius: 20px;
+  }
+}

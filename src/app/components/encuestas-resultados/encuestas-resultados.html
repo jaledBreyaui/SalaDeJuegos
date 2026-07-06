@@ -1,0 +1,67 @@
+<section class="survey-results-page">
+  <div class="survey-results-shell">
+    <header class="survey-results-header">
+      <p class="survey-results-eyebrow">Administracion</p>
+      <h1>Resultados de encuestas</h1>
+      <p class="survey-results-lead">
+        Esta vista resume las respuestas registradas por la comunidad y solo esta disponible para
+        usuarios administradores.
+      </p>
+    </header>
+
+    <div class="survey-results-highlights" aria-hidden="true">
+      <article class="highlight-card">
+        <span class="highlight-label">Total</span>
+        <strong>{{ totalEncuestas() }}</strong>
+        <p>encuestas registradas</p>
+      </article>
+      <article class="highlight-card">
+        <span class="highlight-label">Conformes</span>
+        <strong>{{ cantidadConformes() }}</strong>
+        <p>usuarios conformes con el diseno</p>
+      </article>
+      <article class="highlight-card">
+        <span class="highlight-label">Juego favorito</span>
+        <strong>{{ juegoMasElegido() }}</strong>
+        <p>segun las respuestas enviadas</p>
+      </article>
+    </div>
+
+    <section class="survey-results-panel">
+      @if (encuestas().length > 0) {
+        <p-table [value]="encuestas()" responsiveLayout="scroll">
+          <ng-template #header>
+            <tr>
+              <th>Usuario</th>
+              <th>Email</th>
+              <th>Edad</th>
+              <th>Como nos conocio</th>
+              <th>Juego favorito</th>
+              <th>Diseno</th>
+              <th>Fecha</th>
+            </tr>
+          </ng-template>
+          <ng-template #body let-encuesta>
+            <tr>
+              <td>
+                {{ encuesta.usuarios_registrados?.nombre }}
+                {{ encuesta.usuarios_registrados?.apellido }}
+              </td>
+              <td>{{ encuesta.usuarios_registrados?.email }}</td>
+              <td>{{ encuesta.usuarios_registrados?.edad }}</td>
+              <td>{{ encuesta.pregunta_uno }}</td>
+              <td>{{ formatearJuego(encuesta.pregunta_dos) }}</td>
+              <td>{{ encuesta.pregunta_tres === 'si' ? 'Si' : 'No' }}</td>
+              <td>{{ encuesta.created_at | date: 'dd/MM/yyyy HH:mm' }}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      } @else {
+        <div class="survey-results-empty">
+          <p>Todavia no hay respuestas cargadas en la encuesta.</p>
+          <span>Cuando la comunidad participe, las respuestas apareceran aca.</span>
+        </div>
+      }
+    </section>
+  </div>
+</section>

@@ -1,4 +1,4 @@
-import { Component, signal, OnInit } from '@angular/core';
+import { Component, OnInit, computed } from '@angular/core';
 import { NgxRetroGridComponent } from '@omnedia/ngx-retro-grid';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
@@ -15,23 +15,10 @@ import { AccesoJuego } from '../acceso-juego/acceso-juego';
   standalone: true,
 })
 export class Animatedbg implements OnInit {
-  nombre = signal<string>('');
-  nombreGuardado = sessionStorage.getItem('nombreJugador');
+  nombre = computed(() => this.sb.nombreUsuario());
   constructor(public sb: Supabase) {}
 
-  ngOnInit() {
-    if (this.nombreGuardado) {
-      this.nombre.set(this.nombreGuardado);
-    } else {
-      this.obtenerNombreUsuario();
-      sessionStorage.setItem('nombreJugador', this.nombre());
-    }
-  }
-
-  async obtenerNombreUsuario(): Promise<void> {
-    const data = await this.sb.obtenerUsuarioPorMail(this.sb.dataUsuario?.email || '');
-    if (data) {
-      this.nombre.set(data?.nombre || '');
-    }
+  async ngOnInit(): Promise<void> {
+    await this.sb.obtenerUsuarioActual();
   }
 }

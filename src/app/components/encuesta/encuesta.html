@@ -1,0 +1,163 @@
+<section class="survey-page">
+  <div class="survey-shell">
+    <p-toast />
+
+    <header class="survey-header">
+      <p class="survey-eyebrow">Comunidad</p>
+      <h1>Encuesta de experiencia</h1>
+      <p class="survey-lead">
+        Queremos conocer tu opinion sobre la plataforma. Tus datos personales se validan con tu
+        cuenta y las respuestas quedan asociadas a tu usuario.
+      </p>
+    </header>
+
+    <section class="survey-card">
+      <form [formGroup]="formularioEncuesta" class="survey-form">
+        <div class="survey-grid">
+          <label class="field">
+            <span>Nombre</span>
+            <p-inputgroup>
+              <p-inputgroup-addon>
+                <i class="pi pi-user"></i>
+              </p-inputgroup-addon>
+              <input pInputText formControlName="nombre" placeholder="Ingresa tu nombre" />
+            </p-inputgroup>
+            @if (campoInvalido('nombre')) {
+              <small>Ingresa un nombre valido.</small>
+            }
+          </label>
+
+          <label class="field">
+            <span>Apellido</span>
+            <p-inputgroup>
+              <p-inputgroup-addon>
+                <i class="pi pi-id-card"></i>
+              </p-inputgroup-addon>
+              <input pInputText formControlName="apellido" placeholder="Ingresa tu apellido" />
+            </p-inputgroup>
+            @if (campoInvalido('apellido')) {
+              <small>Ingresa un apellido valido.</small>
+            }
+          </label>
+
+          <label class="field">
+            <span>Edad</span>
+            <p-inputgroup>
+              <p-inputgroup-addon>
+                <i class="pi pi-calendar"></i>
+              </p-inputgroup-addon>
+              <input pInputText type="number" formControlName="edad" placeholder="18 a 99" />
+            </p-inputgroup>
+            @if (campoInvalido('edad')) {
+              <small>La edad debe estar entre 18 y 99 anos.</small>
+            }
+          </label>
+
+          <label class="field">
+            <span>Telefono</span>
+            <p-inputgroup>
+              <p-inputgroup-addon>
+                <i class="pi pi-phone"></i>
+              </p-inputgroup-addon>
+              <input
+                pInputText
+                formControlName="telefono"
+                placeholder="Solo numeros"
+                maxlength="10"
+              />
+            </p-inputgroup>
+            @if (campoInvalido('telefono')) {
+              <small>El telefono debe tener solo numeros y hasta 10 caracteres.</small>
+            }
+          </label>
+        </div>
+
+        <div class="question-block">
+          <div class="question-title">
+            <h2>1. Como nos conociste?</h2>
+            <span>Respuesta de texto</span>
+          </div>
+
+          <textarea
+            class="survey-textarea"
+            formControlName="preguntaUno"
+            rows="4"
+            placeholder="Contanos como llegaste a Sala de Juegos"
+          ></textarea>
+
+          @if (campoInvalido('preguntaUno')) {
+            <small class="error-text">Esta respuesta es obligatoria.</small>
+          }
+        </div>
+
+        <div class="question-block">
+          <div class="question-title">
+            <h2>2. Que juego te gusto mas?</h2>
+            <span>Elegi una opcion</span>
+          </div>
+
+          <div class="radio-grid">
+            @for (juego of juegos; track juego.value) {
+              <label class="choice-card">
+                <p-radiobutton
+                  formControlName="preguntaDos"
+                  [inputId]="juego.value"
+                  [value]="juego.value"
+                />
+                <span>{{ juego.label }}</span>
+              </label>
+            }
+          </div>
+
+          @if (campoInvalido('preguntaDos')) {
+            <small class="error-text">Tenes que seleccionar un juego.</small>
+          }
+        </div>
+
+        <div class="question-block" [formGroup]="conformidadGroup">
+          <div class="question-title">
+            <h2>3. Estas conforme con el diseno de la web?</h2>
+            <span>Marca una sola opcion</span>
+          </div>
+
+          <div class="checkbox-row">
+            <label class="choice-card">
+              <p-checkbox
+                formControlName="si"
+                inputId="conformeSi"
+                [binary]="true"
+                (onChange)="seleccionarConformidad('si')"
+              />
+              <span>Si</span>
+            </label>
+
+            <label class="choice-card">
+              <p-checkbox
+                formControlName="no"
+                inputId="conformeNo"
+                [binary]="true"
+                (onChange)="seleccionarConformidad('no')"
+              />
+              <span>No</span>
+            </label>
+          </div>
+
+          @if (conformidadInvalida()) {
+            <small class="error-text">Debes elegir solo una respuesta.</small>
+          }
+        </div>
+
+        <div class="actions">
+          <p-button
+            label="Enviar encuesta"
+            icon="pi pi-send"
+            type="button"
+            (onClick)="enviarEncuesta()"
+            [loading]="enviandoEncuesta"
+            [disabled]="enviandoEncuesta"
+          />
+        </div>
+      </form>
+    </section>
+  </div>
+</section>

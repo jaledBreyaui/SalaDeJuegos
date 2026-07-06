@@ -1,0 +1,189 @@
+:host {
+  display: flex;
+  flex: 1;
+  background:
+    radial-gradient(circle at top left, rgba(98, 201, 174, 0.14), transparent 30%),
+    radial-gradient(circle at bottom right, rgba(98, 201, 174, 0.08), transparent 28%),
+    #0f0f0f;
+}
+
+.survey-page {
+  display: flex;
+  flex: 1;
+  width: 100%;
+}
+
+.survey-shell {
+  width: min(980px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 2rem 0 3rem;
+}
+
+.survey-header {
+  display: grid;
+  gap: 0.85rem;
+  margin-bottom: 1.5rem;
+}
+
+.survey-eyebrow {
+  margin: 0;
+  color: rgba(98, 201, 174, 0.9);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.survey-header h1 {
+  margin: 0;
+  color: #f5f7f6;
+  font-size: clamp(2.3rem, 4vw, 3.7rem);
+  line-height: 1;
+}
+
+.survey-lead {
+  margin: 0;
+  max-width: 48rem;
+  color: rgba(232, 238, 235, 0.78);
+  line-height: 1.75;
+}
+
+.survey-card {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 28px;
+  background: rgba(19, 19, 19, 0.84);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(18px);
+  padding: 1.5rem;
+}
+
+.survey-form {
+  display: grid;
+  gap: 1.4rem;
+}
+
+.survey-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.field span,
+.question-title span {
+  color: rgba(235, 240, 238, 0.78);
+  font-size: 0.9rem;
+}
+
+.field > span:first-child {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.field small,
+.error-text {
+  color: #fca5a5;
+}
+
+.question-block {
+  display: grid;
+  gap: 1rem;
+  padding: 1.1rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.question-title {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.question-title h2 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 1.1rem;
+}
+
+.survey-textarea {
+  width: 100%;
+  min-height: 120px;
+  resize: vertical;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  background: rgba(13, 13, 13, 0.9);
+  color: #f2f7f4;
+  padding: 1rem;
+  outline: none;
+}
+
+.survey-textarea:focus {
+  border-color: rgba(98, 201, 174, 0.7);
+  box-shadow: 0 0 0 1px rgba(98, 201, 174, 0.3);
+}
+
+.radio-grid,
+.checkbox-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.choice-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 1rem;
+  color: #eef4f1;
+  cursor: pointer;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+:host ::ng-deep .p-inputgroupaddon,
+:host ::ng-deep .p-inputtext {
+  background: rgba(11, 11, 11, 0.88);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #f2f7f4;
+}
+
+:host ::ng-deep .p-inputtext:enabled:focus {
+  border-color: rgba(98, 201, 174, 0.7);
+  box-shadow: 0 0 0 1px rgba(98, 201, 174, 0.3);
+}
+
+@media (max-width: 760px) {
+  .survey-shell {
+    width: min(100%, calc(100% - 1rem));
+    padding: 1rem 0 2rem;
+  }
+
+  .survey-card {
+    padding: 1rem;
+    border-radius: 22px;
+  }
+
+  .survey-grid,
+  .radio-grid,
+  .checkbox-row {
+    grid-template-columns: 1fr;
+  }
+
+  .actions {
+    justify-content: stretch;
+  }
+
+  .actions :is(button, .p-button) {
+    width: 100%;
+  }
+}

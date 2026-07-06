@@ -1,6 +1,8 @@
 import { Injectable, signal } from '@angular/core';
 import { createClient, SupabaseClient, RealtimeChannel, User } from '@supabase/supabase-js';
 import { environment } from '../../../environments/environment.development';
+import { UsuarioRegistrado } from '../../interfaces/usuario-registrado';
+import { Encuesta } from '../../interfaces/encuesta';
 
 @Injectable({
   providedIn: 'root',
@@ -8,6 +10,8 @@ import { environment } from '../../../environments/environment.development';
 export class Supabase {
   usuarioLogueado = signal(false);
   nombreUsuario = signal('');
+  esAdmin = signal(false);
+  usuarioRegistradoActual = signal<UsuarioRegistrado | null>(null);
 
   dataUsuario: User | undefined;
   clienteSupabase: SupabaseClient;
@@ -15,14 +19,11 @@ export class Supabase {
   constructor() {
     this.clienteSupabase = createClient(environment.SUPABASE_URL, environment.SUPABASE_KEY);
 
-    this.clienteSupabase.auth.getSession().then(({ data }) => {
-      this.usuarioLogueado.set(!!data.session);
-      this.dataUsuario = data.session?.user;
-    });
+    this.cargarSesionActual();
 
-    this.clienteSupabase.auth.onAuthStateChange((_event, session) => {
+    this.clienteSupabase.auth.onAuthStateChange(async (_event, session) => {
       this.usuarioLogueado.set(!!session);
-      this.dataUsuario = session?.user;
+      await this.sincronizarPerfilUsuario(session?.user);
     });
   }
 
@@ -39,20 +40,19 @@ export class Supabase {
       password: clave,
     });
     this.usuarioLogueado.set(!!respuesta.data.session);
-    this.dataUsuario = respuesta.data.session?.user;
+    await this.sincronizarPerfilUsuario(respuesta.data.session?.user);
     return respuesta;
   }
 
-  async cerrarSesion() {
-    const respuesta = await this.clienteSupabase.auth.signOut();
-    if (!respuesta.error) {
-      this.usuarioLogueado.set(false);
-      this.nombreUsuario.set('');
-      this.dataUsuario = undefined;
+  async cerrarSesion(): Promise<void> {
+    const { error } = await this.clienteSupabase.auth.signOut();
+
+    if (error) {
+      console.error('Error al cerrar sesion en Supabase:', error.message);
+      throw error;
     }
-    sessionStorage.clear();
-    localStorage.clear();
-    return respuesta;
+
+    this.limpiarSesionLocal();
   }
 
   async guardarDatosUsuario(
@@ -74,13 +74,56 @@ export class Supabase {
     return this.clienteSupabase.from('usuarios_registrados').select('*');
   }
 
-  async obtenerUsuarioPorMail(email: string) {
+  async obtenerUsuarioPorMail(email: string): Promise<UsuarioRegistrado | null> {
     const { data, error } = await this.clienteSupabase
       .from('usuarios_registrados')
       .select(`*`)
       .eq('email', email)
       .single();
+
+    if (error) {
+      console.error('Error: ', error.message);
+      return null;
+    }
+
     return data;
+  }
+
+  async obtenerUsuarioActual(): Promise<UsuarioRegistrado | null> {
+    const usuarioActual = this.usuarioRegistradoActual();
+    if (usuarioActual) {
+      return usuarioActual;
+    }
+
+    let email = this.dataUsuario?.email;
+    if (!email) {
+      const { data } = await this.clienteSupabase.auth.getSession();
+      this.dataUsuario = data.session?.user;
+      email = data.session?.user.email;
+      this.usuarioLogueado.set(!!data.session);
+    }
+
+    if (!email) {
+      return null;
+    }
+
+    const usuario = await this.obtenerUsuarioPorMail(email);
+    this.usuarioRegistradoActual.set(usuario);
+    this.esAdmin.set(!!usuario?.es_admin);
+    this.nombreUsuario.set(usuario?.nombre ?? '');
+    return usuario;
+  }
+
+  async usuarioEsAdmin(): Promise<boolean> {
+    const usuario = await this.obtenerUsuarioActual();
+    return !!usuario?.es_admin;
+  }
+
+  async cargarSesionActual(): Promise<boolean> {
+    const { data } = await this.clienteSupabase.auth.getSession();
+    this.usuarioLogueado.set(!!data.session);
+    await this.sincronizarPerfilUsuario(data.session?.user);
+    return !!data.session;
   }
 
   ///////////////////////////////////////CHAT//////////////////////////////////////////////////
@@ -187,6 +230,98 @@ export class Supabase {
       return false;
     }
     return true;
+  }
+
+  ////////////////////////////////////////ENCUESTAS////////////////////////////////////////////////////////
+
+  async guardarEncuesta(
+    preguntaUno: string,
+    preguntaDos: string,
+    preguntaTres: string,
+  ): Promise<{ ok: boolean; mensaje: string }> {
+    const usuario = await this.obtenerUsuarioActual();
+
+    if (!usuario) {
+      return { ok: false, mensaje: 'No hay un usuario valido para guardar la encuesta.' };
+    }
+
+    const { data: encuestaExistente, error: errorConsulta } = await this.clienteSupabase
+      .from('encuestas')
+      .select('id')
+      .eq('id', usuario.id)
+      .maybeSingle();
+
+    if (errorConsulta) {
+      console.error('Error: ', errorConsulta.message);
+      return { ok: false, mensaje: 'No se pudo verificar si ya completaste la encuesta.' };
+    }
+
+    if (encuestaExistente) {
+      return { ok: false, mensaje: 'Ya completaste la encuesta con este usuario.' };
+    }
+
+    const { error } = await this.clienteSupabase.from('encuestas').insert([
+      {
+        id: usuario.id,
+        pregunta_uno: preguntaUno,
+        pregunta_dos: preguntaDos,
+        pregunta_tres: preguntaTres,
+      },
+    ]);
+
+    if (error) {
+      console.error('Error: ', error.message);
+      return { ok: false, mensaje: 'No se pudo guardar la encuesta.' };
+    }
+
+    return { ok: true, mensaje: 'Encuesta guardada correctamente.' };
+  }
+
+  async obtenerEncuestas(): Promise<Encuesta[]> {
+    const { data, error } = await this.clienteSupabase
+      .from('encuestas')
+      .select('id, pregunta_uno, pregunta_dos, pregunta_tres, created_at, usuarios_registrados(nombre, apellido, email, edad)')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error: ', error.message);
+      return [];
+    }
+
+    return (
+      data?.map((encuesta: any) => ({
+        ...encuesta,
+        usuarios_registrados: Array.isArray(encuesta.usuarios_registrados)
+          ? (encuesta.usuarios_registrados[0] ?? null)
+          : encuesta.usuarios_registrados,
+      })) ?? []
+    ) as Encuesta[];
+  }
+
+  private async sincronizarPerfilUsuario(user?: User): Promise<void> {
+    this.dataUsuario = user;
+
+    if (!user?.email) {
+      this.nombreUsuario.set('');
+      this.esAdmin.set(false);
+      this.usuarioRegistradoActual.set(null);
+      return;
+    }
+
+    const usuario = await this.obtenerUsuarioPorMail(user.email);
+    this.usuarioRegistradoActual.set(usuario);
+    this.nombreUsuario.set(usuario?.nombre ?? '');
+    this.esAdmin.set(!!usuario?.es_admin);
+  }
+
+  private limpiarSesionLocal(): void {
+    this.usuarioLogueado.set(false);
+    this.nombreUsuario.set('');
+    this.esAdmin.set(false);
+    this.usuarioRegistradoActual.set(null);
+    this.dataUsuario = undefined;
+    sessionStorage.clear();
+    localStorage.clear();
   }
 }
 // Explicar las reglas como si nunca hubieran sido explicadas antes, y como si el interlocutor no tuviera ningún conocimiento previo sobre el tema.

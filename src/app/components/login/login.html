@@ -4,13 +4,18 @@
     maskStyleClass="backdrop-blur-sm"
     [visible]="visible()"
     (visibleChange)="visible.set($event)"
-    styleClass="!border-0 !bg-transparent"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [dismissableMask]="true"
+    appendTo="body"
+    position="center"
+    styleClass="login-dialog"
   >
     <ng-template #headless class="">
       <form
         [formGroup]="formularioLogin"
-        class="flex flex-col justify-evenly p-8 gap-6 mx-auto w-full min-h-[450px] sm:px-6 bg-zinc-900 rounded-2xl"
-        style="border-radius: 12px; width: 400px"
+        class="login-form"
         [ngClass]="{
           erroralingresar: errorAlIngresar(),
         }"

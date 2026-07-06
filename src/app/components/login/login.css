@@ -1,3 +1,36 @@
 .erroralingresar {
   border: 2px solid red;
 }
+
+:host ::ng-deep .login-dialog {
+  width: min(400px, calc(100vw - 2rem));
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+:host ::ng-deep .login-dialog .p-dialog-content {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow: visible;
+}
+
+.login-form {
+  display: flex;
+  width: 100%;
+  min-height: 450px;
+  flex-direction: column;
+  justify-content: space-evenly;
+  gap: 1.5rem;
+  border-radius: 12px;
+  background: #18181b;
+  padding: 2rem;
+}
+
+@media (max-width: 480px) {
+  .login-form {
+    min-height: auto;
+    padding: 1.5rem;
+  }
+}
