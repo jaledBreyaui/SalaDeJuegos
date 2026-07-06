@@ -1,4 +1,4 @@
-import { Component, OnInit, computed } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { NgxRetroGridComponent } from '@omnedia/ngx-retro-grid';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
@@ -15,10 +15,20 @@ import { AccesoJuego } from '../acceso-juego/acceso-juego';
   standalone: true,
 })
 export class Animatedbg implements OnInit {
-  nombre = computed(() => this.sb.nombreUsuario());
+  nombre = signal('');
+
   constructor(public sb: Supabase) {}
 
   async ngOnInit(): Promise<void> {
-    await this.sb.obtenerUsuarioActual();
+    await this.cargarNombreUsuario();
+  }
+
+  async cargarNombreUsuario(): Promise<void> {
+    const usuario = await this.sb.obtenerUsuarioActual();
+    this.nombre.set(usuario?.nombre ?? '');
+
+    if (!usuario?.nombre) {
+      console.error('No se pudo cargar el nombre del usuario para el home.', usuario);
+    }
   }
 }

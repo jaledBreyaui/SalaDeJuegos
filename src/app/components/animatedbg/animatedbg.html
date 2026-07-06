@@ -46,7 +46,7 @@
             <h2>Ingresa para jugar, chatear y guardar tus puntajes.</h2>
           </div>
           <div class="auth-actions">
-            <app-login></app-login>
+            <app-login (loginExitoso)="cargarNombreUsuario()"></app-login>
             <p-button
               label="Registrarse"
               size="large"
@@ -58,7 +58,7 @@
       } @else {
         <div class="welcome-card">
           <p class="auth-card-eyebrow">Sesion activa</p>
-          <h2>Bienvenido, {{ nombre() }}</h2>
+          <h2>Bienvenido, {{ nombre() || 'jugador' }}</h2>
           <p>Ya podes entrar a cualquier juego, participar del chat y competir en el ranking.</p>
         </div>
       }

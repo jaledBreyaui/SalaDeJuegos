@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { InputGroupModule } from 'primeng/inputgroup';
@@ -35,6 +35,8 @@ export class Login implements OnInit {
   formularioLogin!: FormGroup;
   visible = signal<boolean>(false);
   errorAlIngresar = signal<boolean>(false);
+  @Output() loginExitoso = new EventEmitter<void>();
+
   constructor(
     private fb: FormBuilder,
     private sb: Supabase,
@@ -74,7 +76,12 @@ export class Login implements OnInit {
         summary: 'Usuario o Contraseña incorrectas',
       });
       this.errorAlIngresar.set(true);
+      return;
     }
+
+    this.errorAlIngresar.set(false);
+    this.visible.set(false);
+    this.loginExitoso.emit();
   }
 
   aplicarLoginRapido(loginRapido: boolean): void {

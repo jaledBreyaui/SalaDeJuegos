@@ -19,11 +19,25 @@ export class Supabase {
   constructor() {
     this.clienteSupabase = createClient(environment.SUPABASE_URL, environment.SUPABASE_KEY);
 
-    this.cargarSesionActual();
+    void this.cargarSesionActual().catch((error) => {
+      console.error('Error al cargar la sesion inicial:', error);
+    });
 
-    this.clienteSupabase.auth.onAuthStateChange(async (_event, session) => {
+    this.clienteSupabase.auth.onAuthStateChange((event, session) => {
+      console.log('Cambio de estado auth:', event, 'hay sesion:', !!session);
       this.usuarioLogueado.set(!!session);
-      await this.sincronizarPerfilUsuario(session?.user);
+      this.dataUsuario = session?.user;
+
+      if (!session?.user) {
+        this.limpiarPerfilLocal();
+        return;
+      }
+
+      setTimeout(() => {
+        this.sincronizarPerfilUsuario(session.user).catch((error) => {
+          console.error('Error al sincronizar perfil desde auth state:', error);
+        });
+      }, 0);
     });
   }
 
@@ -39,6 +53,12 @@ export class Supabase {
       email: correo,
       password: clave,
     });
+
+    if (respuesta.error) {
+      console.error('Error al iniciar sesion:', respuesta.error.message);
+      return respuesta;
+    }
+
     this.usuarioLogueado.set(!!respuesta.data.session);
     await this.sincronizarPerfilUsuario(respuesta.data.session?.user);
     return respuesta;
@@ -75,16 +95,28 @@ export class Supabase {
   }
 
   async obtenerUsuarioPorMail(email: string): Promise<UsuarioRegistrado | null> {
+    if (!email) {
+      console.error('No se puede buscar usuario registrado sin email.');
+      return null;
+    }
+
     const { data, error } = await this.clienteSupabase
       .from('usuarios_registrados')
       .select(`*`)
-      .eq('email', email)
+      .ilike('email', email)
       .single();
 
     if (error) {
-      console.error('Error: ', error.message);
+      console.error('Error al obtener usuario por mail:', {
+        email,
+        mensaje: error.message,
+        detalles: error.details,
+        codigo: error.code,
+      });
       return null;
     }
+
+    console.log('Usuario registrado encontrado:', data);
 
     return data;
   }
@@ -104,6 +136,7 @@ export class Supabase {
     }
 
     if (!email) {
+      console.error('No hay email de sesion para obtener el usuario actual.');
       return null;
     }
 
@@ -120,7 +153,13 @@ export class Supabase {
   }
 
   async cargarSesionActual(): Promise<boolean> {
-    const { data } = await this.clienteSupabase.auth.getSession();
+    const { data, error } = await this.clienteSupabase.auth.getSession();
+
+    if (error) {
+      console.error('Error al cargar la sesion actual:', error.message);
+      throw error;
+    }
+
     this.usuarioLogueado.set(!!data.session);
     await this.sincronizarPerfilUsuario(data.session?.user);
     return !!data.session;
@@ -280,7 +319,9 @@ export class Supabase {
   async obtenerEncuestas(): Promise<Encuesta[]> {
     const { data, error } = await this.clienteSupabase
       .from('encuestas')
-      .select('id, pregunta_uno, pregunta_dos, pregunta_tres, created_at, usuarios_registrados(nombre, apellido, email, edad)')
+      .select(
+        'id, pregunta_uno, pregunta_dos, pregunta_tres, created_at, usuarios_registrados(nombre, apellido, email, edad)',
+      )
       .order('created_at', { ascending: false });
 
     if (error) {
@@ -288,43 +329,47 @@ export class Supabase {
       return [];
     }
 
-    return (
-      data?.map((encuesta: any) => ({
-        ...encuesta,
-        usuarios_registrados: Array.isArray(encuesta.usuarios_registrados)
-          ? (encuesta.usuarios_registrados[0] ?? null)
-          : encuesta.usuarios_registrados,
-      })) ?? []
-    ) as Encuesta[];
+    return (data?.map((encuesta: any) => ({
+      ...encuesta,
+      usuarios_registrados: Array.isArray(encuesta.usuarios_registrados)
+        ? (encuesta.usuarios_registrados[0] ?? null)
+        : encuesta.usuarios_registrados,
+    })) ?? []) as Encuesta[];
   }
 
   private async sincronizarPerfilUsuario(user?: User): Promise<void> {
     this.dataUsuario = user;
 
     if (!user?.email) {
+      console.log('No hay usuario de auth para sincronizar perfil.');
       this.nombreUsuario.set('');
       this.esAdmin.set(false);
       this.usuarioRegistradoActual.set(null);
       return;
     }
 
+    console.log('Sincronizando perfil para:', user.email);
     const usuario = await this.obtenerUsuarioPorMail(user.email);
     this.usuarioRegistradoActual.set(usuario);
     this.nombreUsuario.set(usuario?.nombre ?? '');
     this.esAdmin.set(!!usuario?.es_admin);
+
+    if (!usuario) {
+      console.error('No existe perfil en usuarios_registrados para:', user.email);
+    }
   }
 
   private limpiarSesionLocal(): void {
     this.usuarioLogueado.set(false);
+    this.limpiarPerfilLocal();
+    sessionStorage.clear();
+    localStorage.clear();
+  }
+
+  private limpiarPerfilLocal(): void {
     this.nombreUsuario.set('');
     this.esAdmin.set(false);
     this.usuarioRegistradoActual.set(null);
     this.dataUsuario = undefined;
-    sessionStorage.clear();
-    localStorage.clear();
   }
 }
-// Explicar las reglas como si nunca hubieran sido explicadas antes, y como si el interlocutor no tuviera ningún conocimiento previo sobre el tema.
-// El quien soy va en el home -> una vez logueado solo los juegos y el quien soy.
-// Registro validar los campos minimo de caracteres de contraseña. Si ya esta registrado no te deja. Usar email. Usuario es email .
-// Usar modales -> toastify

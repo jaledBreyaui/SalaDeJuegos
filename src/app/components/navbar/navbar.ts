@@ -14,7 +14,7 @@ import { Supabase } from '../../services/supabase/supabase';
 })
 export class Navbar implements OnInit {
   readonly marca = 'Sala De Juegos';
-  private readonly timeoutCerrarSesionMs = 8000;
+  private readonly timeoutCerrarSesionMs = 20000;
   cerrandoSesion = signal(false);
 
   items = computed<MenuItem[]>(() => {
